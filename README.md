@@ -11,6 +11,23 @@ CKP aims to provide versatile interface, without hurting performance.
 
 CKP is compatible with [impacker](https://github.com/123jimin/impacker), a library (currently WIP) for packing a code and its dependencies into one file. Therefore, CKP can be used for online judges which cannot accept more than one source file.
 
+## To-Do List
+
+- [ ] `automata`
+- [ ] `data_structure`
+- [ ] `fourier`
+- [ ] `geometry`
+- [ ] `graph_theory`
+- [ ] `language`
+- [ ] `linear_algebra`
+- [ ] `nimber`
+- [ ] `number_theory`
+  - [x] `factor`
+  - [ ] `mod_basic`
+  - [ ] `mod_advanced`
+- [ ] `polynomial`
+- [ ] `strings`
+
 ## Notes
 
 Implementations of `SortedList` and `SortedDict` are based on `sortedcontainers` (https://github.com/grantjenks/python-sortedcontainers), which is originally under Apache License, version 2.0 (http://www.apache.org/licenses/LICENSE-2.0).
