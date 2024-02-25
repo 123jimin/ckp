@@ -1,6 +1,7 @@
 import unittest
 from ckp.number_theory.prime_sieve import *
 
+from collections import Counter
 from ckp.number_theory import is_prime_naive
 
 class TestPrimeSieve(unittest.TestCase):
@@ -21,3 +22,8 @@ class TestPrimeSieve(unittest.TestCase):
         sieve.extend(5000000)
 
         for n in range(100001): self.assertEqual(is_prime_naive(n), sieve.is_prime(n), f"primality test for {n=}")
+
+    def test_factor(self):
+        sieve = PrimeSieve(100000)
+        self.assertEqual(Counter(sieve.factor(42)), Counter([2, 3, 7]))
+        self.assertEqual(Counter(sieve.factor(16384)), Counter([2]*14))
