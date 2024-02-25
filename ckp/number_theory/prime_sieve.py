@@ -1,4 +1,4 @@
-from math import isqrt
+import math, itertools
 
 class PrimeSieve:
     """
@@ -22,17 +22,14 @@ class PrimeSieve:
         if max_n > 1: self.extend(max_n)
     
     def primes(self):
-        """ Yields list of prime numbers from this sieve. """
+        """ Yields list of prime numbers inferable from this sieve. """
         yield 2
-        odd_primes = self._odd_primes
-        for p in odd_primes: yield p
-        odd_primes_next, sieve = self._odd_primes_next, self.sieve
-        for p in range(odd_primes_next, self._max_testable_odd+2, 2):
-            if sieve[p//2] > 1: continue
-            odd_primes.append(p)
-            odd_primes_next = p+2
-            yield p
-        self._odd_primes_next = odd_primes_next
+
+        odd_primes, sieve = self._odd_primes, self.sieve
+        odd_primes.extend(k*2+1 for k in range(self._odd_primes_next//2, self._max_testable_odd//2+1) if sieve[k] == 1)
+        yield from odd_primes
+
+        self._odd_primes_next = self._max_testable_odd + 2
 
     def extend(self, max_n:int):
         """ Extend this sieve, so that the primality test up to `max_n` with this sieve becomes possible. """
@@ -44,27 +41,28 @@ class PrimeSieve:
         new_len = (max_n+1) // 2
         new_max_testable_odd = new_len*2 - 1
 
-        sieve += [1] * (new_len - old_len)
-        
-        for p in odd_primes:
-            min_p = p*p
-            if min_p <= max_testable_odd:
-                min_p = max_testable_odd + 2
-                if min_p % p > 0: min_p += p - (min_p % p)
-                if min_p % 2 == 0: min_p += p
-            while min_p <= new_max_testable_odd:
-                sieve[min_p//2] = p
-                min_p += 2*p
+        sieve.extend(itertools.repeat(1, new_len - old_len))
 
-        p = self._odd_primes_next
-        p_max = isqrt(new_max_testable_odd)
-        while p <= p_max: # The reason is uncertain, but using `for p in range(...)` makes the code a little bit slower.
-            if sieve[p//2] == 1:
+        for p in odd_primes:
+            sieve_p = p*p
+            if sieve_p <= max_testable_odd:
+                sieve_p = max_testable_odd + 2
+                if sieve_p % p: sieve_p += p - (sieve_p % p)
+                if sieve_p % 2 == 0: sieve_p += p
+            elif sieve_p > new_max_testable_odd:
+                break
+            for k in range(sieve_p//2, new_len, p):
+                sieve[k] = p
+
+        p_max = math.isqrt(new_max_testable_odd)
+
+        for k in range(self._odd_primes_next//2, p_max//2+1):
+            if sieve[k] == 1:
+                p = k+k+1
                 odd_primes.append(p)
-                for q in range(p*p, new_max_testable_odd+2, 2*p): sieve[q//2] = p
-            p += 2
-        
-        self._odd_primes_next = p
+                for q in range((k+k)*(1+k), new_len, p): sieve[q] = p
+            
+        self._odd_primes_next = p_max + 2
         self._max_testable_odd = new_max_testable_odd
     
     def is_prime(self, n:int) -> bool:
