@@ -1,6 +1,6 @@
 from ckp.number_theory import PrimeSieve
 
-def test():
+def bench():
     sieve = PrimeSieve(1_000_000)
     A = 1_000_000_000_000
     B = A + 1_000_000
@@ -20,4 +20,4 @@ def test():
 tags = {'number_theory', 'primality_test', 'prime_sieve'}
 
 if __name__ == '__main__':
-    test()
+    bench()
