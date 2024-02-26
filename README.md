@@ -43,9 +43,66 @@ Please implement your own C extensions, or use another language, if your applica
 
 ## Usage
 
+### Installing
+
+I *strongly* recommend using [Poetry](https://python-poetry.org/).
+
+```sh
+poetry add git+https://github.com/123jimin/ckp.git
+```
+
+### Using
+
+Write your code using CKP, like this:
+
 ```py
 from ckp.number_theory import is_prime_naive
 
+N = int(input())
+print(is_prime_naive(N))
+```
+
+Run your code like this:
+
+```sh
+poetry run python test.py
+```
+
+### Packing
+
+To pack CKP into the source code, install [impacker](https://github.com/123jimin/impacker).
+
+```sh
+poetry add git+https://github.com/123jimin/impacker.git
+```
+
+Pack CKP by using it (assuming that your source code's name is `code.py`, and you wish the result file's name to be `out.py`):
+
+```sh
+poetry run python -m impacker code.py out.py
+```
+
+`out.py` will contain the packed source code, submittable to online judges:
+
+```py
+import math
+
+# From primality_test.py
+def is_prime_naive(n: int) -> bool:
+    """
+        Naive primality testing.
+        - Time: `O(sqrt(n))`
+    """
+    if n < 100:
+        return n in {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}
+    if n % 2 == 0 or n % 3 == 0 or n % 5 == 0 or (n % 7 == 0) or (n % 11 == 0):
+        return False
+    for p in range(13, math.isqrt(n) + 1, 6):
+        if n % p == 0 or n % (p + 4) == 0:
+            return False
+    return True
+
+# From test.py
 N = int(input())
 print(is_prime_naive(N))
 ```
