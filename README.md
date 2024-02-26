@@ -13,7 +13,7 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a libra
 
 ## To-Do List
 
-- [ ] `automata`
+- [x] `automata`
 - [ ] `data_structure`
 - [ ] `fourier`
 - [ ] `geometry`

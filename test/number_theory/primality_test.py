@@ -1,5 +1,4 @@
 import unittest
-
 from ckp.number_theory.primality_test import *
 
 class TestIsPrimeNaive(unittest.TestCase):
