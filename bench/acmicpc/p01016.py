@@ -1,3 +1,4 @@
+from bench import bench as do_bench
 from ckp.number_theory import PrimeSieve
 
 def bench():
@@ -18,6 +19,3 @@ def bench():
     return ans
 
 tags = {'number_theory', 'primality_test', 'prime_sieve'}
-
-if __name__ == '__main__':
-    bench()
