@@ -74,12 +74,14 @@ class ComplexCooleyTukeyFFT(AbstractComplexDFT):
         while l <= N:
             hl, step = l//2, N//l
             for i in range(0, N, l):
-                k = 0
-                for j in range(i, i+hl):
-                    o = out_buffer[j+hl] * exp_table[k]
-                    out_buffer[j+hl] = out_buffer[j] - o
-                    out_buffer[j] += o
+                k, iu = 0, i+hl
+                while i < iu:
+                    ih = i+hl
+                    oi = out_buffer[i]
+                    out_buffer[ih] = oi - (o := out_buffer[ih] * exp_table[k])
+                    out_buffer[i] = oi + o
                     k += step
+                    i += 1
             l += l
         if inverse:
             for i in range(N): out_buffer[i] /= N
