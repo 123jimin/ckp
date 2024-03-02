@@ -14,8 +14,7 @@ class TestComplexNaiveDFT(unittest.TestCase):
         fy = fft(y)
         self.assertEqual(len(fy), len(fft))
         for i in range(len(fft)): fx[i] *= fy[i]
-        z = fft(fx, fy, inverse=True)
-        self.assertIs(z, fy)
+        z = fft(fx, inverse=True)
         
         self.assertEqual(max(round(abs(x)) for x in z), 28886)
 
@@ -31,7 +30,6 @@ class TestComplexCooleyTukeyFFT(unittest.TestCase):
         fy = fft(y)
         self.assertEqual(len(fy), 32)
         for i in range(len(fft)): fx[i] *= fy[i]
-        z = fft(fx, fy, inverse=True)
-        self.assertIs(z, fy)
+        z = fft(fx, inverse=True)
         
         self.assertEqual(max(round(abs(x)) for x in z), 28886)
