@@ -70,7 +70,15 @@ class ComplexCooleyTukeyFFT(AbstractComplexDFT):
         if len_data == N: out_buffer = [data[i] for i in bit_rev]
         else: out_buffer = [(data[i] if i < len_data else 0) for i in bit_rev]
 
-        l = 2
+        if N == 1: return out_buffer
+
+        for i in range(0, N, 2):
+            ih = i+1
+            oi = out_buffer[i]
+            out_buffer[ih] = oi - (o := out_buffer[ih])
+            out_buffer[i] = oi + o
+
+        l = 4
         while l <= N:
             hl, step = l//2, N//l
             for i in range(0, N, l):
@@ -83,6 +91,7 @@ class ComplexCooleyTukeyFFT(AbstractComplexDFT):
                     k += step
                     i += 1
             l += l
+        
         if inverse:
             for i in range(N): out_buffer[i] /= N
         return out_buffer
