@@ -62,10 +62,14 @@ class ComplexCooleyTukeyFFT(AbstractComplexDFT):
     def __str__(self) -> str: return f"ComplexCooleyTukeyFFT({len(self).bit_length() - 1})"
     def __repr__(self) -> str: return f"ComplexCooleyTukeyFFT({len(self).bit_length() - 1})"
     
-    def __call__(self, in_buffer:list[float|complex], out_buffer:list[float|complex]|None=None, *, inverse:bool=False):
-        N = len(self)
+    def __call__(self, data:list[float|complex], *, inverse:bool=False):
+        N, bit_rev = len(self), self._bit_rev
         exp_table = self._iexp if inverse else self._exp
-        out_buffer = self._init_buffer(in_buffer, out_buffer)
+        
+        len_data = len(data)
+        if len_data == N: out_buffer = [data[i] for i in bit_rev]
+        else: out_buffer = [(data[i] if i < len_data else 0) for i in bit_rev]
+
         l = 2
         while l <= N:
             hl, step = l//2, N//l
@@ -79,33 +83,6 @@ class ComplexCooleyTukeyFFT(AbstractComplexDFT):
             l += l
         if inverse:
             for i in range(N): out_buffer[i] /= N
-        return out_buffer
-    
-    def _init_buffer(self, in_buffer:list[float|complex], out_buffer:list[float|complex]|None) -> list[float|complex]:
-        N, bit_rev = len(self), self._bit_rev
-        len_in_buffer = len(in_buffer)
-        assert(len_in_buffer <= N)
-        
-        if out_buffer is None:
-            if len_in_buffer == N: return [in_buffer[i] for i in bit_rev]
-            else: return [(in_buffer[i] if i < len_in_buffer else 0) for i in bit_rev]
-        
-        # Note: using `out_buffer` is slower than creating a new one...
-        assert(len(out_buffer) >= N)
-        if in_buffer is out_buffer:
-            for i in range(N-1):
-                r = bit_rev[i]
-                if r > i:
-                    in_buffer[i], in_buffer[r] = in_buffer[r], in_buffer[i]
-            return in_buffer
-        
-        if len_in_buffer == N:
-            for i in range(N): out_buffer[i] = in_buffer[bit_rev[i]]
-        else:
-            for i in range(N):
-                j = bit_rev[i]
-                out_buffer[i] = (in_buffer[j] if j < len_in_buffer else 0)
-        
         return out_buffer
     
     @staticmethod

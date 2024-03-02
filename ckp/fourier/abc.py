@@ -8,10 +8,10 @@ class AbstractDFT(abc.ABC):
     def __len__(self): return self._n
 
     @abc.abstractmethod
-    def __call__(self, in_buffer, out_buffer=None, *, inverse:bool=False):
+    def __call__(self, data, *, inverse:bool=False):
         pass
 
 class AbstractComplexDFT(AbstractDFT):
     @abc.abstractmethod
-    def __call__(self, in_buffer:list[float|complex], out_buffer:list[float|complex]|None=None, *, inverse:bool=False):
+    def __call__(self, data:list[float|complex], *, inverse:bool=False):
         pass
