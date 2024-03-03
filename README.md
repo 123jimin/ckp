@@ -21,7 +21,6 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
   - [ ] `graph`
   - [ ] `segment_tree`
   - [x] `sorted_containers`
-  - [ ] `sum_segment_tree`
 - [ ] `fourier`
   - [ ] `complex`
   - [ ] `ntt`
