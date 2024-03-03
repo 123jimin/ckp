@@ -1,4 +1,3 @@
-from bench import bench as do_bench
 from ckp.number_theory import PrimeSieve
 
 def bench():

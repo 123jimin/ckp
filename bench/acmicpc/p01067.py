@@ -1,4 +1,3 @@
-from bench import bench as do_bench
 from ckp.fourier import ComplexCooleyTukeyFFT
 
 import random
@@ -13,7 +12,7 @@ def bench():
     fX = fft(X)
     fY = fft(Y)
     for i in range(len(fft)): fX[i] *= fY[i]
-    Z = fft(fX, fX, inverse=True)
+    Z = fft(fX, inverse=True)
     ans = max(round(abs(z)) for z in Z)
     assert(ans == 76038571)
 

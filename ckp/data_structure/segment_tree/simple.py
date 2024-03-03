@@ -7,7 +7,7 @@ import operator
 class SimpleSegmentTree:
     """
         Simple, generic segment tree supporting arbitrary group operation.
-        Use `SimpleSumSegmentTree` for a bit more optimized version on numbers.
+        Use `SimpleSumSegmentTree` for a bit better performance.
 
         `SimpleSegmentTree` supports updating each element and reducing on a range in O(log N).
         However, it doesn't support efficient range item modifications. 
