@@ -70,36 +70,32 @@ class SimpleSegmentTree:
                 case 0: changed_value = tree[next_ind] = op(changed_value, tree[curr_ind+1])
                 case 1: changed_value = tree[next_ind] = op(tree[curr_ind-1], changed_value)
             curr_ind = next_ind
-    
-    def _reduce_range(self, start:int, end:int, curr_tree:int, curr_offset:int, curr_size:int):
-        curr_tree_end = curr_offset + curr_size
-        start, end = max(start, curr_offset), min(end, curr_tree_end)
-        if start >= end: return self._e
-        if start == curr_offset and end == curr_tree_end: return self._tree[curr_tree]
-
-        assert curr_size > 1
-        if curr_size == 2:
-            assert start+1 == end
-            return self._tree[self._cap + start]
-
-        left_child = curr_tree * 2
-        right_child = left_child + 1
-        child_size = curr_size // 2
-
-        return self._op(
-            self._reduce_range(start, end, left_child, curr_offset, child_size),
-            self._reduce_range(start, end, right_child, curr_offset + child_size, child_size),
-        )
 
     def reduce_range(self, start:int, end:int):
         """ Get the reduced value for indices in the half-open range [start, end). """
-        if self._len == 0 or start >= end: return self._e
-        return self._reduce_range(start, end, 1, 0, self._cap)
+        if self._len == 0: return self._e
+        
+        tree, cap, e, op = self._tree, self._cap, self._e, self._op
+        start, end = max(0, start)+cap, min(end, self._len)+cap
+        
+        res_l, res_r = e, e
+        while start < end:
+            sn, sr = divmod(start, 2)
+            en, er = divmod(end, 2)
+            if sr:
+                res_l = op(res_l, tree[start])
+                sn += 1
+            if er:
+                res_r = op(tree[end-1], res_r)
+
+            start, end = sn, en
+        
+        return op(res_l, res_r)
     
     def reduce(self):
         """ Get the reduced value for all elements in this tree. """
         if self._len == 0: return self._e
-        return self._reduce_range(0, self._len, 1, 0, self._cap)
+        return self._tree[1]
     
 class SimpleSumSegmentTree:
     """
@@ -161,32 +157,31 @@ class SimpleSumSegmentTree:
                 case 0: changed_value = tree[next_ind] = changed_value + tree[curr_ind+1]
                 case 1: changed_value = tree[next_ind] = tree[curr_ind-1] + changed_value
             curr_ind = next_ind
-    
-    def _reduce_range(self, start:int, end:int, curr_tree:int, curr_offset:int, curr_size:int):
-        curr_tree_end = curr_offset + curr_size
-        start, end = max(start, curr_offset), min(end, curr_tree_end)
-        if start >= end: return 0
-        if start == curr_offset and end == curr_tree_end: return self._tree[curr_tree]
-
-        assert curr_size > 1
-        if curr_size == 2:
-            assert start+1 == end
-            return self._tree[self._cap + start]
-
-        left_child = curr_tree * 2
-        right_child = left_child + 1
-        child_size = curr_size // 2
-
-        return self._reduce_range(start, end, left_child, curr_offset, child_size) + self._reduce_range(start, end, right_child, curr_offset + child_size, child_size)
 
     def reduce_range(self, start:int, end:int):
         """ Get the sum from the half-open range [start, end). """
-        if self._len == 0 or start >= end: return 0
-        return self._reduce_range(start, end, 1, 0, self._cap)
+        if self._len == 0: return 0
+
+        tree, cap = self._tree, self._cap
+        start, end = max(0, start)+cap, min(end, self._len)+cap
+        
+        res = 0
+        while start < end:
+            sn, sr = divmod(start, 2)
+            en, er = divmod(end, 2)
+            if sr:
+                res += tree[start]
+                sn += 1
+            if er:
+                res += tree[end-1]
+
+            start, end = sn, en
+        
+        return res
     
     sum_range = reduce_range
 
     def reduce(self):
         """ Get the sum for all elements in this tree. """
         if self._len == 0: return 0
-        return self._reduce_range(0, self._len, 1, 0, self._cap)
+        return self._tree[1]

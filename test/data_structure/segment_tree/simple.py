@@ -47,7 +47,7 @@ class TestSimpleSumSegmentTree(unittest.TestCase):
     def test_ops(self):
         for __ in range(400):
             N = random.randint(1, 128)
-            g = DataGenerator(N, ['get', 'set', 'reduce'])
+            g = DataGenerator(N, ['get', 'set', 'reduce', 'reduce_all'])
 
             arr = g.list()
             tree = SimpleSumSegmentTree(arr)
@@ -64,4 +64,8 @@ class TestSimpleSumSegmentTree(unittest.TestCase):
                     case ('reduce', i, j):
                         s = sum(arr[i:j])
                         self.assertEqual(tree.reduce_range(i, j), s, f"summing on the range [{i}, {j})")
+                    case ('reduce_all',):
+                        s = sum(arr)
+                        self.assertEqual(tree.reduce(), s, f"sum of whole")
+
                         

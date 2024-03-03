@@ -28,3 +28,4 @@ class DataGenerator:
             case 'get': return ('get', self.index())
             case 'set': return ('set', self.index(), self.value())
             case 'reduce': return ('reduce', *self.range())
+            case 'reduce_all': return ('reduce_all',)
