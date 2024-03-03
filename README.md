@@ -20,7 +20,7 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
   - [ ] `disjoint_set`
   - [ ] `graph`
   - [ ] `segment_tree`
-  - [ ] `sorted_containers`
+  - [x] `sorted_containers`
   - [ ] `sum_segment_tree`
 - [ ] `fourier`
 - [ ] `geometry`
