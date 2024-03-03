@@ -1,8 +1,9 @@
-import argparse
+import argparse, cProfile
 from bench.util import bench, log_bench_result
 
 parser = argparse.ArgumentParser(prog="bench.acmicpc", description="Benchmark CKP with one or more problems from acmicpc.net")
-parser.add_argument('problem_name', nargs='?')
+parser.add_argument('problem_name', help="specify this to benchmark a specific problem", nargs='?')
+parser.add_argument('-p', '--profile', help="set this flag to profile (instead of benchmarking)", action='store_true')
 
 args = parser.parse_args()
 
@@ -15,10 +16,15 @@ if args.problem_name:
     problem_names = [problem_name]
 else:
     problem_names = sorted(p for p in dir(problems) if p.startswith('p'))
-print(f"Benchmarking {len(problem_names)} {'problem' if len(problem_names) == 1 else 'problems'}...")
+
+print(f"{'Profiling' if args.profile else 'Benchmarking'} {len(problem_names)} {'problem' if len(problem_names) == 1 else 'problems'}...")
 
 for problem_name in problem_names:
     curr_problem = getattr(problems, problem_name)
 
-    times = bench("bench()", num_trials=8, log=False, global_vars={'bench': curr_problem.bench})
-    log_bench_result(f"Problem #{problem_name[1:]}", times)
+    if args.profile:
+        print(f"## Profile stats for Problem #{problem_name[1:]}:")
+        cProfile.run("[curr_problem.bench() for _ in range(5)]", sort='tottime')
+    else:
+        times = bench("bench()", num_trials=8, log=False, global_vars={'bench': curr_problem.bench})
+        log_bench_result(f"Problem #{problem_name[1:]}", times)
