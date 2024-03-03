@@ -11,7 +11,7 @@ class TestSortedList(unittest.TestCase):
         for key in keys: l.add(key)
 
         sorted_keys = sorted(keys)
-        self.assertEqual(sorted_keys, list(l))
+        self.assertListEqual(sorted_keys, list(l))
     
     def test_random_insertion_and_deletion(self):
         l = SortedList()

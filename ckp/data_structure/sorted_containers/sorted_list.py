@@ -53,7 +53,6 @@ class SortedList(MutableSequence):
     * :func:`SortedList.copy`
     * :func:`SortedList.__len__`
     * :func:`SortedList.__repr__`
-    * :func:`SortedList._check`
     * :func:`SortedList._reset`
 
     Sorted lists use lexicographical ordering semantics when compared to other
@@ -67,7 +66,7 @@ class SortedList(MutableSequence):
     COPYRIGHT = "Originally @grantjenks/python-sortedcontainers, modified at @123jimin/ckp"
     DEFAULT_LOAD_FACTOR = 1000
 
-    def __init__(self, iterable=None, key=None):
+    def __init__(self, iterable=None):
         """Initialize sorted list instance.
 
         Optional `iterable` argument provides an initial iterable of values to
@@ -85,7 +84,6 @@ class SortedList(MutableSequence):
         :param iterable: initial values (optional)
 
         """
-        assert key is None
         self._len = 0
         self._load = self.DEFAULT_LOAD_FACTOR
         self._lists = []
@@ -95,15 +93,6 @@ class SortedList(MutableSequence):
 
         if iterable is not None:
             self._update(iterable)
-
-    @property
-    def key(self):  # pylint: disable=useless-return
-        """Function used to extract comparison key from values.
-
-        Sorted list compares values directly so the key function is none.
-
-        """
-        return None
 
     def _reset(self, load):
         """Reset sorted list load factor.
@@ -1435,10 +1424,6 @@ class SortedList(MutableSequence):
     __le__ = __make_cmp(le, '<=', 'less than or equal to')
     __ge__ = __make_cmp(ge, '>=', 'greater than or equal to')
     __make_cmp = staticmethod(__make_cmp)
-
-    def __reduce__(self):
-        values = reduce(iadd, self._lists, [])
-        return (type(self), (values,))
 
     def __str__(self):
         return "SortedList([{}])".format(", ".join(str(x) for x in self))

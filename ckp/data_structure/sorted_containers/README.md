@@ -7,12 +7,19 @@ Codes in this directory is based on the Python [Sorted Containers](https://githu
 Here are the list of changes:
 
 * Added `COPYRIGHT` attribute to attribute (no pun intended) original authors.
-* Removed the following functions:
+* Removed the following functions / proeprties:
   * `Sorted*.__new__`
   * `Sorted*._check`
+  * `Sorted*.__reduce__`
+  * `Sorted*._check`
+  * `SortedDict.iloc`
+  * `SortedList.key`
+  * `SortedDict.keys`, `SortedDict.items`, `SortedDict.values`
 * Removed docstrings from comparers returned by `__make_cmp`.
 * Replaced `Sorted*.__repr__` with a simpler one, and added `Sorted*.__str__`.
 * In `SortedList._build_index`, removed usage of `log` in size computation.
+* Removed `key` argument from `SortedList` and `SortedDict`.
+* Removed `Sorted*View`.
 
 ## Original License
 
