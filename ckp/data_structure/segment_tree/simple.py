@@ -65,10 +65,9 @@ class SimpleSegmentTree:
         changed_value = tree[curr_ind] = value
 
         while curr_ind > 1:
-            next_ind = curr_ind // 2
-            match curr_ind%2:
-                case 0: changed_value = tree[next_ind] = op(changed_value, tree[curr_ind+1])
-                case 1: changed_value = tree[next_ind] = op(tree[curr_ind-1], changed_value)
+            next_ind, r = divmod(curr_ind, 2)
+            # `op` might not be commutative, so we can't optimize this into `op(changed_value, tree[curr_ind+(-1,1)[r]])`.
+            changed_value = tree[next_ind] = op(changed_value, tree[curr_ind+1]) if r == 0 else op(tree[curr_ind-1], changed_value)
             curr_ind = next_ind
 
     def reduce_range(self, start:int, end:int):
@@ -78,6 +77,7 @@ class SimpleSegmentTree:
         tree, cap, e, op = self._tree, self._cap, self._e, self._op
         start, end = max(0, start)+cap, min(end, self._len)+cap
         
+        # `op` might not be commutative, so the left and right parts should be added separately.
         res_l, res_r = e, e
         while start < end:
             sn, sr = divmod(start, 2)
@@ -152,10 +152,8 @@ class SimpleSumSegmentTree:
         changed_value = tree[curr_ind] = value
 
         while curr_ind > 1:
-            next_ind = curr_ind // 2
-            match curr_ind%2:
-                case 0: changed_value = tree[next_ind] = changed_value + tree[curr_ind+1]
-                case 1: changed_value = tree[next_ind] = tree[curr_ind-1] + changed_value
+            next_ind, r = divmod(curr_ind, 2)
+            changed_value = tree[next_ind] = changed_value + tree[curr_ind+(1,-1)[r]]
             curr_ind = next_ind
 
     def reduce_range(self, start:int, end:int):
