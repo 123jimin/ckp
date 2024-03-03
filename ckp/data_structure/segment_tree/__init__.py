@@ -5,3 +5,4 @@
 """
 
 from .simple import SimpleSegmentTree
+from .lazy import LazySumSegmentTree

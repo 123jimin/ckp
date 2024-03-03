@@ -14,8 +14,8 @@ class TestSimpleSegmentTree(unittest.TestCase):
             self.assertEqual(len(tree), N)
 
             for _ in range(100):
-                i = random.randint(0, N)
-                j = random.randint(0, N)
+                i = random.randrange(0, N)
+                j = random.randrange(0, N)
 
                 if i >= j:
                     self.assertEqual(tree.reduce_range(i, j), 0, f"summing on an empty range [{i}, {j})")
