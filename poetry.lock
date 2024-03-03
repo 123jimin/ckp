@@ -2,7 +2,7 @@
 
 [[package]]
 name = "impacker"
-version = "0.1.2"
+version = "0.1.3"
 description = "Import Packer for Python: packs imported library code into single file, for submitting competitive programming codes."
 optional = false
 python-versions = "^3.11"
@@ -13,7 +13,7 @@ develop = false
 type = "git"
 url = "https://github.com/123jimin/impacker.git"
 reference = "HEAD"
-resolved_reference = "5ce052e5bd507dc0425ec09f4f8c92f70ae54a72"
+resolved_reference = "23fcd582dcf9086201e4942edf92ace1b6c9bca3"
 
 [metadata]
 lock-version = "2.0"
