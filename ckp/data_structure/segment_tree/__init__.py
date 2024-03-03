@@ -4,5 +4,5 @@
     - Simple segment tree: segment tree with range queries and simple item operations; no range operations.
 """
 
-from .simple import SimpleSegmentTree
+from .simple import SimpleSegmentTree, SimpleSumSegmentTree
 from .lazy import LazySumSegmentTree

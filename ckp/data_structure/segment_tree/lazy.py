@@ -44,7 +44,7 @@ class LazySumSegmentTree:
     def __getitem__(self, ind:int): return self.reduce_range(ind, ind+1)
     def __setitem__(self, ind:int, value):
         prev_val = self[ind]
-        self._add_to_range(ind, ind+1, value - prev_val)
+        self._add_to_range(ind, ind+1, value - prev_val, 1, 0, self._cap)
 
     def _add_to_range(self, start:int, end:int, add_val, curr_tree:int, curr_offset:int, curr_size:int):
         curr_tree_end = curr_offset + curr_size
@@ -93,7 +93,7 @@ class LazySumSegmentTree:
         return self._reduce_range(start, end, left_child, curr_offset, child_size) + self._reduce_range(start, end, right_child, curr_offset + child_size, child_size)
 
     def reduce_range(self, start:int, end:int):
-        """ Get the whole sum from the half-open range [start, end). """
+        """ Get the sum from the half-open range [start, end). """
         if self._len == 0 or start >= end: return 0
         return self._reduce_range(start, end, 1, 0, self._cap)
     
