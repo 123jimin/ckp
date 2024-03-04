@@ -1,4 +1,4 @@
-from ckp.data_structure import SimpleSegmentTree, LazySumSegmentTree
+from ckp.data_structure import SimpleSegmentTree, LazyOpSegmentTree
 
 import random, math
 N, Q = 30_000, 50_000
@@ -23,7 +23,7 @@ init_diffs = [0] * (N-1)
 for i in range(N-1): init_diffs[i] = init_values[i+1] - init_values[i]
 
 def bench():
-    sum_tree = LazySumSegmentTree(init_values)
+    sum_tree = LazyOpSegmentTree(init_values)
     diff_tree = SimpleSegmentTree(init_diffs, math.gcd)
 
     ans = 0

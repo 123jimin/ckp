@@ -1,12 +1,8 @@
-"""
-    Collection of generic segment trees, supporting arbitrary groups / rings.
-"""
-
 import operator
 
 class SimpleSegmentTree:
     """
-        Simple, generic segment tree supporting arbitrary group operation.
+        Simple, generic segment tree supporting arbitrary monoid operation.
         Use `SimpleSumSegmentTree` for a bit better performance.
 
         `SimpleSegmentTree` supports updating each element and reducing on a range in O(log N).
@@ -25,7 +21,7 @@ class SimpleSegmentTree:
         """
             Creates a segment tree on `init_values`.
             
-            `op` is the group operation and `e` is the group identity for the group this tree resides.
+            `op` is the monoid operation and `e` is the identity for the monoid this tree resides.
         """
 
         self._len = L = len(init_values)
@@ -94,7 +90,7 @@ class SimpleSegmentTree:
         """ Get the reduced value for all elements in this tree. """
         if self._len == 0: return self._e
         return self.reduce_range(0, self._len)
-    
+
 class SimpleSumSegmentTree:
     """
         Simple, segment tree for summing numbers in ranges.
