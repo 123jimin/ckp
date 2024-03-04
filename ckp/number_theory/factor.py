@@ -20,39 +20,64 @@ def factor_naive(n: int):
         n //= 5
     if n == 1: return
 
-    p = 7
-    psq = 49
+    p, psq = 7, 49
 
     while psq <= n:
-        while n%p == 0:
+        if n%p == 0:
             yield p
             n //= p
-        if n <= psq:
-            if 1 < n: yield n
-            return
+            while n%p == 0:
+                yield p
+                n //= p
+            if n < psq:
+                if 1 < n: yield n
+                return
         p += 4
         while n%p == 0:
             yield p
             n //= p
-        psq += 12*(p - 1)
         p += 2
-    if n > 1: yield n
+        psq += 12*(p - 3)
+    if 1 < n: yield n
 
 def pollard_rho_find_divisor(n:int, start:int = 2):
     """ Using a proper divisor of `n` , using Pollard's rho algorithm. """
-    if 1 < math.gcd(n, start) < n: return start
-    x, y = 0, start
-    d = 1
-    l = [start]
-    while d == 1:
-        # This is much faster than using `pow(y, 2, n)`.
-        y = (y*y+1) % n
-        l.append(y)
-        y = (y*y+1) % n
-        l.append(y)
-        x += 1
-        d = math.gcd(l[x]-y, n)
-    return 0 if d == n else d
+    if 1 < (d := math.gcd(n, start)) < n: return d
+
+    x = start
+
+    # Doing `(y*y + 1) % n` is 10% faster than using `pow(y, 2, n)`.
+    x1 = (x*x + 1) % n
+    if (d := math.gcd((x2 := (x1*x1 + 1) % n) - x1, n)) != 1: return 0 if d == n else d
+
+    x3 = (x2*x2 + 1) % n
+    if (d := math.gcd((x4 := (x3*x3 + 1) % n) - x2, n)) != 1: return 0 if d == n else d
+
+    x5 = (x4*x4 + 1) % n
+    if (d := math.gcd((x6 := (x5*x5 + 1) % n) - x3, n)) != 1: return 0 if d == n else d
+    
+    x7 = (x6*x6 + 1) % n
+    if (d := math.gcd((x8 := (x7*x7 + 1) % n) - x4, n)) != 1: return 0 if d == n else d
+
+    # Memory usage incurred by storing past trajectory isn't a big deal in practice.
+    # Also, pre-allocating `l` doesn't seem to affect overall performance.
+    i, i4, l = 0, 4, [x5, x6, x7, x8]
+    while True:
+        p0, p1, p2, p3 = l[i:i4]
+        x1 = (x8*x8 + 1) % n
+        if (d := math.gcd((x2 := (x1*x1 + 1) % n) - p0, n)) != 1: return 0 if d == n else d
+
+        x3 = (x2*x2 + 1) % n
+        if (d := math.gcd((x4 := (x3*x3 + 1) % n) - p1, n)) != 1: return 0 if d == n else d
+
+        x5 = (x4*x4 + 1) % n
+        if (d := math.gcd((x6 := (x5*x5 + 1) % n) - p2, n)) != 1: return 0 if d == n else d
+        
+        x7 = (x6*x6 + 1) % n
+        if (d := math.gcd((x8 := (x7*x7 + 1) % n) - p3, n)) != 1: return 0 if d == n else d
+
+        l.extend((x1, x2, x3, x4, x5, x6, x7, x8))
+        i, i4 = i4, i4 + 4
 
 def factor_pollard_rho(n: int):
     """
@@ -99,7 +124,5 @@ def factor(n:int):
     """
 
     if n < 2: return
-    if n < 900_000: yield from factor_naive(n)
+    if n < 1500: yield from factor_naive(n)
     else: yield from factor_pollard_rho(n)
-
-    
