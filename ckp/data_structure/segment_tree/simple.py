@@ -13,16 +13,13 @@ class SimpleSegmentTree:
         However, it doesn't support efficient range item modifications. 
     """
 
-    __slots__ = ('_len', '_cap', '_e', '_op', '_tree')
+    __slots__ = ('_len', '_e', '_op', '_tree')
 
     _len: int
     """ Length of this segment tree. """
 
-    _cap: int
-    """ Max capacity of this segment tree. """
-
     _tree: list
-    """ A flat representation of this segment tree. """
+    """ A flat representation of this segment tree; `len(self._tree) == 2*self._len`. """
 
     def __init__(self, init_values:list, op=operator.add, e=0):
         """
@@ -35,32 +32,33 @@ class SimpleSegmentTree:
         self._op, self._e = op, e
 
         if L == 0:
-            self._cap = 0
             self._tree = []
             return
     
-        self._cap = cap = 1 << (L-1).bit_length()
-        self._tree = tree = [e] * cap + init_values + [e] * (cap - L)
+        self._tree = tree = [e] * L + init_values
 
-        for i in range(cap-1, 0, -1):
+        for i in range(L-1, 0, -1):
             i2 = i+i; tree[i] = op(tree[i2], tree[i2+1])
         
     def __len__(self): return self._len
-    def __bool__(self): return self._len > 0
+    def __iter__(self):
+        L = self._len
+        for i in range(L, L+L):
+            yield self._tree[i]
 
     def __str__(self):
-        tree, cap = self._tree, self._cap
-        items = ", ".join(str(tree[cap+i]) for i in range(self._len))
+        tree, L = self._tree, self._len
+        items = ", ".join(str(tree[i]) for i in range(L, L+L))
         return f"[{items}]"
     
     def __getitem__(self, ind:int):
-        return self._tree[self._cap + ind]
+        return self._tree[self._len + ind]
     
     def __setitem__(self, ind:int, value):
         if not 0 <= ind < self._len:
             raise IndexError(f"Index {ind} out of range (len={self._len})")
 
-        curr_ind = self._cap + ind
+        curr_ind = self._len + ind
         op, tree = self._op, self._tree
         changed_value = tree[curr_ind] = value
 
@@ -72,10 +70,10 @@ class SimpleSegmentTree:
 
     def reduce_range(self, start:int, end:int):
         """ Get the reduced value for indices in the half-open range [start, end). """
-        if self._len == 0: return self._e
+        if self._len == 0 or start >= end: return self._e
         
-        tree, cap, e, op = self._tree, self._cap, self._e, self._op
-        start, end = max(0, start)+cap, min(end, self._len)+cap
+        tree, L, e, op = self._tree, self._len, self._e, self._op
+        start, end = max(0, start)+L, min(end, self._len)+L
         
         # `op` might not be commutative, so the left and right parts should be added separately.
         res_l, res_r = e, e
@@ -95,7 +93,7 @@ class SimpleSegmentTree:
     def reduce(self):
         """ Get the reduced value for all elements in this tree. """
         if self._len == 0: return self._e
-        return self._tree[1]
+        return self.reduce_range(0, self._len)
     
 class SimpleSumSegmentTree:
     """
@@ -105,16 +103,13 @@ class SimpleSumSegmentTree:
         However, it doesn't support efficient range item modifications. 
     """
 
-    __slots__ = ('_len', '_cap', '_tree')
+    __slots__ = ('_len', '_tree')
 
     _len: int
     """ Length of this segment tree. """
 
-    _cap: int
-    """ Max capacity of this segment tree. """
-
-    _tree: list
-    """ A flat representation of this segment tree. """
+    _tree: list 
+    """ A flat representation of this segment tree; `len(self._tree) == 2*self._len`. """
 
     def __init__(self, init_values:list):
         """ Creates a segment tree on `init_values`. """
@@ -122,32 +117,33 @@ class SimpleSumSegmentTree:
         self._len = L = len(init_values)
 
         if L == 0:
-            self._cap = 0
             self._tree = []
             return
     
-        self._cap = cap = 1 << (L-1).bit_length()
-        self._tree = tree = [0] * cap + init_values + [0] * (cap - L)
+        self._tree = tree = [0] * L + init_values
 
-        for i in range(cap-1, 0, -1):
+        for i in range(L-1, 0, -1):
             i2 = i+i; tree[i] = tree[i2] + tree[i2+1]
         
     def __len__(self): return self._len
-    def __bool__(self): return self._len > 0
+    def __iter__(self):
+        L = self._len
+        for i in range(L, L+L):
+            yield self._tree[i]
 
     def __str__(self):
-        tree, cap = self._tree, self._cap
-        items = ", ".join(str(tree[cap+i]) for i in range(self._len))
+        tree, L = self._tree, self._len
+        items = ", ".join(str(tree[i]) for i in range(L, L+L))
         return f"[{items}]"
     
     def __getitem__(self, ind:int):
-        return self._tree[self._cap + ind]
+        return self._tree[self._len + ind]
     
     def __setitem__(self, ind:int, value):
         if not 0 <= ind < self._len:
             raise IndexError(f"Index {ind} out of range (len={self._len})")
 
-        curr_ind = self._cap + ind
+        curr_ind = self._len + ind
         tree = self._tree
         changed_value = tree[curr_ind] = value
 
@@ -158,10 +154,10 @@ class SimpleSumSegmentTree:
 
     def reduce_range(self, start:int, end:int):
         """ Get the sum from the half-open range [start, end). """
-        if self._len == 0: return 0
+        if self._len == 0 or start >= end: return 0
 
-        tree, cap = self._tree, self._cap
-        start, end = max(0, start)+cap, min(end, self._len)+cap
+        tree, L = self._tree, self._len
+        start, end = max(0, start)+L, min(end, self._len)+L
         
         res = 0
         while start < end:
@@ -182,4 +178,4 @@ class SimpleSumSegmentTree:
     def reduce(self):
         """ Get the sum for all elements in this tree. """
         if self._len == 0: return 0
-        return self._tree[1]
+        return self.reduce_range(0, self._len)
