@@ -89,7 +89,7 @@ class SimpleSegmentTree:
     def reduce(self):
         """ Get the reduced value for all elements in this tree. """
         if self._len == 0: return self._e
-        return self.reduce_range(0, self._len)
+        return self._tree[1]
 
 class SimpleSumSegmentTree:
     """
@@ -152,7 +152,7 @@ class SimpleSumSegmentTree:
         """ Get the sum from the half-open range [start, end). """
         if self._len == 0 or start >= end: return 0
 
-        tree, L = self._tree, self._len
+        tree, L = self._tree, self._len        
         start, end = max(0, start)+L, min(end, self._len)+L
         
         res = 0
@@ -174,4 +174,4 @@ class SimpleSumSegmentTree:
     def reduce(self):
         """ Get the sum for all elements in this tree. """
         if self._len == 0: return 0
-        return self.reduce_range(0, self._len)
+        return self._tree[1]
