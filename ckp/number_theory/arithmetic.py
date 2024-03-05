@@ -9,9 +9,13 @@ def num_divisors(n:int, n_factors:Counter|list[int]|None = None):
     """
         Returns the \# of divisors of n, equivalent but a bit faster than `len(list(divisors(n)))`.
         
-        When `n_factors` is given, it would be regarded as the factorization of `n`.
+        When `n_factors` is given, it would be regarded as the factorization of n.
+        In this case, the provided n can either be the original value or 0.
     """
-    if n <= 12: return (0, 1, 2, 2, 3, 2, 4, 2, 4, 3, 4, 2, 6)[n]
+    if n == 0:
+        if n_factors is None: raise ValueError("`n_factors` must be provided when n == 0.")
+    elif n <= 12:
+        return (0, 1, 2, 2, 3, 2, 4, 2, 4, 3, 4, 2, 6)[n]
 
     if n_factors is None: n_factors = Counter(factor(n))
     elif not isinstance(n_factors, Counter): n_factors = Counter(n_factors)
@@ -26,8 +30,12 @@ def sum_divisors(n:int, n_factors:Counter|list[int]|None = None):
         Returns sum of every divisors of n, equivalent but a bit faster than `sum(divisors(n))`.
         
         When `n_factors` is given, it would be regarded as the factorization of `n`.
+        In this case, the provided n can either be the original value or 0.
     """
-    if n <= 12: return (0, 1, 3, 4, 7, 6, 12, 8, 15, 13, 18, 12, 28)[n]
+    if n == 0:
+        if n_factors is None: raise ValueError("`n_factors` must be provided when n == 0.")
+    elif n <= 12:
+        return (0, 1, 3, 4, 7, 6, 12, 8, 15, 13, 18, 12, 28)[n]
 
     if n_factors is None: n_factors = Counter(factor(n))
     elif not isinstance(n_factors, Counter): n_factors = Counter(n_factors)
@@ -43,8 +51,12 @@ def euler_phi(n:int, n_factors:Counter|list[int]|None = None):
         Returns \# of numbers x coprime to n, such that 1 <= x < n.
 
         When `n_factors` is given, it would be regarded as the factorization of `n`.
+        In this case, the provided n can either be the original value or 0.
     """
-    if n <= 12: return (0, 1, 1, 2, 2, 4, 2, 6, 4, 6, 4, 10, 4)[n]
+    if n == 0:
+        if n_factors is None: raise ValueError("`n_factors` must be provided when n == 0.")
+    elif n <= 12:
+        return (0, 1, 1, 2, 2, 4, 2, 6, 4, 6, 4, 10, 4)[n]
 
     m = 1
     if isinstance(n_factors, Counter):

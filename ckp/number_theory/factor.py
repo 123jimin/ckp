@@ -137,10 +137,14 @@ def divisors(n:int, n_factors:Counter|list[int]|None = None):
         Yields every divisors of n, in no particular order.
         
         When `n_factors` is given, it would be regarded as the factorization of `n`.
+        In this case, the provided n can either be the original value or 0.
     """
-    if n == 0: return
-    if n == 1: yield 1; return
-    if n < 4: yield 1; yield n; return
+    if n == 0:
+        if n_factors is None: raise ValueError("`n_factors` must be provided when n == 0.")
+    elif n == 1:
+        yield 1; return
+    elif n < 4:
+        yield 1; yield n; return
 
     if n_factors is None: n_factors = Counter(factor(n))
     elif not isinstance(n_factors, Counter): n_factors = Counter(n_factors)
