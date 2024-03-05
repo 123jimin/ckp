@@ -23,3 +23,15 @@ def iterate_idiv(x):
         ub = x//k
         yield (k, prev_i, ub+1)
         prev_i = ub+1
+
+def factorial_prime_power(n:int, p:int) -> int:
+    """ Given that p is a prime number, returns max i >= 0 such that p^i divides n. """
+    k = 0
+    while n > 0:
+        n //= p
+        k += n
+    return k
+
+def comb_prime_power(n:int, k:int, p:int) -> int:
+    """ Given that p is a prime number, returns max i >= 0 such that p^i divides nCk. """
+    return factorial_prime_power(n, p) - factorial_prime_power(k, p) - factorial_prime_power(n-k, p)
