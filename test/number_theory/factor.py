@@ -38,3 +38,29 @@ class TestFactorPollardRho(unittest.TestCase):
                     self.assertTrue(is_prime(p), f"{p} is not a prime factor of {n}")
                     prod *= p
                 self.assertEqual(prod, n**k)
+
+class TestDivisors(unittest.TestCase):
+    def test_common(self):
+        data = [
+            (1, [1]),
+            (2, [1, 2]),
+            (3, [1, 3]),
+            (4, [1, 2, 4]),
+            (12, [1, 2, 3, 4, 6, 12]),
+            (140, [1, 2, 4, 5, 7, 10, 14, 20, 28, 35, 70, 140]),
+        ]
+
+        for n, expected in data:
+            actual = sorted(divisors(n))
+            self.assertListEqual(actual, expected, f"divisors({n})")
+    
+    def test_range(self):
+        for n in range(1, 2000):
+            d_set = set()
+            for d in divisors(n):
+                self.assertTrue(1 <= d <= n, f"divisors({n}) yielded {d}, which is out of range")
+                self.assertEqual(n%d, 0, f"divisors({n}) yielded {d}, which is not divisble by {n}")
+                self.assertFalse(d in d_set, f"divisors({n}) returned two of {d}")
+                d_set.add(d)
+            self.assertTrue(1 in d_set, f"divisors({n}) did not yielded 1")
+            self.assertTrue(n in d_set, f"divisors({n}) did not yielded n")

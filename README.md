@@ -65,7 +65,7 @@ poetry add git+https://github.com/123jimin/ckp.git
 Write your code using CKP, like this:
 
 ```py
-from ckp.number_theory import is_prime_naive
+from ckp.number_theory.primality_test import is_prime_naive
 
 N = int(input())
 print(is_prime_naive(N))

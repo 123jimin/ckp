@@ -2,7 +2,7 @@ import unittest
 from ckp.number_theory.prime_sieve import *
 
 from collections import Counter
-from ckp.number_theory import is_prime_naive
+from ckp.number_theory.primality_test import is_prime_naive
 
 class TestPrimeSieve(unittest.TestCase):
     def test_single_alloc(self):

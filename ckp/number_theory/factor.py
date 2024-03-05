@@ -128,3 +128,24 @@ def factor(n:int):
     if n < 2: return
     if n < 1500: yield from factor_naive(n)
     else: yield from factor_pollard_rho(n)
+
+import itertools
+from collections import Counter
+
+def divisors(n:int, n_factors:Counter|list[int]|None = None):
+    """
+        Yields every divisors of n, in no particular order.
+        
+        When `n_factors` is given, it would be regarded as the factorization of `n`.
+    """
+    if n == 0: return
+    if n == 1: yield 1; return
+    if n < 4: yield 1; yield n; return
+
+    if n_factors is None: n_factors = Counter(factor(n))
+    elif not isinstance(n_factors, Counter): n_factors = Counter(n_factors)
+
+    for ks in itertools.product(*([p**i for i in range(k+1)] for (p, k) in n_factors.items())):
+        m = 1
+        for pk in ks: m *= pk
+        yield m

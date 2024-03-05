@@ -34,7 +34,7 @@ poetry add git+https://github.com/123jimin/ckp.git
 CKP를 이용한 코드를 작성하세요. 아래는 그 예입니다.
 
 ```py
-from ckp.number_theory import is_prime_naive
+from ckp.number_theory.primality_test import is_prime_naive
 
 N = int(input())
 print(is_prime_naive(N))
