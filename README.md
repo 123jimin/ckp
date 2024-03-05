@@ -33,10 +33,7 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
 - [ ] `language`
 - [ ] `linear_algebra`
 - [ ] `nimber`
-- [ ] `number_theory`
-  - [x] `factor`
-  - [ ] `mod_basic`
-  - [ ] `mod_advanced`
+- [x] `number_theory`
 - [ ] `polynomial`
 - [ ] `strings`
   - [ ] `kmp`
