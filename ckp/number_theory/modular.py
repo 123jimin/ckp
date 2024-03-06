@@ -3,8 +3,62 @@
 """
 
 from collections import Counter
+from math import gcd
 from .misc import factorial_prime_power
 from .factor import factor
+
+def solve_linear_mod(a:int, b:int, m:int) -> int:
+    """ Returns the minimal x >= 0 such that `(ax + b) % m == 0`, or -1 if no such x exists. """
+    if m == 1: return 0
+    a %= m
+    b = (-b) % m
+    if a == 0: return 0 if b == 0 else -1
+    if b == 0: return 0
+    g = gcd(a, m)
+    if g > 1:
+        if b % g != 0: return -1
+        a, b, m = a//g, b//g, m//g
+    if a == 1: return b
+    return (b * pow(a, -1, m)) % m
+
+def count_zero_mod(a:int, b:int, m:int, l:int, r:int) -> int:
+    """ Efficiently computes `sum((a*x + b)%m == 0 for x in range(l, r))`. Assumes that m > 0. """
+    if l >= r: return 0
+    if m == 1: return r - l
+    a %= m
+    b %= m
+    g = gcd(a, m)
+    if g > 1:
+        if b % g != 0: return 0
+        a, b, m = a//g, b//g, m//g
+    x0 = solve_linear_mod(a, a*l + b, m)
+    if x0 == -1: return 0
+    x0 += l
+    if x0 >= r: return 0
+    return (r - 1 - x0) // m + 1
+
+# TODO: implement it more efficiently.
+def sum_floor_linear(a:int, b:int, m:int, n:int) -> int:
+    """ Computes sum((a*x + b) // m for x in range(n)) """
+    if n <= 0: return 0
+    if m == 1: return b*n + a*(n*(n-1)//2)
+    if m < 0: return sum_floor_linear(-a, -b, -m, n)
+
+    if a == 0:
+        return (b//m) * n
+
+    if not 0 <= a < m:
+        ad, ar = divmod(a, m)
+        return sum_floor_linear(ad, 0, 1, n) + sum_floor_linear(ar, b, m, n)
+
+    if not 0 <= b < m:
+        bd, br = divmod(b, m)
+        return n*bd + sum_floor_linear(a, br, m, n)
+
+    h = (a*(n-1)+b) // m
+    s = (n-1) * h - sum_floor_linear(m, m-b, a, h) + count_zero_mod(a, b, m, 1, n)
+
+    return s
 
 def _comb_mod_prime_small_k(n:int, k:int, p:int):
     """

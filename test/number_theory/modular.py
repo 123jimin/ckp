@@ -1,8 +1,52 @@
 import unittest
 from ckp.number_theory.modular import *
 
-import math
+import math, random
 from ckp.number_theory import is_prime
+
+
+class TestSolveLinearMod(unittest.TestCase):
+    def test(self):
+        def solve_naive(a, b, m):
+            if m == 1: return 0
+            a %= m
+            b %= m
+            for x in range(m):
+                if (a*x + b) % m == 0: return x
+            return -1
+        
+        for _ in range(5_000):
+            a = random.randint(-100, 100)
+            b = random.randint(-100, 100)
+            m = random.randint(1, 1000)
+            self.assertEqual(solve_linear_mod(a, b, m), solve_naive(a, b, m), f"{a=}, {b=}, {m=}")
+
+class TestCountZeroMod(unittest.TestCase):
+    def test(self):
+        def sum_naive(a, b, m, l, r):
+            return sum((a*x + b)%m == 0 for x in range(l, r))
+        
+        for _ in range(5_000):
+            a = random.randint(-100, 100)
+            b = random.randint(-100, 100)
+            m = random.randint(1, 100)
+            l = random.randint(-1000, 1000)
+            r = random.randint(-1000, 1000)
+
+            self.assertEqual(count_zero_mod(a, b, m, l, r), sum_naive(a, b, m, l, r), f"{a=}, {b=}, {m=}, {l=}, {r=}")
+
+class TestSumFloorLinear(unittest.TestCase):
+    def test(self):
+        def sum_naive(a, b, m, n):
+            return sum((a*x + b) // m for x in range(n))
+        
+        for _ in range(5_000):
+            a = random.randint(-100, 100)
+            b = random.randint(-100, 100)
+            m = random.randint(1, 100)
+            n = random.randint(0, 100)
+
+            self.assertEqual(sum_floor_linear(a, b, m, n), sum_naive(a, b, m, n), f"{a=}, {b=}, {m=}, {n=}")
 
 class TestCombModPrime(unittest.TestCase):
     def test_common(self):
