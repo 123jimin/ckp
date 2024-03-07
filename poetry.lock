@@ -13,7 +13,7 @@ develop = false
 type = "git"
 url = "https://github.com/123jimin/impacker.git"
 reference = "HEAD"
-resolved_reference = "be08487e15930d23a643adb40849cfa94d562a56"
+resolved_reference = "3429c3b4cc50a5e6663f391bbd3d84f247cc00fc"
 
 [metadata]
 lock-version = "2.0"
