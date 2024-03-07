@@ -37,28 +37,30 @@ def count_zero_mod(a:int, b:int, m:int, l:int, r:int) -> int:
     if x0 >= r: return 0
     return (r - 1 - x0) // m + 1
 
-# TODO: implement it more efficiently.
 def sum_floor_linear(a:int, b:int, m:int, n:int) -> int:
     """ Computes sum((a*x + b) // m for x in range(n)) """
     if n <= 0: return 0
     if m == 1: return b*n + a*(n*(n-1)//2)
-    if m < 0: return sum_floor_linear(-a, -b, -m, n)
+    if m < 0: a, b, m = -a, -b, -m
 
-    if a == 0:
-        return (b//m) * n
+    add = 0
+    while True:
+        if not 0 <= a < m:
+            d, a = divmod(a, m)
+            add += d*(n*(n-1)//2)
 
-    if not 0 <= a < m:
-        ad, ar = divmod(a, m)
-        return sum_floor_linear(ad, 0, 1, n) + sum_floor_linear(ar, b, m, n)
+        if a == 0:
+            return add + (b//m) * n
 
-    if not 0 <= b < m:
-        bd, br = divmod(b, m)
-        return n*bd + sum_floor_linear(a, br, m, n)
+        if not 0 <= b < m:
+            d, b = divmod(b, m)
+            add += n*d
 
-    h = (a*(n-1)+b) // m
-    s = (n-1) * h - sum_floor_linear(m, m-b, a, h) + count_zero_mod(a, b, m, 1, n)
+        if (v := a*n + b) <= m:
+            return add
 
-    return s
+        n, b = divmod(v, m)
+        m, a = a, m
 
 def _comb_mod_prime_small_k(n:int, k:int, p:int):
     """

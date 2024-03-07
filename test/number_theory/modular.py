@@ -43,7 +43,7 @@ class TestSumFloorLinear(unittest.TestCase):
         for _ in range(5_000):
             a = random.randint(-100, 100)
             b = random.randint(-100, 100)
-            m = random.randint(1, 100)
+            while (m := random.randint(-100, 100)) == 0: pass
             n = random.randint(0, 100)
 
             self.assertEqual(sum_floor_linear(a, b, m, n), sum_naive(a, b, m, n), f"{a=}, {b=}, {m=}, {n=}")
