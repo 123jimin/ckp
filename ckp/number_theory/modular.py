@@ -237,7 +237,7 @@ class ZMod:
     def __str__(self): return f"{self.x} (mod {self.m})"
 
     def __bool__(self): return self.x != 0
-    def __int__(self): return self.x
+    def __index__(self): return self.x
 
     def __eq__(self, other):
         if isinstance(other, ZMod) and self.m == other.m: return self.x == other.x

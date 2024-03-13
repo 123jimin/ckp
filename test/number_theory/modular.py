@@ -124,12 +124,29 @@ class TestZMod(unittest.TestCase):
         self.assertEqual(b - a, ZMod(3, 4))
         self.assertEqual(a * b, ZMod(2, 4))
 
+        a += b
+        self.assertEqual(a, ZMod(1, 4))
+
+        a -= b
+        self.assertEqual(a, ZMod(3, 4))
+
+        a *= b
+        self.assertEqual(a, ZMod(2, 4))
+
     def test_op_int(self):
         a = ZMod(3, 5)
 
+        self.assertIs(int(a), 3)
+        self.assertIsNot(int(a), 8)
         self.assertEqual(a, 8)
         self.assertNotEqual(a, 2)
         self.assertEqual(a + 4, 2)
         self.assertEqual(a - 123, 0)
         self.assertEqual(a * 9, 2)
         self.assertEqual(a ** 3, 2)
+
+    def test_list(self):
+        l = [1, 2, 3, 4, 5]
+        i = ZMod(3, len(l))
+
+        self.assertEqual(l[i], 4)
