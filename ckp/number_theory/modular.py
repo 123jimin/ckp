@@ -225,3 +225,103 @@ def sqrt_mod(n:int, m:int, m_factors:Counter|list[int]|None = None) -> int:
         crt_mods.append((v, pk))
 
     return chinese_mod(*crt_mods)
+
+class ZMod:
+    """ Class for modular arithmetic; usage of this class is discouraged because of performance hit. """
+    __slots__ = ('x', 'm')
+    x: int; m: int
+
+    def __init__(self, x, m): self.x, self.m = x % m, m
+
+    def __repr__(self): return f"ZMod({self.x}, {self.m})"
+    def __str__(self): return f"{self.x} (mod {self.m})"
+
+    def __bool__(self): return self.x != 0
+    def __int__(self): return self.x
+
+    def __eq__(self, other):
+        if isinstance(other, ZMod) and self.m == other.m: return self.x == other.x
+        elif isinstance(other, int): return self.x == other % self.m
+        else: return NotImplemented
+        
+    def __ne__(self, other):
+        if isinstance(other, ZMod) and self.m == other.m: return self.x != other.x
+        elif isinstance(other, int): return self.x != other % self.m
+        else: return NotImplemented
+
+    def __add__(self, other):
+        m = self.m
+        if isinstance(other, ZMod) and m == other.m: return ZMod(self.x + other.x, m)
+        elif isinstance(other, int): return ZMod(self.x + other, m)
+        else: return NotImplemented
+
+    def __iadd__(self, other):
+        m = self.m
+        if isinstance(other, ZMod) and m == other.m:
+            self.x = (self.x + other.x) % m
+            return self
+        if isinstance(other, int):
+            self.x = (self.x + other) % m
+            return self
+        return NotImplemented
+    
+    def __radd__(self, other):
+        m = self.m
+        if isinstance(other, int): return ZMod(self.x + other, m)
+        else: return NotImplemented
+
+    def __sub__(self, other):
+        m = self.m
+        if isinstance(other, ZMod) and m == other.m: return ZMod(self.x - other.x, m)
+        elif isinstance(other, int): return ZMod(self.x - other, m)
+        else: return NotImplemented
+
+    def __isub__(self, other):
+        m = self.m
+        if isinstance(other, ZMod) and m == other.m:
+            self.x = (self.x - other.x) % m
+            return self
+        if isinstance(other, int):
+            self.x = (self.x - other) % m
+            return self
+        return NotImplemented
+    
+    def __neg__(self): return ZMod(self.m - self.x if self.x else 0, self.m)
+
+    def __rsub__(self, other):
+        m = self.m
+        if isinstance(other, int): return ZMod(other - self.x, m)
+        else: return NotImplemented
+
+    def __mul__(self, other):
+        m = self.m
+        if isinstance(other, ZMod) and m == other.m: return ZMod(self.x * other.x, m)
+        elif isinstance(other, int): return ZMod(self.x * other, m)
+        else: return NotImplemented
+
+    def __imul__(self, other):
+        m = self.m
+        if isinstance(other, ZMod) and m == other.m:
+            self.x = (self.x * other.x) % m
+            return self
+        if isinstance(other, int):
+            self.x = (self.x * other) % m
+            return self
+        return NotImplemented
+    
+    def __rmul__(self, other):
+        m = self.m
+        if isinstance(other, int): return ZMod(other * self.x, m)
+        else: return NotImplemented
+
+    def __pow__(self, other):
+        m = self.m
+        if isinstance(other, int): return ZMod(pow(self.x, other, m), m)
+        return NotImplemented
+    
+    def __ipow__(self, other):
+        m = self.m
+        if isinstance(other, int):
+            self.x = pow(self.x, other, m)
+            return self
+        return NotImplemented

@@ -4,7 +4,6 @@ from ckp.number_theory.modular import *
 import math, random
 from ckp.number_theory import is_prime
 
-
 class TestSolveLinearMod(unittest.TestCase):
     def test(self):
         def solve_naive(a, b, m):
@@ -113,3 +112,24 @@ class TestSqrtMod(unittest.TestCase):
             for v in range(n):
                 if v in quad_res: continue
                 self.assertEqual(sqrt_mod(v, n, n_factors), 0, f"There shouldn't be any square root of {v} for mod {n}")
+
+class TestZMod(unittest.TestCase):
+    def test_op_zmod(self):
+        a = ZMod(3, 4)
+        b = ZMod(2, 4)
+        
+        self.assertNotEqual(a, b)
+        self.assertEqual(a + b, ZMod(1, 4))
+        self.assertEqual(a - b, ZMod(1, 4))
+        self.assertEqual(b - a, ZMod(3, 4))
+        self.assertEqual(a * b, ZMod(2, 4))
+
+    def test_op_int(self):
+        a = ZMod(3, 5)
+
+        self.assertEqual(a, 8)
+        self.assertNotEqual(a, 2)
+        self.assertEqual(a + 4, 2)
+        self.assertEqual(a - 123, 0)
+        self.assertEqual(a * 9, 2)
+        self.assertEqual(a ** 3, 2)
