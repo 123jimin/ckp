@@ -1,6 +1,8 @@
 import unittest
 from ckp.number_theory.misc import *
 
+import random, math
+
 class TestIterateIdiv(unittest.TestCase):
     def test_common(self):
         data = [
@@ -30,3 +32,15 @@ class TestIterateIdiv(unittest.TestCase):
                 prev_a, prev_c = a, c
             self.assertEqual(prev_a, 1, f"last a of iterate_idiv({n})")
             self.assertEqual(prev_c, n+1, f"last c of iterate_idiv({n})")
+
+class TestExtendedGCD(unittest.TestCase):
+    def test_gcd(self):
+        for _ in range(10000):
+            x, y = random.randint(1, 100000), random.randint(1, 100000)
+            g, a, b = extended_gcd(x, y)
+            real_g = math.gcd(x, y)
+            self.assertEqual(g, real_g, f"{x=} {y=}")
+            self.assertEqual(a*x + b*y, g, f"{x=} {y=}")
+            if g != x and g != y:
+                self.assertLessEqual(abs(a), y // (2*g), f"{x=} {y=}")
+                self.assertLessEqual(abs(b), x // (2*g), f"{x=} {y=}")

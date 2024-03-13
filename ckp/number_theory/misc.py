@@ -24,6 +24,17 @@ def iterate_idiv(x):
         yield (k, prev_i, ub+1)
         prev_i = ub+1
 
+def extended_gcd(x:int, y:int) -> tuple[int, int, int]:
+    """ Returns `(g, a, b)` such that `g == math.gcd(x, y)`, and `x*a + y*b = g`."""
+    if not y: return (x, 1, 0)
+    ps, s, pr, r = 1, 0, x, y
+    while r:
+        m, d = divmod(pr, r)
+        pr, r = r, d
+        ps, s = s, ps - m*s
+    
+    return (pr, ps, (pr - ps*x)//y)
+
 def factorial_prime_power(n:int, p:int) -> int:
     """ Given that p is a prime number, returns max i >= 0 such that p^i divides n. """
     k = 0
