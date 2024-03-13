@@ -227,7 +227,14 @@ def sqrt_mod(n:int, m:int, m_factors:Counter|list[int]|None = None) -> int:
     return chinese_mod(*crt_mods)
 
 class ZMod:
-    """ Class for modular arithmetic; usage of this class is discouraged because of performance hit. """
+    """
+        Class for dealing Z/mZ. 
+
+        Using this class, at the expense of performance (4x slower than simply using `%`), may simplify codes involving modular arithmetic and circular objects.
+
+        Still, as the performance hit is severe, other functions involving modular arithmetic does *not* support this class.
+    """
+
     __slots__ = ('x', 'm')
     x: int; m: int
 
