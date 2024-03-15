@@ -22,7 +22,7 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
   - [ ] `segment_tree`
   - [x] `sorted_containers`
 - [ ] `fourier`
-  - [ ] `complex`
+  - [x] `complex`
   - [ ] `ntt`
 - [ ] `geometry`
   - [ ] `convex_hull`
@@ -32,7 +32,7 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
   - [ ] `strongly_connected_components`
 - [ ] `language`
 - [ ] `linear_algebra`
-- [ ] `nimber`
+- [x] `nimber`
 - [x] `number_theory`
 - [ ] `polynomial`
 - [ ] `strings`
