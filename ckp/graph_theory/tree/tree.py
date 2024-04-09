@@ -48,6 +48,7 @@ class Tree:
         
         self.neighbors = neighbors
         self.parents = parents
+        self.depths = depths
     
     def __len__(self): return len(self.parents)
     def __repr__(self): return f"Tree(parents={self.parents}, root={self.root})"

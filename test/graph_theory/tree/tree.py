@@ -1,6 +1,6 @@
 import unittest
 
-from ckp.graph_theory.tree import *
+from ckp.graph_theory.tree.tree import *
 
 class TestTreeParentsAndDepths(unittest.TestCase):
     def test_simple(self):
