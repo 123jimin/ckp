@@ -27,13 +27,13 @@ class DisjointSet:
         """ Returns whether `x` and `y` reside in the same set. """
         return self.find(x) == self.find(y)
 
-    def union(self, x:int, y:int) -> bool:
+    def union(self, x:int, y:int) -> tuple[int, int]|None:
         """
             Take the union of `x` and `y`.
             
-            Returns whether `x` and `y` were in different sets.
+            Returns a tuple (x, y), when a set with root `y` is merged to `x`.
         """
-        if (x := self.find(x)) == (y := self.find(y)): return False
+        if (x := self.find(x)) == (y := self.find(y)): return None
 
         sizes, ranks = self.sizes, self.ranks
         if ranks[x] < ranks[y]: x, y = y, x
@@ -42,7 +42,7 @@ class DisjointSet:
 
         if ranks[x] == ranks[y]: ranks[x] += 1
 
-        return True
+        return (x, y)
     
 class DisjointSetObject:
     """ Independently usable disjoint set. """
@@ -68,12 +68,12 @@ class DisjointSetObject:
     def in_same_set(self, other) -> bool:
         return self.root == other.root
     
-    def union(self, other) -> bool:
+    def union(self, other) -> tuple|None:
         x, y = self.root, other.root
-        if x is y: return False
+        if x is y: return None
 
         if x._rank < y._rank: x, y = y, x
         y._parent = x; x._size += y._size
         if x._rank == y._rank: x._rank += 1
 
-        return True
+        return (x, y)
