@@ -19,35 +19,34 @@ class TreeLCA:
                 if len(a := parents[j]) <= i: continue
                 if len(pa := parents[a[i]]) <= i: continue
                 a.append(pa[i])
-    
-    def _ascend(self, v: int, h: int) -> int:
-        """ Given that the depth of node v is at least h, Ascend h times towards the root. """
-        parents = self.parents
-        while h:
-            if h == 1: return parents[v][0]
-            l = h.bit_length() - 1
-            h -= (2**l)
-            v = parents[v][l]
-        return v
 
     def get(self, v: int, w: int) -> int:
         if v == w: return v
         
-        d_v, d_w = self.depths[v], self.depths[w]
-        if d_v < d_w: w, d_w = self._ascend(w, d_w - d_v), d_v
-        elif d_w < d_v: v, d_v = self._ascend(v, d_v - d_w), d_w
+        depths, parents = self.depths, self.parents
+        
+        d_v, d_w = depths[v], depths[w]
+        if d_v < d_w:
+            h = d_w - d_v
+            while h:
+                if h == 1: w = parents[w][0]; break
+                h -= 1<<(l := h.bit_length() - 1)
+                w = parents[w][l]
+        elif d_w < d_v:
+            h = d_v - d_w
+            while h:
+                if h == 1: v = parents[v][0]; break
+                h -= 1<<(l := h.bit_length() - 1)
+                v = parents[v][l]
 
-        parents = self.parents
         while v != w:
             pv, pw = parents[v], parents[w]
 
+            # Using `zip(pv, pw)` is not faster.
             for i in range(len(pv)):
-                pvi, pwi = pv[i], pw[i]
-                if pvi != pwi: continue
-                if i == 0: return pvi
-                v, w = pv[i-1], pw[i-1]
+                nv, nw = pv[i], pw[i]
+                if nv != nw: v, w = nv, nw; continue
+                if i == 0: return nv
                 break
-            else:
-                v, w = pv[-1], pw[-1]
 
         return v
