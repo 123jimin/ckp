@@ -1,6 +1,7 @@
 import unittest
 
 from ckp.graph_theory.tree.lca import *
+from ckp.graph_theory.tree import Tree
 
 class TestLCA(unittest.TestCase):
     def test_11438(self):
