@@ -19,6 +19,15 @@ class TreeLCA:
                 if len(pa := parents[a[i]]) <= i: continue
                 a.append(pa[i])
 
+    def ancestor(self, v: int, p: int) -> int:
+        """ Retrieves p-th ancestor of v. """
+        parents = self.parents
+        while p:
+            if p == 1: return parents[v][0]
+            p -= 1<<(l := p.bit_length() - 1)
+            v = parents[v][l]
+        return v
+
     def get(self, v: int, w: int) -> int:
         if v == w: return v
         
