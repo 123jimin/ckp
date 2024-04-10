@@ -1,12 +1,11 @@
-from ckp.graph_theory.tree.tree import Tree
-
 class TreeLCA:
     """ Stores information about least common ancestors of a given tree. """
 
     parents: list[list[int]]
     depths: list[int]
 
-    def __init__(self, tree: Tree):
+    def __init__(self, tree):
+        """ Given a `Tree` or `DistanceTree`, constructs a data structure that enables querying LCA in a logarithmic time. """
         depths = self.depths = tree.depths
         parents = self.parents = [([p] if p >= 0 else []) for p in tree.parents]
 

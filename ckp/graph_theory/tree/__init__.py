@@ -3,7 +3,7 @@
 """
 
 from .tree import tree_parents_and_depths, tree_sizes
-from .tree import Tree
+from .tree import Tree, DistanceTree
 
 from .hld import TreeHLD
 from .lca import TreeLCA
