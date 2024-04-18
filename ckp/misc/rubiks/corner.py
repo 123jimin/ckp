@@ -40,8 +40,12 @@ def cube_face_to_corner(faces: list[tuple], face_mapping: dict = {"Y":0, "B":1, 
         )
     )
 
-def corner_to_faces(state: tuple[int, int, int, int, int, int, int, int]):
-    pass # TODO
+def corner_to_faces(state: tuple[int, int, int, int, int, int, int, int], face_mapping: list = ["Y", "B", "R", "W", "G", "O"]) -> list[list]:
+    faces = [[None] * 4 for _ in range(6)]
+    for x, inds in zip(state, [((0, 3), (2, 1), (1, 0)), ((0, 1), (4, 1), (2, 0)), ((0, 0), (5, 1), (4, 0)), ((0, 2), (1, 1), (5, 0)), ((3, 1), (1, 3), (2, 2)), ((3, 3), (2, 3), (4, 2)), ((3, 2), (4, 3), (5, 2)), ((3, 0), (5, 3), (1, 2))]):
+        pass
+    # TODO
+    raise NotImplementedError("Not yet implemented!")
 
 def corner_turn(state: tuple[int, int, int, int, int, int, int, int], move: int):
     """ Returns a new corner state with the move applied. """
@@ -74,8 +78,8 @@ def corner_turn(state: tuple[int, int, int, int, int, int, int, int], move: int)
         # Other moves (presumably on inner layers)
         case _: return state
 
-def corner_is_solved(state: tuple[int, int, int, int, int, int, int, int]) -> bool:
-    return state in {
+def corner_solved_states() -> set[tuple[int]]:
+    return {
         (0, 1, 2, 3, 4, 5, 6, 7), (1, 2, 3, 0, 5, 6, 7, 4), (2, 3, 0, 1, 6, 7, 4, 5), (3, 0, 1, 2, 7, 4, 5, 6),
         (4, 7, 6, 5, 0, 3, 2, 1), (5, 4, 7, 6, 1, 0, 3, 2), (6, 5, 4, 7, 2, 1, 0, 3), (7, 6, 5, 4, 3, 2, 1, 0),
         (8, 19, 15, 20, 17, 10, 22, 13), (9, 16, 12, 21, 18, 11, 23, 14), (10, 17, 13, 22, 19, 8, 20, 15), (11, 18, 14, 23, 16, 9, 21, 12),
@@ -83,3 +87,6 @@ def corner_is_solved(state: tuple[int, int, int, int, int, int, int, int]) -> bo
         (16, 12, 21, 9, 11, 23, 14, 18), (17, 13, 22, 10, 8, 20, 15, 19), (18, 14, 23, 11, 9, 21, 12, 16), (19, 15, 20, 8, 10, 22, 13, 17),
         (20, 8, 19, 15, 13, 17, 10, 22), (21, 9, 16, 12, 14, 18, 11, 23), (22, 10, 17, 13, 15, 19, 8, 20), (23, 11, 18, 14, 12, 16, 9, 21),
     }
+
+def corner_is_solved(state: tuple[int, int, int, int, int, int, int, int]) -> bool:
+    return state in corner_solved_states()
