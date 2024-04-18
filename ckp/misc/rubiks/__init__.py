@@ -10,9 +10,9 @@
 
     Internally, the second method is used.
 
-    ## Cube Action
+    ## Cube Move
 
-    An action consists of an integer.
+    A move consists of an integer.
     - Bits 0-1: \# of quarter turns.
       - Clockwise (w.r.t. layer direction) when layer \# is even, counter-clockwise when layer \# is odd
     - Bits 2-3: Layer direction.
@@ -26,3 +26,4 @@
 
 from .corner import *
 from .edge import *
+from .move import *
