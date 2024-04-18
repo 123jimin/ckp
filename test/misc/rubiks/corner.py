@@ -10,6 +10,16 @@ def make_move_pairs(m: int):
             if x: yield ([m+i, m+j], [m+x])
             else: yield ([m+i, m+j], [])
 
+class TestFacesToCorner(unittest.TestCase):
+    def test_corner_face_to_corner(self):
+        for i, (f1, f2, f3) in enumerate([(0, 2, 1), (0, 4, 2), (0, 5, 4), (0, 1, 5), (3, 1, 2), (3, 2, 4), (3, 4, 5), (3, 5, 1)]):
+            self.assertEqual(corner_face_to_corner(f1, f2, f3), i, f"{i=}")
+            self.assertEqual(corner_face_to_corner(f3, f1, f2), i+8, f"{i=}")
+            self.assertEqual(corner_face_to_corner(f2, f3, f1), i+16, f"{i=}")
+
+    def test_cube_face_to_corner(self):
+        self.assertTupleEqual(cube_face_to_corner(["YYYY", "BBBB", "RRRR", "WWWW", "GGGG", "OOOO"]), corner_init(), "initial corner state")
+
 class TestCornerTurn(unittest.TestCase):
     def test_face_clockwise(self):
         init_state = corner_init()

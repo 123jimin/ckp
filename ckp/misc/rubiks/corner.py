@@ -14,6 +14,35 @@ def corner_init():
     """ Returns the initial corner state. """
     return (0, 1, 2, 3, 4, 5, 6, 7)
 
+def corner_face_to_corner(face_1:int, face_2:int, face_3:int) -> int:
+    """ Given three faces of a corner, clockwise starting from U or D, returns the integer representing the corner piece. """
+    if face_1 in {0, 3}: return {(0, 1): 3, (0, 2): 0, (0, 4): 1, (0, 5): 2, (3, 1): 4, (3, 2): 5, (3, 4): 6, (3, 5): 7}[(face_1, face_2)]
+    elif face_2 in {0, 3}: return {(0, 1): 11, (0, 2): 8, (0, 4): 9, (0, 5): 10, (3, 1): 12, (3, 2): 13, (3, 4): 14, (3, 5): 15}[(face_2, face_3)]
+    else: return {(0, 1): 19, (0, 2): 16, (0, 4): 17, (0, 5): 18, (3, 1): 20, (3, 2): 21, (3, 4): 22, (3, 5): 23}[(face_3, face_1)]
+
+def cube_face_to_corner(faces: list[tuple], face_mapping: dict = {"Y":0, "B":1, "R":2, "W":3, "G":4, "O":5}):
+    """
+        Constructs the corner state based on faces.
+        - `faces`: List of face colors, for each face. For faces other than U and D, the faces' order is (upleft, upright, downleft, downright).
+        - `face_mapping`: Maps each face color into face index (UFRDBL corresponds to 012345).
+    """
+    return tuple(
+        corner_face_to_corner(face_mapping[face_1], face_mapping[face_2], face_mapping[face_3])
+        for (face_1, face_2, face_3) in (
+            (faces[0][3], faces[2][1], faces[1][0]),
+            (faces[0][1], faces[4][1], faces[2][0]),
+            (faces[0][0], faces[5][1], faces[4][0]),
+            (faces[0][2], faces[1][1], faces[5][0]),
+            (faces[3][1], faces[1][3], faces[2][2]),
+            (faces[3][3], faces[2][3], faces[4][2]),
+            (faces[3][2], faces[4][3], faces[5][2]),
+            (faces[3][0], faces[5][3], faces[1][2]),
+        )
+    )
+
+def corner_to_faces(state: tuple[int, int, int, int, int, int, int, int]):
+    pass # TODO
+
 def corner_turn(state: tuple[int, int, int, int, int, int, int, int], move: int):
     """ Returns a new corner state with the move applied. """
     urf, ubr, ulb, ufl, dfr, drb, dbl, dlf = state
@@ -44,3 +73,13 @@ def corner_turn(state: tuple[int, int, int, int, int, int, int, int], move: int)
         case 27: return (urf, ubr, (ufl-8)%24, (dlf+8)%24, dfr, drb, (ulb+8)%24, (dbl-8)%24)
         # Other moves (presumably on inner layers)
         case _: return state
+
+def corner_is_solved(state: tuple[int, int, int, int, int, int, int, int]) -> bool:
+    return state in {
+        (0, 1, 2, 3, 4, 5, 6, 7), (1, 2, 3, 0, 5, 6, 7, 4), (2, 3, 0, 1, 6, 7, 4, 5), (3, 0, 1, 2, 7, 4, 5, 6),
+        (4, 7, 6, 5, 0, 3, 2, 1), (5, 4, 7, 6, 1, 0, 3, 2), (6, 5, 4, 7, 2, 1, 0, 3), (7, 6, 5, 4, 3, 2, 1, 0),
+        (8, 19, 15, 20, 17, 10, 22, 13), (9, 16, 12, 21, 18, 11, 23, 14), (10, 17, 13, 22, 19, 8, 20, 15), (11, 18, 14, 23, 16, 9, 21, 12),
+        (12, 21, 9, 16, 23, 14, 18, 11), (13, 22, 10, 17, 20, 15, 19, 8), (14, 23, 11, 18, 21, 12, 16, 9), (15, 20, 8, 19, 22, 13, 17, 10),
+        (16, 12, 21, 9, 11, 23, 14, 18), (17, 13, 22, 10, 8, 20, 15, 19), (18, 14, 23, 11, 9, 21, 12, 16), (19, 15, 20, 8, 10, 22, 13, 17),
+        (20, 8, 19, 15, 13, 17, 10, 22), (21, 9, 16, 12, 14, 18, 11, 23), (22, 10, 17, 13, 15, 19, 8, 20), (23, 11, 18, 14, 12, 16, 9, 21),
+    }
