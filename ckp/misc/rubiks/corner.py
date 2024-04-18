@@ -42,4 +42,5 @@ def corner_turn(state: tuple[int, int, int, int, int, int, int, int], move: int)
         case 25: return (urf, ubr, (dbl-8)%24, (ulb+8)%24, dfr, drb, (dlf+8)%24, (ufl-8)%24)
         case 26: return (urf, ubr, dlf, dbl, dfr, drb, ufl, ulb)
         case 27: return (urf, ubr, (ufl-8)%24, (dlf+8)%24, dfr, drb, (ulb+8)%24, (dbl-8)%24)
+        # Other moves (presumably on inner layers)
         case _: return state

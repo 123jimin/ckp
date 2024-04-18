@@ -1,7 +1,7 @@
 
 import unittest
 from ckp.misc.rubiks.corner import *
-from ckp.misc.rubiks.move import str_to_move
+from ckp.misc.rubiks.move import str_to_move, str_to_moves
 
 def make_move_pairs(m: int):
     for i in (1, 2, 3):
@@ -41,3 +41,8 @@ class TestCornerTurn(unittest.TestCase):
                 self.assertTrue(all(0 <= s < 24 for s in state), f"{move=} {state=} state int range")
                 self.assertSetEqual(set(s%8 for s in state), {0, 1, 2, 3, 4, 5, 6, 7}, f"{move=} {state=} state position")
                 self.assertEqual(sum(s//8 for s in state)%3, 0, f"{move=} {state=} state orientation")
+    
+    def test_pll(self):
+        for (state, algorithm) in [((1, 0, 2, 3, 4, 5, 6, 7), "RUR'F'RUR'U'R'FR2U'R'")]:
+            for move in str_to_moves(algorithm): state = corner_turn(state, move)
+            self.assertTupleEqual(state, corner_turn(corner_init(), str_to_move("U")), f"{algorithm=}")
