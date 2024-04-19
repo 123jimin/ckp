@@ -25,7 +25,7 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
   - [x] `complex`
   - [ ] `ntt`
 - [ ] `geometry`
-  - [ ] `convex_hull`
+  - [x] `convex_hull`
 - [ ] `graph_theory`
   - [ ] `bipartite_matching`
   - [x] `ford_fulkerson`
