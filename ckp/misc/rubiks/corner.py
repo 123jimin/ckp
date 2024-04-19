@@ -40,12 +40,21 @@ def cube_face_to_corner(faces: list[tuple], face_mapping: dict = {"Y":0, "B":1, 
         )
     )
 
+def corner_piece_to_faces(piece_state: int) -> tuple[int, int, int]:
+    orient, position = divmod(piece_state, 8)
+    f1, f2, f3 = ((0, 2, 1), (0, 4, 2), (0, 5, 4), (0, 1, 5), (3, 1, 2), (3, 2, 4), (3, 4, 5), (3, 5, 1))[position]
+    match orient:
+        case 0: return (f1, f2, f3)
+        case 1: return (f3, f1, f2)
+        case 2: return (f2, f3, f1)
+        case _: assert(False)
+
 def corner_to_faces(state: tuple[int, int, int, int, int, int, int, int], face_mapping: list = ["Y", "B", "R", "W", "G", "O"]) -> list[list]:
     faces = [[None] * 4 for _ in range(6)]
     for x, inds in zip(state, [((0, 3), (2, 1), (1, 0)), ((0, 1), (4, 1), (2, 0)), ((0, 0), (5, 1), (4, 0)), ((0, 2), (1, 1), (5, 0)), ((3, 1), (1, 3), (2, 2)), ((3, 3), (2, 3), (4, 2)), ((3, 2), (4, 3), (5, 2)), ((3, 0), (5, 3), (1, 2))]):
-        pass
-    # TODO
-    raise NotImplementedError("Not yet implemented!")
+        for (f, i), face in zip(inds, corner_piece_to_faces(x)):
+            faces[f][i] = face_mapping[face]
+    return faces
 
 def corner_turn(state: tuple[int, int, int, int, int, int, int, int], move: int):
     """ Returns a new corner state with the move applied. """
