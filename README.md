@@ -18,7 +18,7 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
 - [x] `automata`
 - [ ] `data_structure`
   - [x] `disjoint_set`
-  - [ ] `graph`
+  - [x] `graph`
   - [ ] `segment_tree`
   - [x] `sorted_containers`
 - [ ] `fourier`
