@@ -28,10 +28,10 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
   - [ ] `convex_hull`
 - [ ] `graph_theory`
   - [ ] `bipartite_matching`
-  - [ ] `ford_fulkerson`
+  - [x] `ford_fulkerson`
   - [ ] `strongly_connected_components`
 - [ ] `language`
-- [ ] `linear_algebra`
+- [x] `linear_algebra`
 - [x] `nimber`
 - [x] `number_theory`
 - [ ] `polynomial`
