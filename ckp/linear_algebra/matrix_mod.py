@@ -2,7 +2,7 @@
     Codes for performing matrix operations on Z/nZ for some n.
 """
 
-from .matrix import matrix_id, matrix_equal
+from .matrix import matrix_id
 
 def column_vec_mod(x: list[int], m: int) -> list[list[int]]: return [[xe % m] for xe in x]
 
