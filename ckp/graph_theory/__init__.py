@@ -1,4 +1,4 @@
 from ..data_structure.graph import *
 
-from .ford_fulkerson import FordFulkerson
+from .max_flow import *
 from .tree import *

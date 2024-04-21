@@ -1,6 +1,6 @@
 
 import unittest
-from ckp.graph_theory.ford_fulkerson import *
+from ckp.graph_theory.max_flow.ford_fulkerson import *
 from ckp.data_structure.graph.simple import DictGraph
 
 import random

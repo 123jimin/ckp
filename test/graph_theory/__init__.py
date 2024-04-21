@@ -1,2 +1,2 @@
-from .ford_fulkerson import *
+from .max_flow import *
 from .tree import *

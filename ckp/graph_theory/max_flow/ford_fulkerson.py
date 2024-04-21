@@ -1,4 +1,4 @@
-from ..data_structure.graph import AbstractWeightedGraph, DictFlowGraph
+from ...data_structure.graph import AbstractWeightedGraph, DictFlowGraph
 
 class FordFulkerson:
     """ Implements the Ford-Fulkerson max-flow algorithm. """
