@@ -21,7 +21,11 @@ def _tree_size_dfs(neighbors: list[list[int]], sizes: list[int], curr: int, pare
 
 def tree_sizes(neighbors: list[list[int]], root_ind: int = 0) -> list[int]:
     """ Constructs a list S, where S[i] is the size of the subtree rooted at node i. """
+    if not neighbors: return []
+    if not neighbors[0]: return [1] * len(neighbors)
+
     sizes = [0] * len(neighbors)
+
     _tree_size_dfs(neighbors, sizes, root_ind)
     return sizes
 
@@ -62,20 +66,22 @@ class Tree:
         return Tree(neighbors=neighbors, root=root)
 
 class DistanceTree(Tree):
-    __slots__ = ('root', 'neighbors', 'parents', 'depths', 'parent_distances', 'root_distances')
+    __slots__ = ('root', 'neighbors', 'distances', 'parents', 'depths', 'parent_distances', 'root_distances')
 
     root: int
 
-    neighbors: list[list[tuple[int, int]]]
+    neighbors: list[list[int]]
+    distances: list[list[int]]
     parents: list[int]
     depths: list[int]
 
     parent_distances: list[int]
     root_distances: list[int]
 
-    def __init__(self, neighbors: list[list[tuple[int, int]]], root: int = 0):
+    def __init__(self, neighbors: list[list[int]], distances: list[list[int]], root: int = 0):
         self.root = root
         self.neighbors = neighbors
+        self.distances = distances
 
         N = len(neighbors)
         self.parents = [-1] * N
@@ -90,7 +96,7 @@ class DistanceTree(Tree):
         self.depths[curr] = depth
         self.root_distances[curr] = root_distance
 
-        for (ch, d) in self.neighbors[curr]:
+        for (ch, d) in zip(self.neighbors[curr], self.distances[curr]):
             if ch == parent: continue
 
             self.parent_distances[ch] = d
@@ -98,6 +104,10 @@ class DistanceTree(Tree):
 
     @staticmethod
     def from_edges(edges: list[tuple[int, int, int]], root: int = 0):
-        neighbors = [list[tuple[int, int]]() for _ in range(len(edges)+1)]
-        for (x, y, d) in edges: neighbors[x].append((y, d)); neighbors[y].append((x, d))
-        return DistanceTree(neighbors, root)
+        neighbors = [[] for _ in range(len(edges)+1)]
+        distances = [[] for _ in range(len(edges)+1)]
+        for (x, y, d) in edges:
+            assert(x != y)
+            neighbors[x].append(y); neighbors[y].append(x)
+            distances[x].append(d); distances[y].append(d)
+        return DistanceTree(neighbors, distances, root)

@@ -25,7 +25,9 @@ class TreeHLD:
 
         neighbors = self.tree.neighbors[curr]
 
-        if parent != -1:
+        if parent == -1:
+            if len(neighbors) == 0: return
+        else:
             if len(neighbors) == 1: return
             if len(neighbors) == 2:
                 for ch in neighbors:
@@ -33,8 +35,9 @@ class TreeHLD:
                         self._init_node(sizes, ind, ch, curr)
                         return
                 assert(False)
-        
+
         max_ch_size = max(sizes[ch] for ch in neighbors if ch != parent)
+
         for ch in neighbors:
             if ch == parent: continue
             if sizes[ch] == max_ch_size:
