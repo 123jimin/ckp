@@ -14,3 +14,6 @@ class TestLCA(unittest.TestCase):
         self.assertEqual(lca.get(6, 5), 0)
         self.assertEqual(lca.get(7, 12), 2)
         self.assertEqual(lca.get(7, 14), 0)
+
+        for v in range(len(tree)):
+            self.assertEqual(lca.get(0, v), 0)
