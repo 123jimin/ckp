@@ -1,1 +1,2 @@
-from .matrix_chain_ordering import *
+# Misc submodule by itself is meaningless; import a submodule of ckp.misc.
+pass

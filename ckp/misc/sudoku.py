@@ -4,6 +4,7 @@ class SudokuBoard:
     ROWS = [[(i, j) for j in range(9)] for i in range(9)]
     COLS = [[(i, j) for i in range(9)] for j in range(9)]
     CELLS = [[(3*(i//3)+j//3, 3*(i%3)+(j%3)) for j in range(9)] for i in range(9)]
+    BIT_MAP = {1: 1, 2: 2, 4: 3, 8: 4, 16: 5, 32: 6, 64: 7, 128: 8, 256: 9}
     
     __slots__ = ('candi',)
     def __init__(self, candi: list[list[int]]):
@@ -85,6 +86,9 @@ class SudokuBoard:
                         return next_boards
         
         return [self]
+    
+    def to_array(self):
+        return [[self.BIT_MAP.get(c) or 0 for c in row] for row in self.candi]
 
     @staticmethod
     def from_array(A: list[list[int]]):
