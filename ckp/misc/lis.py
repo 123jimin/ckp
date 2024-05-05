@@ -14,7 +14,7 @@ def lis(A: list):
     for i in range(1, len(A)):
         if j := bisect_right(L, A[i], key=lambda v: A[v]):
             P[i] = L[j-1]
-        if j == len(L): L.append(j)
+        if j == len(L): L.append(i)
         else: L[j] = i
 
     v = L[-1]
