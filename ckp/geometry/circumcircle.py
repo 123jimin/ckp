@@ -40,24 +40,24 @@ def circumcircle_of_triangle(D: list[tuple[int|float, int|float]]):
     Sy = _determinant(ax, l2A, 1, bx, l2B, 1, cx, l2C, 1)
     return (2*a, (Sx, Sy), Sx*Sx+Sy*Sy + 4*a*b)
 
-def _circumcircle_of_points_inner(P: list[tuple[int|float, int|float]], i: int, D: list[tuple[int|float, int|float]]) -> tuple[int|float, int|float, int|float]:
+def _min_enclosing_circle_inner(P: list[tuple[int|float, int|float]], i: int, D: list[tuple[int|float, int|float]]) -> tuple[int|float, int|float, int|float]:
     if i == len(P) or len(D) == 3: return circumcircle_of_triangle(D)
     if len(D) == 0 and i+1 >= len(P): return circumcircle_of_triangle(P[i:])
 
-    C = _circumcircle_of_points_inner(P, i+1, D)
+    C = _min_enclosing_circle_inner(P, i+1, D)
     if is_in_circumcircle(C, P[i]): return C
 
     D.append(P[i])
-    C = _circumcircle_of_points_inner(P, i+1, D)
+    C = _min_enclosing_circle_inner(P, i+1, D)
     D.pop()
 
     return C
 
-def circumcircle_of_points(P: list[tuple[int|float, int|float]]):
+def min_enclosing_circle(P: list[tuple[int|float, int|float]]):
     """
         Given that the circumcircle of P is centered at (cx, cy) and r, returns (a, (a*cx, a*cy), (a*r)^2).
         When all points of P are integer points, then all three values will be integers.
         
         Note that `a` might be a negative number.
     """
-    return _circumcircle_of_points_inner(P, 0, [])
+    return _min_enclosing_circle_inner(P, 0, [])
