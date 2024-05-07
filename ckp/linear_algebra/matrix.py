@@ -87,39 +87,39 @@ class Matrix:
 
     def __eq__(self, other):
         if isinstance(other, Matrix): return matrix_equal(self.rows, other.rows)
-        elif isinstance(other, list): return matrix_equal(self.rows, other)
+        elif isinstance(other, (list, tuple)): return matrix_equal(self.rows, other)
         else: return NotImplemented
     
     def __ne__(self, other): return not self.__eq__(other)
     
     def __add__(self, other):
         if isinstance(other, Matrix): return Matrix(matrix_add(self.rows, other.rows))
-        elif isinstance(other, list): return Matrix(matrix_add(self.rows, other))
+        elif isinstance(other, (list, tuple)): return Matrix(matrix_add(self.rows, other))
         else: return NotImplemented
         
     def __iadd__(self, other):
         if isinstance(other, Matrix): matrix_iadd(self.rows, other.rows)
-        elif isinstance(other, list): matrix_iadd(self.rows, other)
+        elif isinstance(other, (list, tuple)): matrix_iadd(self.rows, other)
         else: return NotImplemented
         return self
     
     def __radd__(self, other):
-        if isinstance(other, list): return Matrix(matrix_add(other, self.rows))
+        if isinstance(other, (list, tuple)): return Matrix(matrix_add(other, self.rows))
         else: return NotImplemented
     
     def __sub__(self, other):
         if isinstance(other, Matrix): return Matrix(matrix_sub(self.rows, other.rows))
-        elif isinstance(other, list): return Matrix(matrix_sub(self.rows, other))
+        elif isinstance(other, (list, tuple)): return Matrix(matrix_sub(self.rows, other))
         else: return NotImplemented
         
     def __isub__(self, other):
         if isinstance(other, Matrix): matrix_isub(self.rows, other.rows)
-        elif isinstance(other, list): matrix_isub(self.rows, other)
+        elif isinstance(other, (list, tuple)): matrix_isub(self.rows, other)
         else: return NotImplemented
         return self
     
     def __rsub__(self, other):
-        if isinstance(other, list): return Matrix(matrix_sub(other, self.rows))
+        if isinstance(other, (list, tuple)): return Matrix(matrix_sub(other, self.rows))
         else: return NotImplemented
     
     def __neg__(self):
@@ -127,17 +127,17 @@ class Matrix:
     
     def __mul__(self, other):
         if isinstance(other, Matrix): return Matrix(matrix_mul(self.rows, other.rows))
-        elif isinstance(other, list): return Matrix(matrix_mul(self.rows, other))
+        elif isinstance(other, (list, tuple)): return Matrix(matrix_mul(self.rows, other))
         else: return Matrix(matrix_scalar_mul(self.rows, other))
     
     def __imul__(self, other):
         if isinstance(other, Matrix): self.rows = matrix_mul(self.rows, other.rows)
-        elif isinstance(other, list): self.rows = matrix_mul(self.rows, other)
+        elif isinstance(other, (list, tuple)): self.rows = matrix_mul(self.rows, other)
         else: matrix_scalar_imul(self.rows, other)
         return self
     
     def __rmul__(self, other):
-        if isinstance(other, list): return Matrix(matrix_sub(other, self.rows))
+        if isinstance(other, (list, tuple)): return Matrix(matrix_sub(other, self.rows))
         else: return Matrix(matrix_scalar_mul(self.rows, other))
     
     def __pow__(self, other):
