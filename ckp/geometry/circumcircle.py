@@ -17,6 +17,8 @@ def circumcircle_of_triangle(D: list[tuple[int|float, int|float]]):
         Note that `a` might be a negative number.
     """
 
+    assert(len(D) <= 3)
+
     if len(D) == 1: return (1, D[0], 0)
     if len(D) == 2:
         ax, ay = D[0]

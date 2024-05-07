@@ -27,6 +27,7 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
 - [x] `geometry`
   - [x] `circumcircle`
   - [x] `convex_hull`
+  - [ ] `delaunay`
 - [ ] `graph_theory`
   - [ ] `bipartite_matching`
   - [x] `ford_fulkerson`
