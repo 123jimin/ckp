@@ -1,6 +1,6 @@
 def is_in_circumcircle(C: tuple[float, tuple[float, float], float], p: tuple[float, float]) -> bool:
     """
-        Given a circumcircle (closed disc) returned by `circumcircle_of_*` functions, and a point p = (x, y), returns whether C contains p.
+        Given a circle (closed disc) `C` returned by `circumcircle_of_triangle` or `min_enclosing_circle`, and a point p = (x, y), returns whether `C` contains `p`.
     """
     Ca, Cp, Cr2 = C
     dx = p[0]*Ca-Cp[0]
@@ -21,10 +21,9 @@ def circumcircle_of_triangle(a: tuple[float, float], b:tuple[float, float], c:tu
         When three points are colinear, Ca will be zero.
     """
 
-    ax, ay = a
-    bx, by = b
-    cx, cy = c
-    al, bl, cl = ax*ax+ay*ay, bx*bx+by*by, cx*cx+cy*cy
+    ax, ay = a; al = ax*ax + ay*ay
+    bx, by = b; bl = bx*bx + by*by
+    cx, cy = c; cl = cx*cx + cy*cy
 
     # Det([(ax, bx, cx), (ay, by, cy), (1, 1, 1)])
     Ca = ax*(by-cy) + bx*(cy-ay) + cx*(ay-by)

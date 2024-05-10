@@ -2,7 +2,26 @@
 import unittest
 from ckp.geometry.circumcircle import *
 
-import math
+import math, random
+
+class TestCircumsphereOfTriangle(unittest.TestCase):
+    def test_simple(self):
+        self.assertEqual(circumcircle_of_triangle((0, 0), (0, 1), (1, 1)), (2, (1, 1), 2))
+    
+    def test_regular_triangle(self):
+        Ca, (Cx, Cy), Cr2 = circumcircle_of_triangle((-1/2, -math.sqrt(3/4)), (1/2, -math.sqrt(3/4)), (0, 1))
+        self.assertAlmostEqual(Ca*Ca, Cr2)
+        self.assertAlmostEqual(Cx, 0)
+        self.assertAlmostEqual(Cy, 0)
+    
+    def test_random(self):
+        for _ in range(1000):
+            P = [(random.random()*1000, random.random()*1000) for _ in range(3)]
+            Ca, (Cx, Cy), Cr2 = circumcircle_of_triangle(*P)
+            r = math.sqrt(Cr2 / (Ca*Ca))
+            Cx, Cy = Cx/Ca, Cy/Ca
+            for (x, y) in P:
+                self.assertAlmostEqual(math.hypot(x-Cx, y-Cy), r)
 
 class TestMinEnclosingCircle(unittest.TestCase):
     def test_simple(self):
