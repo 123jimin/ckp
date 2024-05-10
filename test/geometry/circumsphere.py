@@ -32,3 +32,11 @@ class TestCircumsphereOfTetrahedron(unittest.TestCase):
             Cx, Cy, Cz = Cx/Ca, Cy/Ca, Cz/Ca
             for (x, y, z) in P:
                 self.assertAlmostEqual(math.hypot(x-Cx, y-Cy, z-Cz), r)
+
+class TestMinEnclosingSphere(unittest.TestCase):
+    def test_11930(self):
+        Ca, (Cx, Cy, Cz), Cr2 = min_enclosing_sphere([(-5, 0, 0), (5, 0, 0), (0, 3, 4), (4, -3, 0), (2, 2, -2)])
+        self.assertAlmostEqual(Cr2, Ca*Ca*25)
+        self.assertAlmostEqual(Cx, 0)
+        self.assertAlmostEqual(Cy, 0)
+        self.assertAlmostEqual(Cz, 0)

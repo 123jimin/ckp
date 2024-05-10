@@ -44,7 +44,7 @@ def circumcircle_of_triangle(a: tuple[float, float], b:tuple[float, float], c:tu
 def min_enclosing_circle(P: list[tuple[float, float]]) -> tuple[float, tuple[float, float], float]:
     """
         Given a list of points P, returns the minimal enclosing circle C.
-        C will be given as a format (Ca, Cp, Cr2), where, given that the circumcircle is centered at (x, y) with radius r:
+        C will be given as a format (Ca, Cp, Cr2), where, given that the circle is centered at (x, y) with radius r:
 
         - Ca > 0
         - Cp = Ca * (x, y)

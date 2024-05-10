@@ -46,6 +46,19 @@ def min_enclosing_sphere_of_triangle(a: tuple[float, float, float], b: tuple[flo
     return (1, p, r2)
         
 def circumsphere_of_tetrahedron(a: tuple[float, float,  float], b: tuple[float, float,  float], c: tuple[float, float,  float], d: tuple[float, float,  float]) -> tuple[float, tuple[float, float, float], float]:
+    """
+        Given a tetrahedron abcd, compute the circumsphere C of it.
+        C will be given as a format (Ca, Cp, Cr2), where, given that the circumsphere is centered at (x, y, z) with radius r:
+
+        - Ca > 0
+        - Cp = Ca * (x, y, z)
+        - Cr2 = (Ca * r) ** 2
+
+        When all of `a`, `b`, `c`, `d` are integers, then all Ca, Cp, Cr2 will be integers.
+
+        When four points are colinear, Ca will be zero.
+    """
+    
     ax, ay, az = a; al = ax*ax + ay*ay + az*az
     bx, by, bz = b; bl = bx*bx + by*by + bz*bz
     cx, cy, cz = c; cl = cx*cx + cy*cy + cz*cz
@@ -65,3 +78,51 @@ def circumsphere_of_tetrahedron(a: tuple[float, float,  float], b: tuple[float, 
 
     if Ca < 0: Ca, Cb, Cx, Cy, Cz = -Ca, -Cb, -Cx, -Cy, -Cz
     return (2*Ca, (Cx, Cy, Cz), Cx*Cx + Cy*Cy + Cz*Cz + 4*Ca*Cb)
+
+def min_enclosing_sphere(P: list[tuple[float, float, float]]) -> tuple[float, tuple[float, float], float]:
+    """
+        Given a list of points P, returns the minimal enclosing sphere C.
+        C will be given as a format (Ca, Cp, Cr2), where, given that the circle is centered at (x, y, z) with radius r:
+
+        - Ca > 0
+        - Cp = Ca * (x, y, z)
+        - Cr2 = (Ca * r) ** 2
+
+        Calling `random.shuffle(P)` before using this function is strongly recommended.
+    """
+
+    lP = len(P)
+    assert(lP > 0)
+
+    if lP == 1: return (1, P[0], 0)
+
+    stack = [tuple()] * (lP - 1)
+    stack.append(None)
+    stack_top = lP - 2
+
+    Ca, Cp, Cr2 = 1, P[-1], 0
+
+    while stack_top >= 0:
+        D = stack[i := stack_top]; stack_top -= 1
+        if D is None: continue
+
+        Pi = P[i]
+
+        dx, dy, dz = Pi[0]*Ca-Cp[0], Pi[1]*Ca-Cp[1], Pi[2]*Ca-Cp[2]
+        if dx*dx + dy*dy + dz*dz <= Cr2: continue
+
+        if len(D) == 3:
+            Ca, Cp, Cr2 = circumsphere_of_tetrahedron(Pi, D[0], D[1], D[2])
+            continue
+        D = D + (Pi,)
+
+        stack[i] = None
+        for j in range(i+1, lP): stack[j] = D
+        stack_top = lP - 1
+        
+        if len(D) == 1:
+            Ca, Cp, Cr2 = 1, Pi, 0
+        elif len(D) == 2: Ca, Cp, Cr2 = circumsphere_of_segment(D[0], Pi)
+        else: Ca, Cp, Cr2 = min_enclosing_sphere_of_triangle(D[0], D[1], Pi)
+    
+    return (Ca, Cp, Cr2)
