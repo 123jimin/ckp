@@ -10,7 +10,7 @@ class TestCircumsphereOfTriangle(unittest.TestCase):
     
     def test_regular_triangle(self):
         Ca, (Cx, Cy), Cr2 = circumcircle_of_triangle((-1/2, -math.sqrt(3/4)), (1/2, -math.sqrt(3/4)), (0, 1))
-        self.assertAlmostEqual(Ca*Ca, Cr2)
+        self.assertAlmostEqual(Cr2, Ca*Ca)
         self.assertAlmostEqual(Cx, 0)
         self.assertAlmostEqual(Cy, 0)
     

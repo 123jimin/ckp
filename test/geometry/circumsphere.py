@@ -4,6 +4,14 @@ from ckp.geometry.circumsphere import *
 
 import math, random
 
+class TestMinEnclosingSphereOfTriangle(unittest.TestCase):
+    def test_regular_triangle(self):
+        Ca, (Cx, Cy, Cz), Cr2 = min_enclosing_sphere_of_triangle((-1/2, -math.sqrt(3/4), 2), (1/2, -math.sqrt(3/4), 2), (0, 1, 2))
+        self.assertAlmostEqual(Cr2, Ca*Ca)
+        self.assertAlmostEqual(Cx/Ca, 0)
+        self.assertAlmostEqual(Cy/Ca, 0)
+        self.assertAlmostEqual(Cz/Ca, 2)
+
 class TestCircumsphereOfTetrahedron(unittest.TestCase):
     def test_regular_tetrahedron(self):
         v1 = (math.sqrt(8/9), 0, -1/3)
@@ -12,7 +20,7 @@ class TestCircumsphereOfTetrahedron(unittest.TestCase):
         v4 = (0, 0, 1)
 
         Ca, Cp, Cr2 = circumsphere_of_tetrahedron(v1, v2, v3, v4)
-        self.assertAlmostEqual(Ca*Ca, Cr2) # R = 1
+        self.assertAlmostEqual(Cr2, Ca*Ca) # R = 1
         for p in Cp:
             self.assertAlmostEqual(p, 0) # P = (0, 0, 0)
     
