@@ -3,9 +3,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > [!CAUTION]
-> 이 라이브러리는 현재 개발중입니다.
+> 이 라이브러리는 현재 개발중입니다. API가 언제든지 변경될 수 있습니다.
 
-CKP는 프로그래밍 대회용 알고리즘의 순수 파이썬 구현체를 모아 놓은 라이브러리입니다.
+CKP는 프로그래밍 대회용 알고리즘의 **의존성 없는 순수 파이썬 구현체**를 모아 놓은 라이브러리입니다.
 
 CKP는 성능을 해치지 않으면서, 유연하게 쓰일 수 있는 인터페이스를 제공하는 것을 목표로 합니다.
 

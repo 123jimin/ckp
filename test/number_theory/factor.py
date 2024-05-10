@@ -39,6 +39,10 @@ class TestFactorPollardRho(unittest.TestCase):
                     prod *= p
                 self.assertEqual(prod, n**k)
 
+class TestFactor(unittest.TestCase):
+    def test_example(self):
+        self.assertListEqual(sorted(factor(29841007892689553873)), [3250204337, 9181271329])
+
 class TestDivisors(unittest.TestCase):
     def test_common(self):
         data = [

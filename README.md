@@ -5,13 +5,49 @@
 - [한국어](README.ko-KR.md)
 
 > [!CAUTION]
-> This library is currently work-in-progress.
+> This library is currently work-in-progress. Any API may change.
 
-CKP is a collection of pure Python implementations of various algorithms for competitive programming.
+CKP is a collection of **no-dependency, pure Python implementations** of various algorithms for competitive programming.
 
 CKP aims to provide versatile interface, without hurting performance.
 
 CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool for packing a code and its dependencies into one file. Therefore, CKP can be used for online judges which cannot accept more than one source file.
+
+## Examples
+
+For the full list of functions, refer to the document (TO-DO).
+
+### Segment Tree
+
+```py
+from ckp.data_structure import SimpleSegmentTree
+from ckp.number_theory import PrimeSieve
+
+tree = SimpleSegmentTree(list(PrimeSieve(10_000_000).primes()), op=lambda x,y: (x*y)%1_000_000, e=1)
+print(len(tree)) # 664579
+print(tree.reduce()) # 668970 (last 6 digits of sum of all primes <= 10_000_000)
+print(tree.reduce_range(12345, 67890)) # 830967
+
+tree[20000] = 100
+print(tree.reduce_range(12345, 67890)) # 596900
+```
+
+### Factoring
+
+```py
+from ckp.number_theory import factor
+
+# [3250204337, 9181271329]
+print(sorted(factor(29841007892689553873)))
+```
+
+## Notes
+
+Implementations of `SortedList` and `SortedDict` are based on `sortedcontainers` (<https://github.com/grantjenks/python-sortedcontainers>), which is originally under Apache License, version 2.0 (<http://www.apache.org/licenses/LICENSE-2.0>).
+
+Using CKP for purposes other than competitive programming is not recommended. This library is (and *must* be) written in pure Python, which is a huge restriction on performance.
+
+If your application doesn't require you to write code in pure Python, then *please* implement your own C extensions, use another library, or use another language.
 
 ## To-Do List
 
@@ -26,6 +62,7 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
   - [ ] `ntt`
 - [x] `geometry`
   - [x] `circumcircle`
+  - [x] `circumsphere`
   - [x] `convex_hull`
   - [ ] `delaunay`
 - [ ] `graph_theory`
@@ -40,14 +77,6 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
 - [ ] `strings`
   - [ ] `kmp`
   - [ ] `suffix_array`
-
-## Notes
-
-Implementations of `SortedList` and `SortedDict` are based on `sortedcontainers` (<https://github.com/grantjenks/python-sortedcontainers>), which is originally under Apache License, version 2.0 (<http://www.apache.org/licenses/LICENSE-2.0>).
-
-Using CKP for purposes other than competitive programming is not recommended. This library is written in pure Python, which is a huge restriction on performance.
-
-Please implement your own C extensions, or use another language, if your application doesn't require you to write code in pure Python.
 
 ## Usage
 

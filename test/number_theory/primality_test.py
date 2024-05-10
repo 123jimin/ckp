@@ -31,3 +31,9 @@ class TestIsPrimeMillerRabin(unittest.TestCase):
                 prod *= p
                 if prod != p:
                     self.assertFalse(is_prime_miller_rabin(prod), f"{prod} is not a prime number")
+
+class TestIsPrime(unittest.TestCase):
+    def test_example(self):
+        x = 10**100
+        while not is_prime(x): x += 1
+        self.assertEqual(x - 10**100, 267)

@@ -27,3 +27,14 @@ class TestPrimeSieve(unittest.TestCase):
         sieve = PrimeSieve(100000)
         self.assertEqual(Counter(sieve.factor(42)), Counter([2, 3, 7]))
         self.assertEqual(Counter(sieve.factor(16384)), Counter([2]*14))
+    
+    def test_example(self):
+        sieve = PrimeSieve(10**7)
+        self.assertEqual(len(list(sieve.primes())), 664579)
+
+        self.assertTrue(sieve.is_prime(9999991))
+        self.assertFalse(sieve.is_prime(9999997))
+        self.assertEqual(len(list(sieve.primes())), 664579)
+
+        self.assertTrue(sieve.is_prime(10000019))
+        self.assertEqual(len(list(sieve.primes())), 664580)
