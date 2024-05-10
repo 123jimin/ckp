@@ -1,5 +1,4 @@
 from .vector import vec3_add, vec3_sub, vec3_scalar_mul, vec3_dot, vec3_cross, vec3_dist_sq
-from math import sqrt
 
 def is_in_circumsphere(C: tuple[float, tuple[float, float, float], float], p: tuple[float, float, float]) -> bool:
     """
@@ -31,19 +30,26 @@ def min_enclosing_sphere_of_triangle(a: tuple[float, float, float], b: tuple[flo
     else: al, cl, a, c = cl, al, c, a
     
     if al >= bl+cl: return circumsphere_of_segment(b, c)
-    
-    cos_a = (bl+cl-al) / (2*sqrt(bl*cl))
-    r2 = al / (4*(1-cos_a*cos_a))
+
+    excess = bl+cl-al
+    denom = 4*bl*cl-excess*excess
+    r2 = al*bl*cl*denom
     
     alpha = (a[0]-c[0], a[1]-c[1], a[2]-c[2])
     beta = (b[0]-c[0], b[1]-c[1], b[2]-c[2])
     gamma = vec3_cross(alpha, beta)
-    p = vec3_add(vec3_scalar_mul(vec3_cross(
-        vec3_sub(vec3_scalar_mul(beta, vec3_dot(alpha, alpha)), vec3_scalar_mul(alpha, vec3_dot(beta, beta))),
-        gamma
-    ), 1/(2*vec3_dot(gamma, gamma))), c)
-    
-    return (1, p, r2)
+
+    gamma_div = 2*vec3_dot(gamma, gamma)
+
+    p = vec3_add(
+        vec3_cross(
+            vec3_sub(vec3_scalar_mul(beta, vec3_dot(alpha, alpha)), vec3_scalar_mul(alpha, vec3_dot(beta, beta))),
+            gamma
+        ),
+        vec3_scalar_mul(c, gamma_div)
+    )
+
+    return (gamma_div*denom, vec3_scalar_mul(p, denom), r2*gamma_div*gamma_div)
         
 def circumsphere_of_tetrahedron(a: tuple[float, float,  float], b: tuple[float, float,  float], c: tuple[float, float,  float], d: tuple[float, float,  float]) -> tuple[float, tuple[float, float, float], float]:
     """
@@ -87,6 +93,8 @@ def min_enclosing_sphere(P: list[tuple[float, float, float]]) -> tuple[float, tu
         - Ca > 0
         - Cp = Ca * (x, y, z)
         - Cr2 = (Ca * r) ** 2
+        
+        When all points are integral points, then all Ca, Cp, Cr2 will be integers.
 
         Calling `random.shuffle(P)` before using this function is strongly recommended.
     """
