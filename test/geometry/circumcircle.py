@@ -4,7 +4,10 @@ from ckp.geometry.circumcircle import *
 
 import math
 
-class TestCircumcircle(unittest.TestCase):
+class TestMinEnclosingCircle(unittest.TestCase):
+    def test_simple(self):
+        self.assertEqual(min_enclosing_circle([(12, 34)]), (1, (12, 34), 0))
+
     def test_02389(self):
         a, (acx, acy), ar2 = min_enclosing_circle([(1, 1), (2, 2), (3, 3)])
         self.assertEqual(acx, a*2) # cx == 2

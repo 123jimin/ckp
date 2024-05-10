@@ -1,5 +1,3 @@
-def _determinant(a, b, c, d, e, f, g, h, i): return a*(e*i-f*h) - b*(d*i-f*g) + c*(d*h-e*g)
-
 def is_in_circumcircle(C: tuple[float, tuple[float, float], float], p: tuple[float, float]) -> bool:
     """
         Given a circumcircle (closed disc) returned by `circumcircle_of_*` functions, and a point p = (x, y), returns whether C contains p.
@@ -26,37 +24,23 @@ def circumcircle_of_triangle(a: tuple[float, float], b:tuple[float, float], c:tu
     ax, ay = a
     bx, by = b
     cx, cy = c
-
-    Ca = _determinant(ax, ay, 1, bx, by, 1, cx, cy, 1)
     al, bl, cl = ax*ax+ay*ay, bx*bx+by*by, cx*cx+cy*cy
 
-    Cb = _determinant(ax, ay, al, bx, by, bl, cx, cy, cl)
-    Cx = _determinant(al, ay, 1, bl, by, 1, cl, cy, 1)
-    Cy = _determinant(ax, al, 1, bx, bl, 1, cx, cl, 1)
+    # Det([(ax, bx, cx), (ay, by, cy), (1, 1, 1)])
+    Ca = ax*(by-cy) + bx*(cy-ay) + cx*(ay-by)
+
+    # Det([(ax, bx, cx), (ay, by, cy), (al, bl, cl)])
+    Cb = ax*(by*cl - bl*cy) + bx*(cy*al - cl*ay) + cx*(ay*bl - al*by)
+
+    # Det([(al, bl, cl), (ay, by, cy), (1, 1, 1)])
+    Cx = al*(by-cy) + bl*(cy-ay) + cl*(ay-by)
+
+    # Det([(ax, bx, cx), (al, bl, cl), (1, 1, 1)])
+    Cy = ax*(bl-cl) + bx*(cl-al) + cx*(al-bl)
 
     if Ca < 0: Ca, Cb, Cx, Cy = -Ca, -Cb, -Cx, -Cy
 
     return (2*Ca, (Cx, Cy), Cx*Cx+Cy*Cy + 4*Ca*Cb)
-
-def _min_enclosing_circle_inner(P: list[tuple[float, float]], i: int, D: list[tuple[float, float]]) -> tuple[float, tuple[float, float], float]:
-    if i == len(P):
-        assert(1 <= len(D) <= 2)
-        if len(D) == 1: return (1, D[0], 0)
-        ax, ay = D[0]; bx, by = D[1]
-        dx, dy = ax-bx, ay-by
-        return (2, (ax+bx, ay+by), dx*dx + dy*dy)
-    if len(D) == 0 and i == len(P)-1: return (1, P[i], 0)
-
-    C = _min_enclosing_circle_inner(P, i+1, D)
-    if is_in_circumcircle(C, P[i]): return C
-
-    if len(D) == 2: return circumcircle_of_triangle(P[i], D[0], D[1])
-
-    D.append(P[i])
-    C = _min_enclosing_circle_inner(P, i+1, D)
-    D.pop()
-
-    return C
 
 def min_enclosing_circle(P: list[tuple[float, float]]) -> tuple[float, tuple[float, float], float]:
     """
@@ -69,5 +53,41 @@ def min_enclosing_circle(P: list[tuple[float, float]]) -> tuple[float, tuple[flo
 
         When all points are integral points, then all Ca, Cp, Cr2 will be integers.
     """
-    assert(len(P) > 0)
-    return _min_enclosing_circle_inner(P, 0, [])
+
+    lP = len(P)
+    assert(lP > 0)
+
+    if lP == 1: return (1, P[0], 0)
+
+    stack = [tuple()] * (lP - 1)
+    stack.append(None)
+    stack_top = lP - 2
+
+    Ca, Cp, Cr2 = 1, P[-1], 0
+
+    while stack_top >= 0:
+        D = stack[i := stack_top]; stack_top -= 1
+        if D is None: continue
+
+        Pi = P[i]
+
+        dx, dy = Pi[0]*Ca-Cp[0], Pi[1]*Ca-Cp[1]
+        if dx*dx + dy*dy <= Cr2: continue
+
+        if len(D) == 2:
+            Ca, Cp, Cr2 = circumcircle_of_triangle(Pi, D[0], D[1])
+            continue
+        D = D + (Pi,)
+
+        stack[i] = None
+        for j in range(i+1, lP): stack[j] = D
+        stack_top = lP - 1
+        
+        if len(D) == 1:
+            Ca, Cp, Cr2 = 1, Pi, 0
+        else:
+            ax, ay = D[0]; bx, by = Pi
+            dx, dy = ax-bx, ay-by
+            Ca, Cp, Cr2 = 2, (ax+bx, ay+by), dx*dx + dy*dy
+    
+    return (Ca, Cp, Cr2)
