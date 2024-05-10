@@ -62,7 +62,7 @@ class PrimeSieve:
                 odd_primes.append(p)
                 for q in range((k+k)*(1+k), new_len, p): sieve[q] = p
             
-        self._odd_primes_next = p_max + 2
+        self._odd_primes_next = max(self._odd_primes_next, p_max + 2)
         self._max_testable_odd = new_max_testable_odd
     
     def is_prime(self, n:int) -> bool:
