@@ -13,8 +13,8 @@ def circumcircle_of_triangle(D: list[tuple[int|float, int|float]]):
     """
         Given that the circumcircle of P is centered at (cx, cy) and r, returns (a, (a*cx, a*cy), (a*r)^2).
         When all points of P are integer points, then all three values will be integers.
-
-        Note that `a` might be a negative number.
+        
+        `a` will always be positive.
     """
 
     assert(len(D) <= 3)
@@ -38,6 +38,9 @@ def circumcircle_of_triangle(D: list[tuple[int|float, int|float]]):
     b = _determinant(ax, ay, l2A, bx, by, l2B, cx, cy, l2C)
     Sx = _determinant(l2A, ay, 1, l2B, by, 1, l2C, cy, 1)
     Sy = _determinant(ax, l2A, 1, bx, l2B, 1, cx, l2C, 1)
+
+    if a < 0: a, b, Sx, Sy = -a, -b, -Sx, -Sy
+
     return (2*a, (Sx, Sy), Sx*Sx+Sy*Sy + 4*a*b)
 
 def _min_enclosing_circle_inner(P: list[tuple[int|float, int|float]], i: int, D: list[tuple[int|float, int|float]]) -> tuple[int|float, int|float, int|float]:
