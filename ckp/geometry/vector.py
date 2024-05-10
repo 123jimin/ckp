@@ -1,5 +1,6 @@
 """
     2D and 3D vector classes and methods for geometric applications.
+    Unfortunately, usage of these classes are discouraged as the performance cost is non-negligible (2x slower than using tuples).
 """
 
 from dataclasses import dataclass
