@@ -52,6 +52,8 @@ def min_enclosing_circle(P: list[tuple[float, float]]) -> tuple[float, tuple[flo
         - Cr2 = (Ca * r) ** 2
 
         When all points are integral points, then all Ca, Cp, Cr2 will be integers.
+
+        Calling `random.shuffle(P)` before using this function is strongly recommended.
     """
 
     lP = len(P)
