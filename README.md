@@ -74,8 +74,8 @@ If your application doesn't require you to write code in pure Python, then *plea
 - [x] `nimber`
 - [x] `number_theory`
 - [ ] `polynomial`
-- [ ] `strings`
-  - [ ] `kmp`
+- [ ] `string`
+  - [x] `kmp`
   - [ ] `suffix_array`
 
 ## Usage
