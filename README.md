@@ -25,7 +25,7 @@ from ckp.number_theory import PrimeSieve
 
 tree = SimpleSegmentTree(list(PrimeSieve(10_000_000).primes()), op=lambda x,y: (x*y)%1_000_000, e=1)
 print(len(tree)) # 664579
-print(tree.reduce()) # 668970 (last 6 digits of sum of all primes <= 10_000_000)
+print(tree.reduce()) # 668970 (last 6 digits of product of all primes <= 10_000_000)
 print(tree.reduce_range(12345, 67890)) # 830967
 
 tree[20000] = 100
