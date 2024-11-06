@@ -1,6 +1,6 @@
 from ckp.graph_theory.tree import Tree, TreeLCA
 
-import random, math
+import random
 N, M = 100_000, 100_000
 
 random.seed(42)

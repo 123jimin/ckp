@@ -2,7 +2,7 @@ from bench.util import bench
 from ckp.fourier.complex import ComplexCooleyTukeyFFT
 from ckp.fourier.util import bit_reverse_table, min_convolution_size_power
 
-import random, cmath
+import random
 random.seed(42)
 
 X = [random.random() for _ in range(262144)]

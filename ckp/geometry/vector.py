@@ -6,6 +6,10 @@
 from dataclasses import dataclass
 from math import hypot
 
+def vec2_dist_sq(v: tuple[float, float], w: tuple[float, float]) -> float:
+    vx, vy = v; wx, wy = w; dx, dy = vx-wx, vy-wy
+    return dx*dx + dy*dy
+
 def vec2_orientation(o: tuple[float, float], v: tuple[float, float], w: tuple[float, float]) -> float:
     """ Returns positive if `w` is located counter-clockwise from `v`, relative to `o`. """
     ox, oy = o; vx, vy = v; wx, wy = w
