@@ -51,16 +51,7 @@ class DelaunayMesh:
         else:
             for i in range(0, len(quad_src), 2):
                 yield (quad_src[i], quad_src[i+1])
-    
-    def _lnext(self, x: int) -> int:
-        return self.quad_nxt_face[x^1]^1
-    
-    def _lprev(self, x: int) -> int:
-        return self.quad_nxt_face[x]
-    
-    def _oprev(self, x: int) -> int:
-        return self.quad_nxt_face[x]^1
-    
+        
     def make_edge(self, src: int, dst: int) -> int:
         x = len(self.quad_src)
 
@@ -71,30 +62,34 @@ class DelaunayMesh:
         
         return x
     
-    def splice_edge(self, x: int, y: int):
-        nxt_edge, nxt_face = self.quad_nxt_edge, self.quad_nxt_face
-        
-        xf = nxt_edge[x]; yf = nxt_edge[y]
-        nxt_face[xf], nxt_face[yf] = nxt_face[yf], nxt_face[xf]
-        nxt_edge[x], nxt_edge[y] = nxt_edge[y], nxt_edge[x]
-    
     def delete_edge(self, edge: int):
         assert(self._quad_mask[edge//2])
+        
+        nxt, nxt_face = self.quad_nxt_edge, self.quad_nxt_face
 
-        self.splice_edge(edge, self._oprev(edge))
-        self.splice_edge(edge^1, self._oprev(edge^1))
+        # splice_edge(edge, oprev(edge))
+        y = nxt_face[edge]^1; xf, yf = nxt[edge], nxt[y]; nxt[edge], nxt[y], nxt_face[xf], nxt_face[yf] = yf, xf, nxt_face[yf], nxt_face[xf]
+        # splice_edge(edge^1, oprev(edge^1))
+        x, y = edge^1, nxt_face[edge^1]^1; xf, yf = nxt[x], nxt[y]; nxt[x], nxt[y], nxt_face[xf], nxt_face[yf] = yf, xf, nxt_face[yf], nxt_face[xf]
+
         self._quad_mask[edge//2] = False
 
     def connect(self, x: int, y: int) -> int:
         """ Connect two edges sharing the same left-face by creating a new quad-edge. """
         z = self.make_edge(self.quad_src[x^1], self.quad_src[y])
-        self.splice_edge(z, self._lnext(x))
-        self.splice_edge(z^1, y)
+        
+        nxt, nxt_face = self.quad_nxt_edge, self.quad_nxt_face
+
+        # splice_edge(z, lnext(x))
+        x = nxt_face[x^1]^1; xf, yf = nxt[z], nxt[x]; nxt[z], nxt[x], nxt_face[xf], nxt_face[yf] = yf, xf, nxt_face[yf], nxt_face[xf]
+        # splice_edge(z^1, y)
+        x = z^1; xf, yf = nxt[x], nxt[y]; nxt[x], nxt[y], nxt_face[xf], nxt_face[yf] = yf, xf, nxt_face[yf], nxt_face[xf]
+
         return z
     
     def _triangulate(self, start: int, end: int) -> tuple[int, int]:
         assert(start < end)
-        vertices = self.vertices
+        vertices, src, nxt, nxt_face = self.vertices, self.quad_src, self.quad_nxt_edge, self.quad_nxt_face
 
         if start+3 >= end:
             if start+3 == end:
@@ -102,7 +97,10 @@ class DelaunayMesh:
                 i1, i2, i3 = start, start+1, start+2
                 a = self.make_edge(i1, i2)
                 b = self.make_edge(i2, i3)
-                self.splice_edge(a^1, b)
+
+                # splice_edge(a^1, b)
+                x = a^1; xf, yf = nxt[x], nxt[b]; nxt[x], nxt[b], nxt_face[xf], nxt_face[yf] = yf, xf, nxt_face[yf], nxt_face[xf]
+                
                 ori = vec2_orientation(*vertices[start:end])
                 if ori < 0:
                     c = self.connect(b, a)
@@ -116,7 +114,6 @@ class DelaunayMesh:
                 return [a, a^1]
         
         # 4 or more vertices
-        src, nxt = self.quad_src, self.quad_nxt_edge
         mid = (start + end) // 2
         
         ldo, ldi = self._triangulate(start, mid)
@@ -125,7 +122,7 @@ class DelaunayMesh:
         # Compute the lower common tangent of left and right halves.
         while True:
             ldi_src, rdi_src = vertices[src[ldi]], vertices[src[rdi]]
-            if vec2_orientation(rdi_src, ldi_src, vertices[src[ldi^1]]) > 0: ldi = self._lnext(ldi)
+            if vec2_orientation(rdi_src, ldi_src, vertices[src[ldi^1]]) > 0: ldi = nxt_face[ldi^1]^1
             elif vec2_orientation(ldi_src, vertices[src[rdi^1]], rdi_src) > 0: rdi = nxt[rdi^1]
             else: break
 
@@ -144,10 +141,10 @@ class DelaunayMesh:
                     self.delete_edge(lcand)
                     lcand = t
             
-            rcand = self._oprev(base1)
+            rcand = nxt_face[base1]^1
             if vec2_orientation(base1_dst, base1_src, vertices[src[rcand^1]]) > 0:
-                while is_in_circumcircle_of_triangle(base1_dst, base1_src, vertices[src[rcand^1]], vertices[src[self._oprev(rcand)^1]]):
-                    t = self._oprev(rcand)
+                while is_in_circumcircle_of_triangle(base1_dst, base1_src, vertices[src[rcand^1]], vertices[src[nxt_face[rcand]]]):
+                    t = nxt_face[rcand]^1
                     self.delete_edge(rcand)
                     rcand = t
 
@@ -165,7 +162,7 @@ class DelaunayMesh:
         last = end-1
 
         while src[ldo] != start: ldo = nxt[ldo^1]
-        while src[rdo] != last: rdo = self._lprev(rdo)
+        while src[rdo] != last: rdo = nxt_face[rdo]
 
         return [ldo, rdo]
 

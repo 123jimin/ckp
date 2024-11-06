@@ -15,10 +15,8 @@ def bench_delaunay_triangulation():
     return res
 
 if __name__ == '__main__':
-    cProfile.run("[bench_delaunay_triangulation() for _ in range(5)]", sort='tottime')
-
-    """
     bench([
         "bench_delaunay_triangulation()"
     ], num_trials=8, global_vars=globals())
-    """
+    
+    cProfile.run("[bench_delaunay_triangulation() for _ in range(5)]", sort='tottime')
