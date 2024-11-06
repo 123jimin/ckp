@@ -7,7 +7,7 @@ class DelaunayMesh:
 
     vertices: list[tuple[float, float]]
     shuffled_indices: list[int]|None
-    quad_edges: list[tuple[DelaunayEdge, DelaunayEdge, DelaunayEdge, DelaunayEdge, int, int]]
+    quad_edges: dict[int, tuple[DelaunayEdge, DelaunayEdge, DelaunayEdge, DelaunayEdge, int, int]]
 
     def __init__(self, vertices: list[tuple[float, float]], already_sorted: bool = False):
         if already_sorted:
@@ -18,24 +18,27 @@ class DelaunayMesh:
             self.shuffled_indices.sort(key=lambda i: vertices[i])
             self.vertices = [vertices[i] for i in self.shuffled_indices]
             
-        self.quad_edges = []
+        self.quad_edges = dict()
 
     def __iter__(self):
         shuffled_indices = self.shuffled_indices
         if shuffled_indices:
-            for edge in self.quad_edges:
+            for edge in self.quad_edges.values():
                 yield (shuffled_indices[edge[-2]], shuffled_indices[edge[-1]])
         else:
-            for edge in self.quad_edges:
+            for edge in self.quad_edges.values():
                 yield (edge[-2], edge[-1])
 
     def make_edge(self, src: int, dst: int) -> DelaunayEdge:
         quad_edge = make_delaunay_quad_edge(src, dst)
-        self.quad_edges.append(quad_edge)
+        self.quad_edges[id(quad_edge)] = quad_edge
         return quad_edge[0]
     
     def delete_edge(self, edge: DelaunayEdge):
-        self.quad_edges.remove(edge.parent)
+        edge.splice_with(edge.prev())
+        edge_sym = edge.sym()
+        edge_sym.splice_with(edge_sym.prev())
+        del self.quad_edges[id(edge.parent)]
     
     def connect(self, a: DelaunayEdge, b: DelaunayEdge) -> DelaunayEdge:
         """ Connect two edges sharing the same left-face by creating a new quad-edge. """
