@@ -7,6 +7,29 @@ def is_in_circumcircle(C: tuple[float, tuple[float, float], float], p: tuple[flo
     dy = p[1]*Ca-Cp[1]
     return dx*dx + dy*dy <= Cr2
 
+def is_in_circumcircle_of_triangle(a: tuple[float, float], b: tuple[float, float], c: tuple[float, float], d: tuple[float, float]) -> bool:
+    """
+        Given a triangle abc and a point d, check whether d is inside the circumcircle of the triangle.
+    """
+    ax, ay = a
+    bx, by = b
+    cx, cy = c
+    dx, dy = d
+
+    ax -= dx; ay -= dy
+    bx -= dx; by -= dy
+    cx -= dx; cy -= dy
+
+    ab_det = ax*by - bx*ay
+    bc_det = bx*cy - cx*by
+    ca_det = cx*ay - ax*cy
+
+    a_lift = ax*ax + ay*ay
+    b_lift = bx*bx + by*by
+    c_lift = cx*cx + cy*cy
+
+    return (a_lift * bc_det + b_lift * ca_det + c_lift * ab_det) > 0
+
 def circumcircle_of_triangle(a: tuple[float, float], b:tuple[float, float], c:tuple[float, float]) -> tuple[float, tuple[float, float], float]:
     """
         Given a triangle abc, compute the circumcircle C of it.

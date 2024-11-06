@@ -1,8 +1,19 @@
 {
     "cSpell.words": [
         "circumcircle",
+        "circumsphere",
+        "lcand",
+        "lnext",
+        "lprev",
+        "lvalid",
         "monoid",
         "nimber",
-        "nimbers"
+        "nimbers",
+        "oprev",
+        "quadedge",
+        "rcand",
+        "rprev",
+        "rubiks",
+        "rvalid"
     ]
 }

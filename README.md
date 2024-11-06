@@ -5,7 +5,7 @@
 - [한국어](README.ko-KR.md)
 
 > [!CAUTION]
-> This library is currently work-in-progress. Any API may change.
+> This library is currently work-in-progress, and there can be breaking changes.
 
 CKP is a collection of **no-dependency, pure Python implementations** of various algorithms for competitive programming.
 
@@ -43,11 +43,15 @@ print(sorted(factor(29841007892689553873)))
 
 ## Notes
 
-Implementations of `SortedList` and `SortedDict` are based on `sortedcontainers` (<https://github.com/grantjenks/python-sortedcontainers>), which is originally under Apache License, version 2.0 (<http://www.apache.org/licenses/LICENSE-2.0>).
+Using CKP for purposes other than competitive programming is not recommended. This library is written in pure Python, which is a huge restriction on performance.
 
-Using CKP for purposes other than competitive programming is not recommended. This library is (and *must* be) written in pure Python, which is a huge restriction on performance.
+If your application doesn't require you to write code in pure Python, then *please* use another library, implement your own C extension, or use another language.
 
-If your application doesn't require you to write code in pure Python, then *please* implement your own C extensions, use another library, or use another language.
+### License
+
+`ckp.data_structure.sorted_containers` is based on `sortedcontainers` (<https://github.com/grantjenks/python-sortedcontainers>), which is originally licensed under Apache License, version 2.0 (<http://www.apache.org/licenses/LICENSE-2.0>).
+
+`ckp.geometry.delaunay` is loosely based on <https://github.com/mkirc/delaunay>, which is originally licensed under the MIT License.
 
 ## To-Do List
 

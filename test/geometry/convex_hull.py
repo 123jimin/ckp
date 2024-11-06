@@ -1,4 +1,3 @@
-
 import unittest
 from ckp.geometry.convex_hull import *
 
