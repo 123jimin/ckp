@@ -5,12 +5,12 @@ from ckp.geometry.delaunay import delaunay_triangulation
 import random
 random.seed(42)
 
-N = 10_000
+N = 20_000
 points = [(random.randrange(1_000_000_000), random.randrange(1_000_000_000)) for _ in range(N)]
 
 def bench_delaunay_triangulation():
     res = sum(1 for _ in delaunay_triangulation(points))
-    assert(res == 29977)
+    assert(res == 59976)
 
     return res
 
