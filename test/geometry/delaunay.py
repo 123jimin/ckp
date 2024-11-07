@@ -38,3 +38,19 @@ class TestDelaunay(unittest.TestCase):
             (7, 8), (7, 9),
             (8, 9),
         ])
+    
+    def test_15696(self):
+        example_1 = [
+            (0,  0),   
+            (170, 0),
+            (140, 30),
+            (60, 30),
+            (0, 70),
+        ]
+
+        self.assertDelaunayTriangulation(example_1, [
+            (0, 1), (0, 3), (0, 4),
+            (1, 2), (1, 3),
+            (2, 3), (2, 4),
+            (3, 4)
+        ])
