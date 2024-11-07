@@ -5,7 +5,7 @@
     - Next indices: x
 """
 
-from ..vector import vec2_orientation
+from ..vector import vec2_orientation, vec2_is_ccw
 from ..circumcircle import is_in_circumcircle_of_triangle
 
 class DelaunayMesh:
@@ -106,13 +106,12 @@ class DelaunayMesh:
                 # splice_edge(a^1, b)
                 x = a^1; xf, yf = nxt[x], nxt[b]; nxt[x], nxt[b], nxt_face[xf], nxt_face[yf] = yf, xf, nxt_face[yf], nxt_face[xf]
                 
-                ori = vec2_orientation(*self.vertices[start:end])
-                if ori: c = self.connect(b, a)
-                return [c^1, c] if ori < 0 else [a, b^1]
+                if (ori := vec2_orientation(*self.vertices[start:end])): c = self.connect(b, a)
+                return (c^1, c) if ori < 0 else (a, b^1)
             else:
                 # 1 or 2 vertices
                 a = self.make_edge(start, end-1)
-                return [a, a^1]
+                return (a, a^1)
         
         # 4 or more vertices
         mid = (start + end) // 2
@@ -123,8 +122,8 @@ class DelaunayMesh:
         # Compute the lower common tangent of left and right halves.
         while True:
             ldi_src, rdi_src = vert[ldi], vert[rdi]
-            if vec2_orientation(rdi_src, ldi_src, vert[ldi^1]) > 0: ldi = nxt_face[ldi^1]^1
-            elif vec2_orientation(ldi_src, vert[rdi^1], rdi_src) > 0: rdi = nxt[rdi^1]
+            if vec2_is_ccw(rdi_src, ldi_src, vert[ldi^1]): ldi = nxt_face[ldi^1]^1
+            elif vec2_is_ccw(ldi_src, vert[rdi^1], rdi_src): rdi = nxt[rdi^1]
             else: break
 
         base1 = self.connect(rdi^1, ldi)
@@ -132,25 +131,22 @@ class DelaunayMesh:
         if src[rdi] == src[rdo]: rdo = base1
 
         while True:
-            base1_src = vert[base1]
-            base1_dst = vert[base1^1]
+            base1_src, base1_dst = vert[base1], vert[base1^1]
 
             lcand = nxt[base1^1]
-            if vec2_orientation(base1_dst, base1_src, vert[lcand^1]) > 0:
-                while is_in_circumcircle_of_triangle(base1_dst, base1_src, vert[lcand^1], vert[nxt[lcand]^1]):
-                    t = nxt[lcand]
-                    self.delete_edge(lcand)
-                    lcand = t
+            if vec2_is_ccw(base1_dst, base1_src, vert[lcand^1]):
+                lcand_nxt = nxt[lcand]
+                while is_in_circumcircle_of_triangle(base1_dst, base1_src, vert[lcand^1], vert[lcand_nxt^1]):
+                    self.delete_edge(lcand); lcand_nxt = nxt[lcand := lcand_nxt]
             
             rcand = nxt_face[base1]^1
-            if vec2_orientation(base1_dst, base1_src, vert[rcand^1]) > 0:
-                while is_in_circumcircle_of_triangle(base1_dst, base1_src, vert[rcand^1], vert[nxt_face[rcand]]):
-                    t = nxt_face[rcand]^1
-                    self.delete_edge(rcand)
-                    rcand = t
+            if vec2_is_ccw(base1_dst, base1_src, vert[rcand^1]):
+                rcand_nxt = nxt_face[rcand]
+                while is_in_circumcircle_of_triangle(base1_dst, base1_src, vert[rcand^1], vert[rcand_nxt]):
+                    self.delete_edge(rcand); rcand_nxt = nxt_face[rcand := rcand_nxt^1]
 
-            lvalid = vec2_orientation(base1_dst, base1_src, vert[lcand^1]) > 0
-            rvalid = vec2_orientation(base1_dst, base1_src, vert[rcand^1]) > 0
+            lvalid = vec2_is_ccw(base1_dst, base1_src, vert[lcand^1])
+            rvalid = vec2_is_ccw(base1_dst, base1_src, vert[rcand^1])
 
             if not lvalid and not rvalid: break
 
@@ -165,7 +161,7 @@ class DelaunayMesh:
         while src[ldo] != start: ldo = nxt[ldo^1]
         while src[rdo] != last: rdo = nxt_face[rdo]
 
-        return [ldo, rdo]
+        return (ldo, rdo)
 
     def _prune(self):
         quad_mask = self._quad_mask

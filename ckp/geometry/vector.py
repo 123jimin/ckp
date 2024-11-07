@@ -12,10 +12,13 @@ def vec2_dist_sq(v: tuple[float, float], w: tuple[float, float]) -> float:
 
 def vec2_orientation(o: tuple[float, float], v: tuple[float, float], w: tuple[float, float]) -> float:
     """ Returns positive if `w` is located counter-clockwise from `v`, relative to `o`. """
-    ox, oy = o; vx, vy = v; wx, wy = w
-    dvx, dvy = vx-ox, vy-oy
-    dwx, dwy = wx-ox, wy-oy
-    return dvx*dwy - dvy*dwx
+    ox, oy = o
+    return (v[0]-ox)*(w[1]-oy) - (v[1]-oy)*(w[0]-ox)
+
+def vec2_is_ccw(o: tuple[float, float], v: tuple[float, float], w: tuple[float, float]) -> bool:
+    """ Slightly more efficient version of `vec2_orientation(o, v, w) > 0`. """
+    ox, oy = o
+    return (v[0]-ox)*(w[1]-oy) > (v[1]-oy)*(w[0]-ox)
 
 @dataclass
 class Vec2:
