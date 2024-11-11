@@ -2,6 +2,7 @@
     "cSpell.words": [
         "circumcircle",
         "circumsphere",
+        "fulkerson",
         "lcand",
         "lnext",
         "lprev",
@@ -12,6 +13,7 @@
         "oprev",
         "quadedge",
         "rcand",
+        "repr",
         "rprev",
         "rubiks",
         "rvalid",

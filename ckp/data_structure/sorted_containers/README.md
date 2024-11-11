@@ -7,7 +7,7 @@ Codes in this directory is based on the Python [Sorted Containers](https://githu
 Here are the list of changes:
 
 * Added `COPYRIGHT` attribute to attribute (no pun intended) original authors.
-* Removed the following functions / proeprties:
+* Removed the following functions / properties:
   * `Sorted*.__new__`
   * `Sorted*._check`
   * `Sorted*.__reduce__`

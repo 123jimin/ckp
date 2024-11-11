@@ -68,7 +68,7 @@ If your application doesn't require you to write code in pure Python, then *plea
   - [x] `circumcircle`
   - [x] `circumsphere`
   - [x] `convex_hull`
-  - [ ] `delaunay`
+  - [x] `delaunay`
 - [ ] `graph_theory`
   - [ ] `bipartite_matching`
   - [x] `ford_fulkerson`
