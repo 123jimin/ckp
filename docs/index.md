@@ -2,13 +2,25 @@
 
 CKP is a Python library implementing various algorithms for competitive programming.
 
+- [GitHub repository](https://github.com/123jimin/ckp)
+- [License](https://github.com/123jimin/ckp/blob/main/LICENSE)
+- [Contributing](https://github.com/123jimin/ckp/blob/main/CONTRIBUTING.md)
+
 ## Features
 
-- **Pure Python**
+- **Pure Python 3**
+  - CKP does not use any C extensions. 
+  - CKP supports both CPython and PyPy.
 - **No Dependency**
-- **Online Judge-friendly**: [Using impacker](impacker.md), codes using CKP can be submitted to various online judge services.
-- **Modular and Versatile**
+  - CKP does not have any dependency.
+- **Online Judge-friendly**
+  - [Using impacker](impacker.md), codes using CKP can be submitted to various online judge services.
 - **Performant**
+  - Codes in CKP are micro-optimized on CPython.
+  - There are [micro-benchmarks](./benchmark/index.md) for testing run-times.
+- **Modular and Versatile**
+  - The API of CKP is designed to be performant while being modular.
+  - Each API function and class can be used in multiple scenarios.
 
 ### Example
 
@@ -21,6 +33,8 @@ print(sum(PrimeSieve(10_000_000).primes())) # 3203324994356
 ```
 
 ## Caveats
+
+**Many parts of the library are work-in-progress.**
 
 **There's no guarantee on API stability. No backwards compatibility is provided.**
 
