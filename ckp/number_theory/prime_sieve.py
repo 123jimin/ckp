@@ -62,7 +62,7 @@ def prime_sieve_extend(sieve: PrimeSieveData, max_n: int):
     sieve._max_testable_odd = new_max_testable_odd
 
 def prime_sieve_primes(sieve: PrimeSieveData):
-    """ Yields list of prime numbers inferable from the sieve. """
+    """ Yields prime numbers inferable from the sieve. """
     yield 2
     odd_primes, sieve_arr = sieve._odd_primes, sieve._sieve
     odd_primes.extend(k*2+1 for k in range(sieve._odd_primes_next//2, sieve._max_testable_odd//2+1) if sieve_arr[k] == 1)
