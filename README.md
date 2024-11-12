@@ -5,7 +5,7 @@
 - [한국어](README.ko-KR.md)
 
 > [!CAUTION]
-> This library is currently work-in-progress, and there can be breaking changes.
+> Currently, there's no promise on backwards compatibility. Breaking changes may be introduced at any time.
 
 CKP is a collection of **no-dependency, pure Python implementations** of various algorithms for competitive programming.
 
@@ -15,7 +15,7 @@ CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool 
 
 ## Examples
 
-For the full list of functions, refer to the document (TO-DO).
+List of functions provided by CKP and detailed examples can be found on the documentation page: <https://123jimin.github.io/ckp/>.
 
 ### Segment Tree
 
