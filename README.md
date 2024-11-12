@@ -4,11 +4,9 @@
 
 - [한국어](README.ko-KR.md)
 
-CKP is a collection of **no-dependency, pure Python implementations** of various algorithms for competitive programming. CKP aims to provide versatile interface, without hurting performance.
+CKP is a collection of **no-dependency, pure Python implementations** of algorithms for solving competitive programming problems. Codes using CKP can be submitted to online judge services, by using [impacker](https://github.com/123jimin/impacker).
 
 Check the documentation on <https://123jimin.github.io/ckp/>.
-
-CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool for packing a code and its dependencies into one file. Therefore, CKP can be used for online judges which cannot accept more than one source file.
 
 ## To-Do List
 
