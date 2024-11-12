@@ -5,8 +5,15 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python_version: ['3.12', '3.13', 'pypy3.10']
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+    - name: Setting Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python_version }}
     - name: Run Tests
       run: python -m test
