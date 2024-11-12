@@ -1,0 +1,24 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+body {
+    padding: 25px;
+}
+
+div.wrapper {
+    width: 900px;
+}
+
+header {
+    width: 260px;
+}
+
+section {
+    width: 600px;
+}
+
+footer {
+    width: 260px;
+}

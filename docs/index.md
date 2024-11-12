@@ -25,7 +25,8 @@ Here's a simple code for computing sum of all prime numbers under $10^7$:
 ```py
 from ckp.number_theory import PrimeSieve
 
-print(sum(PrimeSieve(10_000_000).primes())) # 3203324994356
+# Prints "3203324994356".
+print(sum(PrimeSieve(10_000_000).primes()))
 ```
 
 ## Installation
