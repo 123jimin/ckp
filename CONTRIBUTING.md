@@ -1,8 +1,9 @@
 # Contributing to CKP
 
-## Code of Conduct
+Feel free to send pull requests, but currently it's likely to be revised/rejected by me.
 
-## Reporting Bugs
+- I'm still coming up with better API.
+- There are some atypical code guidelines.
 
 ## Priority
 
@@ -22,6 +23,24 @@ The first one is absolute, but the rests are not in a strict order. The most imp
 
 ### No Global Variables
 
-### No Name Collision
+Currently, impacker can't handle global variables.
 
-### Prefer Imperative over Object-Oriented
+Instead of using global variables, consider using one of the following methods.
+
+- Provide a function that provides global variables.
+- Use classes.
+- Use memoization (using `functools.cache`).
+
+### No Global Name Collision
+
+Currently, impacker doesn't try to resolve name collisions, so there could be errors when names of functions or classes across two files collide.
+
+- Consider prefixing general category name of functions and classes.
+- Avoid generic names which can be accidentally used.
+
+### Provide Imperative Interface
+
+It is very hard to do dependency analysis on member functions. Moreover, using "raw" data types such as tuples and lists is usually faster than using objects.
+
+- Prefer `foo_method(...)` over `Foo.method(...)`.
+- Keep classes minimal, and mostly use it as named tuples / dataclasses.
