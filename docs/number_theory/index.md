@@ -76,6 +76,39 @@ This is a probabilistic test, but in practice it always behaves correctly.
 
 ## Prime Sieves
 
+An implementation of the sieve of Eratosthenes. (TODO: implement a better prime sieves...?)
+
+> `prime_sieve_init(max_n: int = 1)`
+
+Create a new prime sieve for numbers up to `max_n`.
+
+The sieve will be extended whenever needed, so providing `max_n` is not necessary.
+
+Still, providing `max_n` is generally preferable for performance reason (less call to `prime_sieve_extend`).
+
+> `prime_sieve_primes(sieve) -> Generator[int]`
+
+Yields prime numbers inferable from the sieve.
+
+> `prime_sieve_query(sieve, n: int) -> bool`
+
+Check whether `n` is a prime number, querying `sieve`. When `n` is an odd number, the sieve might get extended.
+
+> `prime_sieve_factor(sieve, n: int) -> Generator[int]`
+
+Yields every prime factors of `n` with repeats, in *no particular order*.
+
+> `prime_sieve_extend(sieve, max_n: int)`
+
+Extend the sieve, so that the primality test up to `max_n` with this sieve can be done.
+
+Other prime sieve functions call this function as needed, so calling this function is not necessary.
+
+> Class `PrimeSieve`
+
+A conveient class to manage prime sieves in an OOP manner.
+Using this class is as efficient as using individual prime sieve functions, but impacker would emit a code with unused functions.
+
 ## Integer Factorization
 
 An example of factoring some integers:

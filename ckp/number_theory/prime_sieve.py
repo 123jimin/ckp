@@ -24,6 +24,9 @@ class PrimeSieve(PrimeSieveData):
     def primes(self): return prime_sieve_primes(self)
     def factor(self, n: int): return prime_sieve_factor(self, n)
 
+def prime_sieve_init(max_n: int = 1):
+    return PrimeSieveData(max_n)
+
 def prime_sieve_extend(sieve: PrimeSieveData, max_n: int):
     """ Extend the sieve, so that the primality test up to `max_n` with this sieve becomes possible. """
     if max_n <= sieve._max_testable_odd+1: return
