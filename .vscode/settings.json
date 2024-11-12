@@ -3,6 +3,7 @@
         "circumcircle",
         "circumsphere",
         "fulkerson",
+        "impacker",
         "lcand",
         "lnext",
         "lprev",

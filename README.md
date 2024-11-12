@@ -4,54 +4,11 @@
 
 - [한국어](README.ko-KR.md)
 
-> [!CAUTION]
-> Currently, there's no promise on backwards compatibility. Breaking changes may be introduced at any time.
+CKP is a collection of **no-dependency, pure Python implementations** of various algorithms for competitive programming. CKP aims to provide versatile interface, without hurting performance.
 
-CKP is a collection of **no-dependency, pure Python implementations** of various algorithms for competitive programming.
-
-CKP aims to provide versatile interface, without hurting performance.
+Check the documentation on <https://123jimin.github.io/ckp/>.
 
 CKP is compatible with [impacker](https://github.com/123jimin/impacker), a tool for packing a code and its dependencies into one file. Therefore, CKP can be used for online judges which cannot accept more than one source file.
-
-## Examples
-
-List of functions provided by CKP and detailed examples can be found on the documentation page: <https://123jimin.github.io/ckp/>.
-
-### Segment Tree
-
-```py
-from ckp.data_structure import SimpleSegmentTree
-from ckp.number_theory import PrimeSieve
-
-tree = SimpleSegmentTree(list(PrimeSieve(10_000_000).primes()), op=lambda x,y: (x*y)%1_000_000, e=1)
-print(len(tree)) # 664579
-print(tree.reduce()) # 668970 (last 6 digits of product of all primes <= 10_000_000)
-print(tree.reduce_range(12345, 67890)) # 830967
-
-tree[20000] = 100
-print(tree.reduce_range(12345, 67890)) # 596900
-```
-
-### Factoring
-
-```py
-from ckp.number_theory import factor
-
-# [3250204337, 9181271329]
-print(sorted(factor(29841007892689553873)))
-```
-
-## Notes
-
-Using CKP for purposes other than competitive programming is not recommended. This library is written in pure Python, which is a huge restriction on performance.
-
-If your application doesn't require you to write code in pure Python, then *please* use another library, implement your own C extension, or use another language.
-
-### License
-
-`ckp.data_structure.sorted_containers` is based on `sortedcontainers` (<https://github.com/grantjenks/python-sortedcontainers>), which is originally licensed under Apache License, version 2.0 (<http://www.apache.org/licenses/LICENSE-2.0>).
-
-`ckp.geometry.delaunay` is loosely based on <https://github.com/mkirc/delaunay>, which is originally licensed under the MIT License.
 
 ## To-Do List
 
