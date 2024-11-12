@@ -16,4 +16,4 @@ jobs:
       with:
         python-version: ${{ matrix.python_version }}
     - name: Run Tests
-      run: python -m test
+      run: python -m test -v
