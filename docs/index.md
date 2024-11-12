@@ -1,28 +1,24 @@
 # CKP
 
-CKP is a Python library implementing various algorithms for competitive programming.
-
-- [GitHub repository](https://github.com/123jimin/ckp)
-- [License](https://github.com/123jimin/ckp/blob/main/LICENSE)
-- [Contributing](https://github.com/123jimin/ckp/blob/main/CONTRIBUTING.md)
+CKP is a Python library providing various algorithms for solving competitive programming problems.
 
 ## Features
 
+- **Online Judge-friendly**
+  - [Using impacker](impacker.md), codes that uses CKP can be submitted to online judge services, which usually only accept one source file without dependency.
 - **Pure Python 3**
   - CKP does not use any C extensions. 
   - CKP supports both CPython and PyPy.
 - **No Dependency**
   - CKP does not have any dependency.
-- **Online Judge-friendly**
-  - [Using impacker](impacker.md), codes using CKP can be submitted to various online judge services.
 - **Performant**
-  - Codes in CKP are micro-optimized on CPython.
-  - There are [micro-benchmarks](./benchmark/index.md) for testing run-times.
+  - CKP is micro-optimized for CPython.
+  - There are [micro-benchmarks](./benchmark/index.md) for testing CKP's performance.
 - **Modular and Versatile**
-  - The API of CKP is designed to be performant while being modular.
+  - CKP is designed to be modular, while remaining performant.
   - Each API function and class can be used in multiple scenarios.
 
-### Example
+### Examples
 
 Here's a simple code for computing sum of all prime numbers under $10^7$:
 
@@ -34,7 +30,7 @@ print(sum(PrimeSieve(10_000_000).primes())) # 3203324994356
 
 ## Caveats
 
-**Many parts of the library are work-in-progress.**
+**Many parts of CKP are work-in-progress.**
 
 **There's no guarantee on API stability. No backwards compatibility is provided.**
 
