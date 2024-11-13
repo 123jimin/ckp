@@ -106,6 +106,10 @@ Contains various algorithms and functions for 2D and 3D geometry.
 - Convex Hull
 - Delaunay Triangulation
 
+### Nimber: `ckp.nimber`
+
+Contains nimber arithmetic, which is just an another name for the Galois field $GF(2^{2^k})$.
+
 ### Miscellaneous: `ckp.misc`
 
 Contains several niche algorithms that aren't used much.

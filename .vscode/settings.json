@@ -8,6 +8,7 @@
         "coprime",
         "dataclass",
         "fulkerson",
+        "functools",
         "idiv",
         "impacker",
         "katex",
