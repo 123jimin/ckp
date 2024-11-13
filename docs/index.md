@@ -49,7 +49,7 @@ poetry add git+https://github.com/123jimin/ckp.git
 
 ## Library Index
 
-Below is the list of submodules CKP provides.
+Below is the list of submodules CKP provides. Click on a header to check API available under the module.
 
 It's generally preferred to import one or more of the sub-packages, rather than doing `import ... from ckp`.
 
