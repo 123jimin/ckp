@@ -1,4 +1,5 @@
 from math import isqrt
+from .modular import jacobi_symbol
 
 def is_prime_naive(n: int) -> bool:
     """
@@ -29,12 +30,6 @@ def is_prime_miller_rabin_with_base(n: int, al: list[int]) -> bool:
             return False
     
     return True
-
-def is_prime_strong_lucas(n: int) -> bool:
-    """ Perform strong Lucas probable prime test on n. """
-    for D in range(5, 1_000_000, 2):
-        if D&2: D = -D
-
 
 def is_prime(n: int) -> bool:
     """ Returns whether `n` is a prime number. The best algorithm will be picked depending on `n`. """
