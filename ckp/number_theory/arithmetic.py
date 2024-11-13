@@ -7,7 +7,7 @@ from collections import Counter
 
 def num_divisors(n:int, n_factors:Counter|list[int]|None = None):
     """
-        Returns the \# of divisors of n, equivalent but a bit faster than `len(list(divisors(n)))`.
+        Returns the amount of divisors of n, equivalent but a bit faster than `len(list(divisors(n)))`.
         
         When `n_factors` is given, it would be regarded as the factorization of n.
         In this case, the provided n can either be the original value or 0.
@@ -48,7 +48,7 @@ def sum_divisors(n:int, n_factors:Counter|list[int]|None = None):
 
 def euler_phi(n:int, n_factors:Counter|list[int]|None = None):
     """
-        Returns \# of numbers x coprime to n, such that 1 <= x < n.
+        Returns the amount of numbers x coprime to n, such that 1 <= x < n.
 
         When `n_factors` is given, it would be regarded as the factorization of `n`.
         In this case, the provided n can either be the original value or 0.

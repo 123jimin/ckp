@@ -24,6 +24,7 @@ def is_prime_miller_rabin_with_base(n: int, al: list[int]) -> bool:
         if x == 1 or x == n1: continue
         for _ in range(r-1):
             if (x := (x*x)%n) == n1: break
+            elif x == 1: return False
         else:
             return False
     
