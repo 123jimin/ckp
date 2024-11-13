@@ -1,4 +1,4 @@
-import math
+from math import isqrt
 
 def is_prime_naive(n: int) -> bool:
     """
@@ -8,7 +8,7 @@ def is_prime_naive(n: int) -> bool:
     if n < 100: return n in {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}
     if not(n%2 and n%3 and n%5 and n%7 and n%11): return False
     
-    for p in range(13, math.isqrt(n)+1, 6):
+    for p in range(13, isqrt(n)+1, 6):
         if not(n%p and n%(p+4)): return False
     
     return True
@@ -30,13 +30,19 @@ def is_prime_miller_rabin_with_base(n: int, al: list[int]) -> bool:
     
     return True
 
+def is_prime_strong_lucas(n: int) -> bool:
+    """ Perform strong Lucas probable prime test on n. """
+    for D in range(5, 1_000_000, 2):
+        if D&2: D = -D
+
+
 def is_prime(n: int) -> bool:
     """ Returns whether `n` is a prime number. The best algorithm will be picked depending on `n`. """
     if n < 100: return n in {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}
     if not(n%2 and n%3 and n%5 and n%7 and n%11): return False
     
     if n <= 90_000:
-        for p in range(13, math.isqrt(n)+1, 6):
+        for p in range(13, isqrt(n)+1, 6):
             if not(n%p and n%(p+4)): return False
         
         return True
