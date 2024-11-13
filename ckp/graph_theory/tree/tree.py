@@ -1,3 +1,48 @@
+class TreeData:
+    """ Represents a tree. """
+    __slots__ = ('root', 'neighbors', 'parents', 'depths')
+
+    root: int
+    """ The root index of this tree. """
+
+    neighbors: list[list[int]]
+    """ Neighbor list of each node. """
+    
+    parents: list[int]
+    """ Parent node index of each node. `tree.parents[tree.root]` is -1. """
+
+    depths: list[int]
+    """ Depth of each node. `tree.depths[tree.root]` is 0. """
+    
+    def __len__(self): return len(self.parents)
+    def __repr__(self): return f"TreeData(parents={self.parents}, root={self.root})"
+
+def tree_from_neighbors(neighbors: list[list[int]], root: int = 0) -> TreeData:
+    """ Constructs a new tree from lists of neighbors. """
+    tree = TreeData()
+    tree.root = root
+    tree.neighbors = neighbors = neighbors
+    tree.parents, tree.depths = tree_parents_and_depths(neighbors, root)
+    return tree
+
+def tree_from_parents(parents: list[int], root: int = 0) -> TreeData:
+    """ Constructs a new tree from lists of parents. `parents[root]` must be `-1`. """
+    assert(parents[root] == -1)
+    tree = TreeData()
+    tree.root = root
+    neighbors = tree.neighbors = [[] for _ in range(len(parents))]
+    for i in range(len(parents)):
+        if (p := parents[i]) >= 0: neighbors[p].append(i); neighbors[i].append(p)
+    tree.parents = parents
+    _, tree.depths = tree_parents_and_depths(neighbors, root)
+    return tree
+
+def tree_from_edges(edges: list[tuple[int, int]], root: int = 0) -> TreeData:
+    """ Constructs a new tree from lists of undirected edges. Each edge must appear once. """
+    neighbors = [list[int]() for _ in range(len(edges)+1)]
+    for (x, y) in edges: neighbors[x].append(y); neighbors[y].append(x)
+    return tree_from_neighbors(neighbors, root)
+
 def _tree_parents_and_depths_dfs(neighbors: list[list[int]], parents: list[int], depths: list[int], depth: int, curr: int, parent: int = -1):
     parents[curr] = parent
     depths[curr] = depth
@@ -29,85 +74,48 @@ def tree_sizes(neighbors: list[list[int]], root_ind: int = 0) -> list[int]:
     _tree_size_dfs(neighbors, sizes, root_ind)
     return sizes
 
-class Tree:
-    __slots__ = ('root', 'neighbors', 'parents', 'depths')
+class DistanceTreeData(TreeData):
+    """ Represents a tree, where each edge has length. """
+    __slots__ = ('distances', 'parent_distances', 'root_distances')
 
-    root: int
-
-    neighbors: list[list[int]]
-    parents: list[int]
-    depths: list[int]
-
-    def __init__(self, *, root: int = 0, neighbors: list[list[int]]|None = None, parents: list[int]|None = None, depths: list[int]|None = None):
-        assert(neighbors or parents)
-        self.root = root
-        
-        if not neighbors:
-            neighbors = [[] for _ in range(len(parents))]
-            for i in range(len(parents)):
-                if (p := parents[i]) >= 0: neighbors[p].append(i); neighbors[i].append(p)
-        elif not parents:
-            parents, depths = tree_parents_and_depths(neighbors, root)
-        
-        if not depths:
-            _, depths = tree_parents_and_depths(neighbors, root)
-        
-        self.neighbors = neighbors
-        self.parents = parents
-        self.depths = depths
-    
-    def __len__(self): return len(self.parents)
-    def __repr__(self): return f"Tree(parents={self.parents}, root={self.root})"
-
-    @staticmethod
-    def from_edges(edges: list[tuple[int, int]], root: int = 0):
-        neighbors = [list[int]() for _ in range(len(edges)+1)]
-        for (x, y) in edges: neighbors[x].append(y); neighbors[y].append(x)
-        return Tree(neighbors=neighbors, root=root)
-
-class DistanceTree(Tree):
-    __slots__ = ('root', 'neighbors', 'distances', 'parents', 'depths', 'parent_distances', 'root_distances')
-
-    root: int
-
-    neighbors: list[list[int]]
     distances: list[list[int]]
-    parents: list[int]
-    depths: list[int]
 
     parent_distances: list[int]
     root_distances: list[int]
 
-    def __init__(self, neighbors: list[list[int]], distances: list[list[int]], root: int = 0):
-        self.root = root
-        self.neighbors = neighbors
-        self.distances = distances
+def _distance_tree_init_dfs(tree: DistanceTreeData, depth: int, root_distance: int, curr: int, parent: int = -1):
+    tree.parents[curr] = parent
+    tree.depths[curr] = depth
+    tree.root_distances[curr] = root_distance
+    parent_distances = tree.parent_distances
 
-        N = len(neighbors)
-        self.parents = [-1] * N
-        self.depths = [0] * N
-        self.parent_distances = [0] * N
-        self.root_distances = [0] * N
+    for (ch, d) in zip(tree.neighbors[curr], tree.distances[curr]):
+        if ch == parent: continue
 
-        self._init_dfs(0, 0, root)
-    
-    def _init_dfs(self, depth, root_distance, curr, parent=-1):
-        self.parents[curr] = parent
-        self.depths[curr] = depth
-        self.root_distances[curr] = root_distance
+        parent_distances[ch] = d
+        _distance_tree_init_dfs(tree, depth+1, root_distance+d, ch, curr)
 
-        for (ch, d) in zip(self.neighbors[curr], self.distances[curr]):
-            if ch == parent: continue
+def distance_tree_init(neighbors: list[list[int]], distances: list[list[int]], root: int = 0) -> DistanceTreeData:
+    tree = DistanceTreeData()
+    tree.root = root
+    tree.neighbors = neighbors
+    tree.distances = distances
 
-            self.parent_distances[ch] = d
-            self._init_dfs(depth+1, root_distance+d, ch, curr)
+    N = len(neighbors)
+    tree.parents = [-1] * N
+    tree.depths = [0] * N
+    tree.parent_distances = [0] * N
+    tree.root_distances = [0] * N
 
-    @staticmethod
-    def from_edges(edges: list[tuple[int, int, int]], root: int = 0):
-        neighbors = [[] for _ in range(len(edges)+1)]
-        distances = [[] for _ in range(len(edges)+1)]
-        for (x, y, d) in edges:
-            assert(x != y)
-            neighbors[x].append(y); neighbors[y].append(x)
-            distances[x].append(d); distances[y].append(d)
-        return DistanceTree(neighbors, distances, root)
+    _distance_tree_init_dfs(tree, 0, 0, root)
+    return tree
+
+def distance_tree_from_edges(edges: list[tuple[int, int, int]], root: int = 0) -> DistanceTreeData:
+    neighbors = [[] for _ in range(len(edges)+1)]
+    distances = [[] for _ in range(len(edges)+1)]
+    for (x, y, d) in edges:
+        assert(x != y)
+        neighbors[x].append(y); neighbors[y].append(x)
+        distances[x].append(d); distances[y].append(d)
+
+    return distance_tree_init(neighbors, distances, root)
