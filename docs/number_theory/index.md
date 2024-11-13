@@ -54,6 +54,8 @@ print(is_prime(2), is_prime(2**32 + 1), is_prime(10**100 + 267))
 
 Returns whether `n` is a prime number. The best algorithm will be picked depending on `n`.
 
+This is a probable primality test, but there's no known counter-example.
+
 - Time Complexity: $\Theta(\log^4 n)$
 
 ### Specific Algorithms under `ckp.number_theory.primality_test`
@@ -66,11 +68,9 @@ Do use this function instead of `is_prime` when `n` is small (million-ish) and y
 
 - Time Complexity: $\Theta(\sqrt n)$
 
-> `is_prime_miller_rabin(n: int) -> bool`
+> `is_prime_miller_rabin_with_base(n: int, al: list[int]) -> bool`
 
-Performs primality testing using the Miller-Rabin primality test.
-
-This is a probabilistic test, but in practice it always behaves correctly.
+Returns whether `n` is a probable prime, using `al` as a list of bases for the Miller-Rabin test.
 
 - Time Complexity: $\Theta(\log^4 n)$
 
