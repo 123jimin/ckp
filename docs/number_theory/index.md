@@ -1,5 +1,7 @@
 # Number Theory
 
+`ckp.number_theory` contains implementations of algorithms and mathematical functions related to number theory and finite fields.
+
 Several functions receive `n_factors` as a parameter, which represents a previously-computed factorization of `n`.
 
 When `n_factors` is given, then it would be regarded as the factorization of `n`. In this case, `n` should be either `0` or the original value that was used to obtain `n_factors`.

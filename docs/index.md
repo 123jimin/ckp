@@ -72,13 +72,13 @@ Contains various functions related to number theory, mostly for working on a fin
 - Segmented Tree
 - Sorted Containers
 
-### Graph Theory: `ckp.graph_theory`
+### [Graph Theory: `ckp.graph_theory`](./graph_theory/index.md)
 
 Note: graph data structures themselves are under `ckp.data_structure.graph`, not under this module.
 
 - Bipartite Marching
 
-#### Tree Graphs: `ckp.graph_theory.tree`
+#### [Tree Graphs: `ckp.graph_theory.tree`](./graph_theory/tree.md)
 
 - Least Common Ancestor
 - Heavy-Light Decomposition
