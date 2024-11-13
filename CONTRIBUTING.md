@@ -40,7 +40,27 @@ Currently, impacker doesn't try to resolve name collisions, so there could be er
 
 ### Provide Imperative Interface
 
-It is very hard to do dependency analysis on member functions. Moreover, using "raw" data types such as tuples and lists is usually faster than using objects.
+It is very hard to do dependency analysis on member functions.
 
-- Prefer `foo_method(...)` over `Foo.method(...)`.
-- Keep classes minimal, and mostly use it as named tuples / dataclasses.
+The following structure is recommended:
+
+```py
+# Minimal class to hold data.
+class FooData:
+   __slots__ = (...)
+   def __init__(self, x, y, ...): pass
+   # Some util functions may be defined.
+   def __repr__(self) -> str: pass
+   def __str__(self) -> str: pass
+   # However, do not put member functions in this class, especially when it's long.
+
+# Imperative API
+def foo_init(x, y, ...): return FooData(x, y, ...)
+def foo_bar(foo: FooData, a, b, ...): pass
+
+# Object-oriented API for convenience
+class Foo(FooData):
+   __slots__ = ()
+   # Member functions are just proxies to the imperative API.
+   def bar(self, a, b, ...): return foo_bar(self, a, b, ...)
+```

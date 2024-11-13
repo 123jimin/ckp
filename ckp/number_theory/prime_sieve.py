@@ -19,6 +19,7 @@ class PrimeSieveData:
         if max_n > 1: prime_sieve_extend(self, max_n)
 
 class PrimeSieve(PrimeSieveData):
+    __slots__ = ()
     def extend(self, max_n: int): prime_sieve_extend(self, max_n)
     def is_prime(self, n: int) -> bool: return prime_sieve_query(self, n)
     def primes(self): return prime_sieve_primes(self)

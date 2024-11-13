@@ -12,7 +12,7 @@ class TestPrimeSieve(unittest.TestCase):
     def test_list_primes(self):
         sieve = PrimeSieve(100000)
         for p in sieve.primes():
-            self.assertTrue(sieve.is_prime(p), f"dismatch between primes() and is_prime() for {p=}")
+            self.assertTrue(sieve.is_prime(p), f"mismatch between primes() and is_prime() for {p=}")
             self.assertTrue(is_prime_naive(p), f"{p} is not a prime number")
     
     def test_multi_extend(self):
