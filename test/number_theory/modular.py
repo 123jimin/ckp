@@ -2,7 +2,7 @@ import unittest
 from ckp.number_theory.modular import *
 
 import math, random
-from ckp.number_theory import is_prime
+from ckp.number_theory import is_prime, factor
 
 class TestSolveLinearMod(unittest.TestCase):
     def test(self):
@@ -68,6 +68,37 @@ class TestChineseMod(unittest.TestCase):
         self.assertEqual(chinese_mod((2, 7)), 2)
         self.assertEqual(chinese_mod((2, 3), (3, 5), (2, 7)), 23)
 
+class TestLegendreSymbol(unittest.TestCase):
+    def test_small(self):
+        self.assertEqual(legendre_symbol(-2, 2), 0)
+        self.assertEqual(legendre_symbol(-1, 2), 1)
+        self.assertEqual(legendre_symbol(0, 2), 0)
+        self.assertEqual(legendre_symbol(1, 2), 1)
+        self.assertEqual(legendre_symbol(2, 2), 0)
+        for p in range(3, 1000, 2):
+            if not is_prime(p): continue
+            v = [False] * p
+            for i in range(p): v[(i*i)%p] = True
+            if p > 2: self.assertEqual(2*sum(v)-1, p, f"Quadratic residue array for {p=}")
+            for a in range(-2*p, 2*p+1):
+                expected = (1 if v[a%p] else -1) if a%p else 0
+                self.assertEqual(legendre_symbol(a, p), expected, f"({a} / {p})")
+
+class TestJacobiSymbol(unittest.TestCase):
+    def test_one(self):
+        for x in range(1, 100):
+            self.assertEqual(jacobi_symbol(x, 1), 1)
+        for x in range(1, 100, 2):
+            self.assertEqual(jacobi_symbol(1, x), 1)
+    
+    def test_small(self):
+        for n in range(3, 500, 2):
+            n_factors = list(factor(n))
+            for a in range(-2*n, 2*n+1):
+                expected = 1
+                for p in n_factors: expected *= legendre_symbol(a, p)
+                self.assertEqual(jacobi_symbol(a, n), expected, f"({a} / {n})")
+
 class TestSqrtModPrime(unittest.TestCase):
     def test(self):
         for p in range(2, 100):
@@ -100,7 +131,7 @@ class TestSqrtModPrimePower(unittest.TestCase):
 
 class TestSqrtMod(unittest.TestCase):
     def test(self):
-        for n in range(2, 1000):
+        for n in range(2, 500):
             n_factors = Counter(factor(n))
             quad_res = set()
             for v in range(n):

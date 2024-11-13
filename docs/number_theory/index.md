@@ -176,6 +176,10 @@ Factor `n` using Pollard's rho algorithm.
 
 For a prime number $p$, returns the Legendre symbol $(a/p)$.
 
+> `jacobi_symbol(a: int, n: int) -> int`
+
+For a positive odd number $n$, returns the Jacobi symbol $(a/p)$.
+
 > `sqrt_mod(n: int, m: int, m_factors = None) -> int`
 
 Given an integer $m \ge 2$, either returns $x$ such that $x^2 \equiv n \pmod m$, or returns $0$ if there's no such $x$.

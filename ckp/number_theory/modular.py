@@ -123,6 +123,30 @@ def legendre_symbol(a:int, p:int) -> int:
     if p == 2: return 1
     return (-1, 1)[pow(a, p//2, p) == 1]
 
+def jacobi_symbol(a: int, n: int) -> int:
+    """ Returns the Jacobi symbol (a/n) for an odd integer `n`. """
+    assert(n > 0 and n%2 == 1)
+
+    if a == 1 or n == 1: return 1
+    
+    a %= n
+    if not a: return 0
+    if a == 1: return 1
+
+    if gcd(a, n) != 1: return 0
+
+    j = 1
+    while a:
+        n8 = n%8
+        if n8 == 3 or n8 == 5:
+            while not (a%2): a //= 2; j = -j
+        else:
+            while not (a%2): a //= 2
+        a, n = n, a
+        if a%4 == n%4 == 3: j = -j
+        a %= n
+    return j
+
 def any_non_quadratic_residue_mod_prime(p:int) -> int:
     """ Given a prime number p >= 3, returns an arbitrary non quadratic residue. """
     
