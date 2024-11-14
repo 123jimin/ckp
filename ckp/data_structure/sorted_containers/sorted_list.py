@@ -2,10 +2,10 @@
 # Check README.md for more information.
 
 from bisect import bisect_left, bisect_right, insort
-from collections.abc import MutableSequence, Sequence
+from collections.abc import MutableSequence
 from functools import reduce
 from itertools import chain, repeat, starmap
-from operator import add, eq, ge, gt, iadd, le, lt, ne
+from operator import add, iadd
 
 class SortedList(MutableSequence):
     """Sorted list is a sorted mutable sequence.
@@ -1389,41 +1389,6 @@ class SortedList(MutableSequence):
         self._clear()
         self._update(values)
         return self
-
-    def __make_cmp(seq_op, symbol, doc):
-        "Make comparator method."
-
-        def comparer(self, other):
-            "Compare method for sorted list and sequence."
-            if not isinstance(other, Sequence):
-                return NotImplemented
-
-            self_len = self._len
-            len_other = len(other)
-
-            if self_len != len_other:
-                if seq_op is eq:
-                    return False
-                if seq_op is ne:
-                    return True
-
-            for alpha, beta in zip(self, other):
-                if alpha != beta:
-                    return seq_op(alpha, beta)
-
-            return seq_op(self_len, len_other)
-
-        seq_op_name = seq_op.__name__
-        comparer.__name__ = f'__{seq_op_name}__'
-        return comparer
-
-    __eq__ = __make_cmp(eq, '==', 'equal to')
-    __ne__ = __make_cmp(ne, '!=', 'not equal to')
-    __lt__ = __make_cmp(lt, '<', 'less than')
-    __gt__ = __make_cmp(gt, '>', 'greater than')
-    __le__ = __make_cmp(le, '<=', 'less than or equal to')
-    __ge__ = __make_cmp(ge, '>=', 'greater than or equal to')
-    __make_cmp = staticmethod(__make_cmp)
 
     def __str__(self):
         return "SortedList([{}])".format(", ".join(str(x) for x in self))

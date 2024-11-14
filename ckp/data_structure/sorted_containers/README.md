@@ -14,8 +14,8 @@ Here are the list of changes:
   * `Sorted*._check`
   * `SortedDict.iloc`
   * `SortedList.key`
-  * `SortedDict.keys`, `SortedDict.items`, `SortedDict.values`
-* Removed docstrings from comparers returned by `__make_cmp`.
+  * `SortedDict.keys`, `SortedDict.items`, `SortedDict.values`*
+* Removed comparators.
 * Replaced `Sorted*.__repr__` with a simpler one, and added `Sorted*.__str__`.
 * In `SortedList._build_index`, removed usage of `log` in size computation.
 * Removed `key` argument from `SortedList` and `SortedDict`.
