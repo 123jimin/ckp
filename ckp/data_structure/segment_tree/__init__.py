@@ -1,9 +1,7 @@
-"""
-    Implement of segment trees.
+""" Implementation of various segment trees. """
 
-    - Simple segment tree: segment tree with range queries and simple item operations; no range operations.
-"""
+from .monoid import *
 
 from .lazy import LazyOpSegmentTree, LazySumSegmentTree
 from .merge_sort import MergeSortTree
-from .simple import SimpleSegmentTree, SimpleSumSegmentTree
+from .simple import SimpleSumSegmentTree

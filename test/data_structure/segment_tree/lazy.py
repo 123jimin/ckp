@@ -2,13 +2,13 @@ import unittest
 from ckp.data_structure.segment_tree.lazy import *
 
 import random
-from .data_generator import DataGenerator
+from .test_util import DataGenerator
 
 class TestLazyOpSegmentTree(unittest.TestCase):    
     def test_random_ops(self):
         for __ in range(400):
             N = random.randint(1, 128)
-            g = DataGenerator(N, ['add_to', 'get'])
+            g = DataGenerator(N, ['add_to_range', 'get'])
 
             arr = g.list()
             tree = LazyOpSegmentTree(arr)
@@ -17,7 +17,7 @@ class TestLazyOpSegmentTree(unittest.TestCase):
 
             for _ in range(400):
                 match g.op():
-                    case ('add_to', i, j, v):
+                    case ('add_to_range', i, j, v):
                         for k in range(i, j): arr[k] += v
                         tree.add_to_range(i, j, v)
                     case ('get', i):
@@ -27,7 +27,7 @@ class TestLazySumSegmentTree(unittest.TestCase):
     def test_sum_random(self):
         for __ in range(100):
             N = random.randint(1, 128)
-            g = DataGenerator(N)
+            g = DataGenerator(N, [])
 
             arr = g.list()
             tree = LazySumSegmentTree(arr)
@@ -46,7 +46,7 @@ class TestLazySumSegmentTree(unittest.TestCase):
     def test_random_ops(self):
         for __ in range(400):
             N = random.randint(1, 128)
-            g = DataGenerator(N, ['add_to', 'get', 'set', 'reduce'])
+            g = DataGenerator(N, ['add_to_range', 'get', 'set', 'reduce_range'])
 
             arr = g.list()
             tree = LazySumSegmentTree(arr)
@@ -55,7 +55,7 @@ class TestLazySumSegmentTree(unittest.TestCase):
 
             for _ in range(400):
                 match g.op():
-                    case ('add_to', i, j, v):
+                    case ('add_to_range', i, j, v):
                         for k in range(i, j): arr[k] += v
                         tree.add_to_range(i, j, v)
                     case ('get', i):
@@ -63,6 +63,6 @@ class TestLazySumSegmentTree(unittest.TestCase):
                     case ('set', i, v):
                         arr[i] = v
                         tree[i] = v
-                    case ('reduce', i, j):
+                    case ('reduce_range', i, j):
                         s = sum(arr[i:j])
                         self.assertEqual(tree.reduce_range(i, j), s, f"summing on the range [{i}, {j})")

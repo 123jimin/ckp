@@ -12,13 +12,14 @@ Many, but not all, segment trees' APIs look like a subset of this:
 
 ```py
 class SegmentTree:
-    def __init__(self, ...): pass
+    def __init__(self, init_values: list ...): pass
     def __len__(self) -> int: pass
     def __str__(self) -> str: pass
     def __iter__(self): pass
 
     def __getitem__(self, ind: int): pass
     def reduce_range(self, start: int, end: int): pass
+    def reduce_all(self): pass
 
     def __setitem__(self, ind: int, value): pass
     def set_range(self, start: int, end: int, value): pass
@@ -33,14 +34,17 @@ class SegmentTree:
     def mul_add_to_range(self, start: int, end: int, m, d): pass
 ```
 
+- `init_values` contains initial values.
+- All ranges are half-open; `(start, end)` represents elements such that its index $i$ satisfies $start \le i < end$.
+
 The API does *not* make use of slice objects, because of it would likely induce an overhead.
 
 ### Base
 
 A segment tree can be based on a *monoid* or a *ring*, potentially non-commutative.
 
-- A monoid is represented via a tuple `(zero, op)`.
-- A ring is represented via a tuple `(zero, one, op_add, op_mul)`.
+- A monoid is represented via a tuple `(op, zero)`.
+- A ring is represented via a tuple `(op_add, op_mul, zero, one)`.
 
 ### Operation Types
 
