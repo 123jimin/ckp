@@ -66,7 +66,7 @@ Contains various functions related to number theory, mostly for working on a fin
 
 ### Strings: `ckp.string`
 
-### Data Structures: `ckp.data_structure`
+### [Data Structures: `ckp.data_structure`](./data_structure/index.md)
 
 - Disjoint Set
 - Segmented Tree
