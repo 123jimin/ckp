@@ -39,7 +39,7 @@ class DelaunayMeshData:
             for i in range(0, len(quad_src), 2):
                 yield (quad_src[i], quad_src[i+1])
 
-def delaunay_mesh_init(vertices: list[tuple[float, float]], already_sorted: bool = False):
+def delaunay_mesh_init(vertices: list[tuple[float, float]], already_sorted: bool = False) -> DelaunayMeshData:
     mesh = DelaunayMeshData()
 
     if already_sorted:
