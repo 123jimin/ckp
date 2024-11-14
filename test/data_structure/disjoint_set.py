@@ -4,20 +4,20 @@ from ckp.data_structure.disjoint_set import *
 
 class TestDisjointSet(unittest.TestCase):
     def test_simple(self):
-        ds = DisjointSet(8)
-        self.assertTrue(ds.union(1, 3))
-        self.assertFalse(ds.in_same_set(1, 7))
-        self.assertTrue(ds.union(7, 6))
-        self.assertFalse(ds.in_same_set(7, 1))
-        self.assertTrue(ds.union(3, 7))
-        self.assertTrue(ds.in_same_set(1, 7))
-        self.assertTrue(ds.union(4, 2))
-        self.assertFalse(ds.union(1, 1))
-        self.assertTrue(ds.in_same_set(1, 1))
-        self.assertTrue(ds.in_same_set(1, 7))
-        self.assertFalse(ds.in_same_set(1, 2))
+        ds = disjoint_set_init(8)
+        self.assertTrue(disjoint_set_union(ds, 1, 3))
+        self.assertFalse(disjoint_set_is_same_set(ds, 1, 7))
+        self.assertTrue(disjoint_set_union(ds, 7, 6))
+        self.assertFalse(disjoint_set_is_same_set(ds, 7, 1))
+        self.assertTrue(disjoint_set_union(ds, 3, 7))
+        self.assertTrue(disjoint_set_is_same_set(ds, 1, 7))
+        self.assertTrue(disjoint_set_union(ds, 4, 2))
+        self.assertFalse(disjoint_set_union(ds, 1, 1))
+        self.assertTrue(disjoint_set_is_same_set(ds, 1, 1))
+        self.assertTrue(disjoint_set_is_same_set(ds, 1, 7))
+        self.assertFalse(disjoint_set_is_same_set(ds, 1, 2))
         for i in range(8):
-            self.assertEqual(ds.size(i), [1,4,2,4,2,1,4,4][i])
+            self.assertEqual(disjoint_set_size(ds, i), [1,4,2,4,2,1,4,4][i])
 
 class TestDisjointSetObject(unittest.TestCase):
     def test_simple(self):

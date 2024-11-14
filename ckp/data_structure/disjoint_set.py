@@ -1,4 +1,4 @@
-class DisjointSet:
+class DisjointSetData:
     """ A simple implementation of disjoint set structure. """
 
     __slots__ = ('parents', 'sizes', 'ranks')
@@ -7,45 +7,48 @@ class DisjointSet:
     sizes: list[int]
     ranks: list[int]
 
-    def __init__(self, size:int):
-        """ Create a disjoint set structure on `size` elements. """
-        self.parents, self.sizes, self.ranks = list(range(size)), [1] * size, [0] * size
-    
     def __len__(self): return len(self.parents)
 
-    def size(self, ind:int):
-        """ Returns the size of the set `ind` is in. """
-        return self.sizes[self.find(ind)]
+def disjoint_set_init(size: int) -> DisjointSetData:
+    """ Create a disjoint set structure on `size` elements. """
+    ds = DisjointSetData()
+    ds.parents, ds.sizes, ds.ranks = list(range(size)), [1] * size, [0] * size
 
-    def find(self, ind:int):
-        """ Returns the representative element for `ind`. """
-        parents = self.parents
-        while (root_ind := parents[ind]) != ind: ind = root_ind
-        return ind
-    
-    def in_same_set(self, x:int, y:int) -> bool:
-        """ Returns whether `x` and `y` reside in the same set. """
-        return self.find(x) == self.find(y)
+    return ds
 
-    def union(self, x:int, y:int) -> tuple[int, int]|None:
-        """
-            Take the union of `x` and `y`.
-            
-            Returns a tuple (x, y), when a set with root `y` is merged to `x`.
-        """
-        if (x := self.find(x)) == (y := self.find(y)): return None
+def disjoint_set_size(ds: DisjointSetData, ind:int):
+    """ Returns the size of the set `ind` is in. """
+    return ds.sizes[disjoint_set_find(ds, ind)]
 
-        sizes, ranks = self.sizes, self.ranks
-        if ranks[x] < ranks[y]: x, y = y, x
+def disjoint_set_find(ds: DisjointSetData, ind:int):
+    """ Returns the representative element for `ind`. """
+    parents = ds.parents
+    while (root_ind := parents[ind]) != ind: ind = root_ind
+    return ind
 
-        self.parents[y] = x; sizes[x] += sizes[y]
+def disjoint_set_is_same_set(ds: DisjointSetData, x:int, y:int) -> bool:
+    """ Returns whether `x` and `y` reside in the same set. """
+    return disjoint_set_find(ds, x) == disjoint_set_find(ds, y)
 
-        if ranks[x] == ranks[y]: ranks[x] += 1
+def disjoint_set_union(ds: DisjointSetData, x:int, y:int) -> tuple[int, int]|None:
+    """
+        Take the union of `x` and `y`.
+        
+        Returns a tuple (x, y), when a set with root `y` is merged to `x`.
+    """
+    if (x := disjoint_set_find(ds, x)) == (y := disjoint_set_find(ds, y)): return None
 
-        return (x, y)
+    sizes, ranks = ds.sizes, ds.ranks
+    if ranks[x] < ranks[y]: x, y = y, x
+
+    ds.parents[y] = x; sizes[x] += sizes[y]
+
+    if ranks[x] == ranks[y]: ranks[x] += 1
+
+    return (x, y)
     
 class DisjointSetObject:
-    """ Independently usable disjoint set. """
+    """ Disjoint set that can be used without constructing the universe set. """
 
     __slots__ = ('key', 'value', '_parent', '_size', '_rank')
 
@@ -53,7 +56,7 @@ class DisjointSetObject:
     _rank: int
 
     def __init__(self, key, value=None):
-        """ Create a new disjoint set object. `key` and `value` may be set to arbitrary value. """
+        """ Create a new disjoint set object. `key` and `value` may be set to arbitrary values. """
         self.key, self.value, self._parent, self._size, self._rank = key, value, self, 1, 0
     
     @property
