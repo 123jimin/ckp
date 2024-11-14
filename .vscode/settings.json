@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "Abelian",
         "Baillie",
         "binom",
         "circumcircle",
@@ -10,13 +11,16 @@
         "fulkerson",
         "functools",
         "idiv",
+        "iloc",
         "impacker",
+        "Jenks",
         "katex",
         "lcand",
         "lnext",
         "lprev",
         "lvalid",
         "monoid",
+        "monoids",
         "nimber",
         "nimbers",
         "oprev",
@@ -28,6 +32,7 @@
         "rprev",
         "rubiks",
         "rvalid",
+        "sortedcontainers",
         "sympy",
         "tottime",
         "Tukey"
