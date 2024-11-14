@@ -15,7 +15,7 @@ def convex_hull_andrew(points: list[tuple[int, int]]) -> list[int]:
             phx, phy = points[lower[-2]]
             hx, hy = hx-phx, hy-phy
             rpx, rpy = px-phx, py-phy
-            if hx*rpy - hy*rpx > 0: break
+            if hx*rpy > hy*rpx: break
             lower.pop()
         lower.append(i)
 
@@ -27,7 +27,7 @@ def convex_hull_andrew(points: list[tuple[int, int]]) -> list[int]:
             phx, phy = points[upper[-2]]
             hx, hy = hx-phx, hy-phy
             rpx, rpy = px-phx, py-phy
-            if hx*rpy - hy*rpx > 0: break
+            if hx*rpy > hy*rpx: break
             upper.pop()
         upper.append(i)
     
@@ -38,4 +38,5 @@ def convex_hull_andrew(points: list[tuple[int, int]]) -> list[int]:
 
 def convex_hull(points: list[tuple[int, int]]) -> list[int]:
     """ Given a list of points, returns indices of points forming the convex hull, in a counter-clockwise order. """
+    global convex_hull; convex_hull = convex_hull_andrew
     return convex_hull_andrew(points)
