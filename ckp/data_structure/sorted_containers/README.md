@@ -11,10 +11,9 @@ Here are the list of changes:
   * `Sorted*.__new__`
   * `Sorted*._check`
   * `Sorted*.__reduce__`
-  * `Sorted*._check`
   * `SortedDict.iloc`
   * `SortedList.key`
-  * `SortedDict.keys`, `SortedDict.items`, `SortedDict.values`*
+  * `SortedDict.keys`, `SortedDict.items`, `SortedDict.values`
 * Removed comparators.
 * Replaced `Sorted*.__repr__` with a simpler one, and added `Sorted*.__str__`.
 * In `SortedList._build_index`, removed usage of `log` in size computation.
