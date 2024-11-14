@@ -22,6 +22,7 @@ def disjoint_set_size(ds: DisjointSetData, ind:int):
 
 def disjoint_set_find(ds: DisjointSetData, ind:int):
     """ Returns the representative element for `ind`. """
+    # TODO: implement path compression without much overhead.
     parents = ds.parents
     while (root_ind := parents[ind]) != ind: ind = root_ind
     return ind
@@ -64,6 +65,7 @@ class DisjointSetObject:
 
     @property
     def root(self):
+        # TODO: implement path compression without much overhead.
         curr = self
         while (parent := curr._parent) != curr: curr = parent
         return curr
