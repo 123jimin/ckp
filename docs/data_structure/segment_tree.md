@@ -6,7 +6,34 @@ CKP provides some generic implementations of segment trees, together with specia
 
 For ease of use, `ckp.data_structure.segment_tree` uses object-oriented APIs.
 
-## Classification
+## General Structure
+
+Many, but not all, segment trees' APIs look like a subset of this:
+
+```py
+class SegmentTree:
+    def __init__(self, ...): pass
+    def __len__(self) -> int: pass
+    def __str__(self) -> str: pass
+    def __iter__(self): pass
+
+    def __getitem__(self, ind: int): pass
+    def reduce_range(self, start: int, end: int): pass
+
+    def __setitem__(self, ind: int, value): pass
+    def set_range(self, start: int, end: int, value): pass
+
+    def add_to(self, ind: int, value): pass
+    def add_to_range(self, start: int, end: int, value): pass
+
+    def mul_to(self, ind: int, value): pass
+    def mul_to_range(self, start: int, end: int, value): pass
+    
+    def mul_add_to(self, ind: int, m, d): pass
+    def mul_add_to_range(self, start: int, end: int, m, d): pass
+```
+
+The API does *not* make use of slice objects, because of it would likely induce an overhead.
 
 ### Base
 
