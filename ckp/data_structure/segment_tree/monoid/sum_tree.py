@@ -56,7 +56,7 @@ class MonoidSumSegmentTree:
     
     def sum_all(self):
         """ Get the sum of all elements in this tree. """
-        return self._zero if self._len == 0 else self._tree[1]
+        return self._tree[1] if self._len else self._zero
 
     def __setitem__(self, ind: int, value):
         if not 0 <= ind < self._len:
@@ -74,3 +74,80 @@ class MonoidSumSegmentTree:
     def add_to(self, ind: int, value):
         """ Add a given value to (the right side of) `self[ind]`. """
         self.__setitem__(ind, self._op(self._tree[self._len + ind], value))
+
+class SumSegmentTree:
+    """ Segment tree for summing numbers in ranges. """
+
+    __slots__ = ('_len', '_tree')
+    
+    _len: int
+    """ Amount of elements in this segment tree. """
+
+    _tree: list 
+    """ A flat representation of this segment tree; `len(self._tree) == 2*self._len`. """
+    
+    def __init__(self, init_values: list):
+        """ Creates a segment tree on `init_values`. """
+
+        L = self._len = len(init_values)
+
+        if not L:
+            self._tree = []
+            return
+    
+        tree = self._tree = [0] * L + init_values
+
+        for i in range(L-1, 0, -1):
+            i2 = i+i; tree[i] = tree[i2] + tree[i2+1]
+            
+    def __len__(self): return self._len
+    def __str__(self): return "[%s]".format(", ".join(str(self._tree[i]) for i in range(self._len, self._len*2)))
+    def __iter__(self):
+        tree = self._tree
+        for i in range(self._len, self._len*2):
+            yield tree[i]
+    
+    def __getitem__(self, ind: int): return self._tree[self._len + ind]
+    def sum_range(self, start: int, end: int):
+        """ Get the sum of elements at indices in the half-open range [start, end). """
+        if (not self._len) or start >= end: return 0
+        
+        tree, L = self._tree, self._len
+        start, end = max(0, start)+L, min(end, L)+L
+
+        res = 0
+        while start < end:
+            sn, sr = divmod(start, 2)
+            en, er = divmod(end, 2)
+            if sr: res += tree[start]; sn += 1
+            if er: res += tree[end-1]
+
+            start, end = sn, en
+        
+        return res
+    
+    def sum_all(self):
+        """ Get the sum of all elements in this tree. """
+        return self._tree[1] if self._len else 0
+    
+    def __setitem__(self, ind: int, value):
+        if not 0 <= ind < self._len:
+            raise IndexError(f"Index {ind} out of range (len={self._len})")
+        
+        curr_ind, tree = self._len + ind, self._tree
+        changed_value = tree[curr_ind] = value
+
+        while curr_ind > 1:
+            next_ind, r = divmod(curr_ind, 2)
+            changed_value = tree[next_ind] = changed_value + tree[curr_ind+(1,-1)[r]]
+            curr_ind = next_ind
+
+    def add_to(self, ind: int, value):
+        """ Add a given value to (the right side of) `self[ind]`. """
+        if not 0 <= ind < self._len:
+            raise IndexError(f"Index {ind} out of range (len={self._len})")
+        
+        curr_ind, tree = self._len + ind, self._tree
+        tree[curr_ind] += value
+
+        while curr_ind > 1: curr_ind //= 2; tree[curr_ind] += value

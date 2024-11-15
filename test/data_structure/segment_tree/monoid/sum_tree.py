@@ -20,3 +20,9 @@ class TestMonoidSumSegmentTree(unittest.TestCase):
         self.assertEqual(tree.sum_range(12345, 67890), 830967)
         tree[20000] = 100
         self.assertEqual(tree.sum_range(12345, 67890), 596900)
+
+class TestSumSegmentTree(unittest.TestCase):
+    def test_random(self):
+        for __ in range(100):
+            N = random.randint(1, 128)
+            DataGenerator.test(self, N, 400, ['get', 'sum_range', 'sum_all', 'set', 'add_to'], SumSegmentTree)
