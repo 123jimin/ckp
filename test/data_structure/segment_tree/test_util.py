@@ -1,14 +1,18 @@
 import random, operator, unittest
 
 class DataGenerator:
-    __slots__ = ('N', 'ops')
+    __slots__ = ('N', 'ops', 'min_value', 'max_value')
 
     N: int
     ops: list[str]
 
-    def __init__(self, N: int, ops: list[str]):
+    min_value: int
+    max_value: int
+
+    def __init__(self, N: int, ops: list[str], min_value: int = -100, max_value: int = 100):
         self.N = N
         self.ops = ops
+        self.min_value, self.max_value = min_value, max_value
 
     def index(self) -> int:
         return random.randrange(0, self.N)
@@ -20,7 +24,7 @@ class DataGenerator:
         return (i, j)
     
     def value(self) -> int:
-        return random.randint(-100, 100)
+        return random.randint(self.min_value, self.max_value)
     
     def list(self) -> list[int]:
         return [self.value() for _ in range(self.N)]
@@ -36,14 +40,15 @@ class DataGenerator:
             case 'add_to_range': return ('add_to_range', *self.range(), self.value())
     
     @staticmethod
-    def test(asserter: unittest.TestCase, N: int, amount: int, test_ops: list, test_tree_maker, ref_tree_maker = None):
-        gen = DataGenerator(N, test_ops)
+    def test(asserter: unittest.TestCase, N: int, amount: int, test_ops: list, test_tree_maker, ref_tree_maker = None, *, min_value = -100, max_value = 100):
+        gen = DataGenerator(N, test_ops, min_value, max_value)
         init_values = gen.list()
 
         test_tree = test_tree_maker(init_values)
         asserter.assertEqual(len(test_tree), N)
 
         ref_tree = (ref_tree_maker or NaiveSegmentTree)(init_values)
+
         for _ in range(amount):
             op = gen.op()
             match op:
@@ -61,6 +66,8 @@ class DataGenerator:
                     test_tree.add_to(i, v); ref_tree.add_to(i, v)
                 case ('add_to_range', i, j, v):
                     test_tree.add_to_range(i, j, v); ref_tree.add_to_range(i, j, v)
+        
+        asserter.assertListEqual(list(test_tree), list(ref_tree))
 
 class NaiveMonoidSegmentTree:
     __slots__ = ('_values', '_op', '_zero')

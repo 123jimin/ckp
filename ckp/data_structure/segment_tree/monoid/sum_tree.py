@@ -1,9 +1,11 @@
 """ Segment tree supporting range sum operations. """
 
-class MonoidSumSegmentTree:
-    """ Monoid segment tree that only supports range sum query. """
+from math import gcd
 
-    __slots__ = ('_len', '_zero', '_op', '_tree')
+class _BaseSumSegmentTree:
+    """ Common methods for all monoid sum segment tree and their derivates. """
+
+    __slots__ = ('_len', '_tree')
 
     _len: int
     """ Amount of elements in this segment tree. """
@@ -11,27 +13,32 @@ class MonoidSumSegmentTree:
     _tree: list
     """ A flat representation of this segment tree; `len(self._tree) == 2*self._len`. """
 
+    def __len__(self): return self._len
+    def __str__(self): return "[%s]".format(", ".join(map(str, self.__iter__())))
+    def __iter__(self):
+        tree = self._tree
+        for i in range(self._len, self._len*2):
+            yield tree[i]
+            
+    def __getitem__(self, ind: int): return self._tree[self._len + ind]
+
+
+class MonoidSumSegmentTree(_BaseSumSegmentTree):
+    """ Monoid segment tree that only supports range sum query. """
+
+    __slots__ = ('_zero', '_op',)
+
     def __init__(self, init_values: list, monoid_op, monoid_zero):
-        L = self._len = len(init_values)
         self._op, self._zero = monoid_op, monoid_zero
 
-        if not L:
-            self._tree = []
-            return
+        L = self._len = len(init_values)
+        if not L: self._tree = []; return
         
         tree = self._tree = [monoid_zero] * L + init_values
 
         for i in range(L-1, 0, -1):
             i2 = i+i; tree[i] = monoid_op(tree[i2], tree[i2+1])
-    
-    def __len__(self): return self._len
-    def __str__(self): return "[%s]".format(", ".join(str(self._tree[i]) for i in range(self._len, self._len*2)))
-    def __iter__(self):
-        tree = self._tree
-        for i in range(self._len, self._len*2):
-            yield tree[i]
 
-    def __getitem__(self, ind: int): return self._tree[self._len + ind]
     def sum_range(self, start: int, end: int):
         """ Get the sum of elements at indices in the half-open range [start, end). """
         if (not self._len) or start >= end: return self._zero
@@ -75,39 +82,22 @@ class MonoidSumSegmentTree:
         """ Add a given value to (the right side of) `self[ind]`. """
         self.__setitem__(ind, self._op(self._tree[self._len + ind], value))
 
-class SumSegmentTree:
+class SumSegmentTree(_BaseSumSegmentTree):
     """ Segment tree for summing numbers in ranges. """
 
-    __slots__ = ('_len', '_tree')
-    
-    _len: int
-    """ Amount of elements in this segment tree. """
-
-    _tree: list 
-    """ A flat representation of this segment tree; `len(self._tree) == 2*self._len`. """
+    __slots__ = ()
     
     def __init__(self, init_values: list):
         """ Creates a segment tree on `init_values`. """
 
         L = self._len = len(init_values)
-
-        if not L:
-            self._tree = []
-            return
+        if not L: self._tree = []; return
     
         tree = self._tree = [0] * L + init_values
 
         for i in range(L-1, 0, -1):
             i2 = i+i; tree[i] = tree[i2] + tree[i2+1]
-            
-    def __len__(self): return self._len
-    def __str__(self): return "[%s]".format(", ".join(str(self._tree[i]) for i in range(self._len, self._len*2)))
-    def __iter__(self):
-        tree = self._tree
-        for i in range(self._len, self._len*2):
-            yield tree[i]
     
-    def __getitem__(self, ind: int): return self._tree[self._len + ind]
     def sum_range(self, start: int, end: int):
         """ Get the sum of elements at indices in the half-open range [start, end). """
         if (not self._len) or start >= end: return 0
@@ -151,3 +141,132 @@ class SumSegmentTree:
         tree[curr_ind] += value
 
         while curr_ind > 1: curr_ind //= 2; tree[curr_ind] += value
+
+class MaxSegmentTree(_BaseSumSegmentTree):
+    """ Segment tree for calculating max of a range of numbers. """
+
+    __slots__ = ('_min')
+    
+    def __init__(self, init_values: list, min_value = 0):
+        """ Creates a segment tree on `init_values`. """
+
+        self._min = min_value
+
+        L = self._len = len(init_values)
+        if not L: self._tree = []; return
+    
+        tree = self._tree = [min_value] * L + init_values
+
+        for i in range(L-1, 0, -1):
+            i2 = i+i; tree[i] = max(tree[i2], tree[i2+1])
+    
+    def sum_range(self, start: int, end: int):
+        """ Get the max value of elements at indices in the half-open range [start, end). """
+        if (not self._len) or start >= end: return self._min
+        
+        tree, L = self._tree, self._len
+        start, end = max(0, start)+L, min(end, L)+L
+
+        res = self._min
+        while start < end:
+            sn, sr = divmod(start, 2)
+            en, er = divmod(end, 2)
+
+            if sr and er: res = max(res, tree[start], tree[end-1]); sn += 1
+            elif sr: res = max(res, tree[start]); sn += 1
+            elif er: res = max(res, tree[end-1])
+
+            start, end = sn, en
+        
+        return res
+    
+    def sum_all(self):
+        """ Get the max value of all elements in this tree. """
+        return self._tree[1] if self._len else self._min
+    
+    def __setitem__(self, ind: int, value):
+        if not 0 <= ind < self._len:
+            raise IndexError(f"Index {ind} out of range (len={self._len})")
+        
+        curr_ind, tree = self._len + ind, self._tree
+        prev_value = tree[curr_ind]
+        changed_value = tree[curr_ind] = value
+
+        if prev_value == changed_value: return
+        elif prev_value < changed_value:
+            while curr_ind > 1:
+                curr_ind //= 2
+                if changed_value <= tree[curr_ind]: break
+                tree[curr_ind] = changed_value
+        else:
+            while curr_ind > 1:
+                next_ind, r = divmod(curr_ind, 2)
+                other_value = tree[curr_ind+(1,-1)[r]]
+                if prev_value <= other_value: break
+                if changed_value < other_value: changed_value = other_value
+                tree[curr_ind := next_ind] = changed_value
+
+class GCDSegmentTree(_BaseSumSegmentTree):
+    """ Segment tree for calculating the GCD of elements in ranges. """
+
+    __slots__ = ()
+    
+    def __init__(self, init_values: list):
+        """ Creates a segment tree on `init_values`. """
+
+        L = self._len = len(init_values)
+        if not L: self._tree = []; return
+    
+        tree = self._tree = [0] * L + init_values
+
+        for i in range(L-1, 0, -1):
+            i2 = i+i; tree[i] = gcd(tree[i2], tree[i2+1])
+    
+    def sum_range(self, start: int, end: int):
+        """ Get the GCD of elements at indices in the half-open range [start, end). """
+        if (not self._len) or start >= end: return 0
+        
+        tree, L = self._tree, self._len
+        start, end = max(0, start)+L, min(end, L)+L
+
+        res = 0
+        while start < end:
+            sn, sr = divmod(start, 2)
+            en, er = divmod(end, 2)
+            if sr and er: res = gcd(res, tree[start], tree[end-1]); sn += 1
+            elif sr: res = gcd(res, tree[start]); sn += 1
+            elif er: res = gcd(res, tree[end-1])
+
+            start, end = sn, en
+        
+        return res
+    
+    def sum_all(self):
+        """ Get the GCD of all elements in this tree. """
+        return self._tree[1] if self._len else 0
+    
+    def __setitem__(self, ind: int, value):
+        if not 0 <= ind < self._len:
+            raise IndexError(f"Index {ind} out of range (len={self._len})")
+        
+        curr_ind, tree = self._len + ind, self._tree
+        changed_value = tree[curr_ind] = value
+
+        while curr_ind > 1:
+            next_ind, r = divmod(curr_ind, 2)
+            changed_value = tree[next_ind] = gcd(changed_value, tree[curr_ind+(1,-1)[r]])
+            curr_ind = next_ind
+
+    def add_to(self, ind: int, value):
+        """ Update `self[ind]` to `gcd(self[ind], value)`. """
+        if not 0 <= ind < self._len:
+            raise IndexError(f"Index {ind} out of range (len={self._len})")
+        
+        curr_ind, tree = self._len + ind, self._tree
+        tree[curr_ind] = gcd(tree[curr_ind], value)
+
+        while curr_ind > 1:
+            orig_value = tree[curr_ind := curr_ind // 2]
+            changed_value = gcd(orig_value, value)
+            if orig_value == changed_value: return
+            tree[curr_ind] = changed_value
