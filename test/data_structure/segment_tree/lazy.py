@@ -46,7 +46,7 @@ class TestLazySumSegmentTree(unittest.TestCase):
     def test_random_ops(self):
         for __ in range(400):
             N = random.randint(1, 128)
-            g = DataGenerator(N, ['add_to_range', 'get', 'set', 'reduce_range'])
+            g = DataGenerator(N, ['add_to_range', 'get', 'set', 'sum_range'])
 
             arr = g.list()
             tree = LazySumSegmentTree(arr)
@@ -63,6 +63,6 @@ class TestLazySumSegmentTree(unittest.TestCase):
                     case ('set', i, v):
                         arr[i] = v
                         tree[i] = v
-                    case ('reduce_range', i, j):
+                    case ('sum_range', i, j):
                         s = sum(arr[i:j])
                         self.assertEqual(tree.reduce_range(i, j), s, f"summing on the range [{i}, {j})")

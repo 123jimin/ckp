@@ -28,8 +28,8 @@ class DataGenerator:
     def op(self):
         match random.choice(self.ops):
             case 'get': return ('get', self.index())
-            case 'reduce_range': return ('reduce_range', *self.range())
-            case 'reduce_all': return ('reduce_all',)
+            case 'sum_range': return ('sum_range', *self.range())
+            case 'sum_all': return ('sum_all',)
             case 'set': return ('set', self.index(), self.value())
             case 'set_range': return ('set_range', *self.range(), self.value())
             case 'add_to': return ('add_to', self.index(), self.value())
@@ -49,10 +49,10 @@ class DataGenerator:
             match op:
                 case ('get', i):
                     asserter.assertEqual(test_tree[i], ref_tree[i], f"{op=}")
-                case ('reduce_range', i, j):
-                    asserter.assertEqual(test_tree.reduce_range(i, j), ref_tree.reduce_range(i, j), f"{op=}")
-                case ('reduce_all',):
-                    asserter.assertEqual(test_tree.reduce_all(), ref_tree.reduce_all(), f"{op=}")
+                case ('sum_range', i, j):
+                    asserter.assertEqual(test_tree.sum_range(i, j), ref_tree.sum_range(i, j), f"{op=}")
+                case ('sum_all',):
+                    asserter.assertEqual(test_tree.sum_all(), ref_tree.sum_all(), f"{op=}")
                 case ('set', i, v):
                     test_tree[i] = v; ref_tree[i] = v
                 case ('set_range', i, j, v):
@@ -75,12 +75,12 @@ class NaiveMonoidSegmentTree:
     def __iter__(self): return self._values.__iter__()
 
     def __getitem__(self, ind: int): return self._values[ind]
-    def reduce_range(self, start: int, end: int):
+    def sum_range(self, start: int, end: int):
         if start >= end: return self._zero
         v = self._values[start]
         for i in range(start+1, end): v = self._op(v, self._values[i])
         return v
-    def reduce_all(self): return self.reduce_range(0, len(self._values))
+    def sum_all(self): return self.sum_range(0, len(self._values))
 
     def __setitem__(self, ind: int, value): self._values[ind] = value
     def set_range(self, start: int, end: int, value):

@@ -32,8 +32,8 @@ class MonoidSumSegmentTree:
             yield tree[i]
 
     def __getitem__(self, ind: int): return self._tree[self._len + ind]
-    def reduce_range(self, start: int, end: int):
-        """ Get the reduced value for indices in the half-open range [start, end). """
+    def sum_range(self, start: int, end: int):
+        """ Get the sum of elements at indices in the half-open range [start, end). """
         if (not self._len) or start >= end: return self._zero
         
         tree, L, zero, op = self._tree, self._len, self._zero, self._op
@@ -54,8 +54,8 @@ class MonoidSumSegmentTree:
         
         return op(res_l, res_r)
     
-    def reduce_all(self):
-        """ Get the reduced value for all elements in this tree. """
+    def sum_all(self):
+        """ Get the sum of all elements in this tree. """
         return self._zero if self._len == 0 else self._tree[1]
 
     def __setitem__(self, ind: int, value):

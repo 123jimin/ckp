@@ -18,8 +18,8 @@ class SegmentTree:
     def __iter__(self): pass
 
     def __getitem__(self, ind: int): pass
-    def reduce_range(self, start: int, end: int): pass
-    def reduce_all(self): pass
+    def sum_range(self, start: int, end: int): pass
+    def sum_all(self): pass
 
     def __setitem__(self, ind: int, value): pass
     def set_range(self, start: int, end: int, value): pass
