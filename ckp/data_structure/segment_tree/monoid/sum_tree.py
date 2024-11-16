@@ -100,9 +100,9 @@ class SumSegmentTree(_BaseSumSegmentTree):
     
     def sum_range(self, start: int, end: int):
         """ Get the sum of elements at indices in the half-open range [start, end). """
-        if (not self._len) or start >= end: return 0
-        
         tree, L = self._tree, self._len
+        if (not L) or start >= end: return 0
+        
         start, end = max(0, start)+L, min(end, L)+L
 
         res = 0

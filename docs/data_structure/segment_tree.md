@@ -90,8 +90,10 @@ There are some specialized instances for commonly occurring monoids:
 
 - `MonoidSumSegmentTree`
   - `SumSegmentTree`
-  - `MinSegmentTree`, `MaxSegmentTree`
+  - `MaxSegmentTree`
   - `GCDSegmentTree`
+- `MonoidAddSegmentTree`
+  - `AddSegmentTree`
 
 ### Merge Sort
 
