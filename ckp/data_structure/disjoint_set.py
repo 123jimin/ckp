@@ -47,6 +47,17 @@ def disjoint_set_union(ds: DisjointSetData, x:int, y:int) -> tuple[int, int]|Non
     if ranks[x] == ranks[y]: ranks[x] += 1
 
     return (x, y)
+
+class DisjointSet(DisjointSetData):
+    """ Objected-oriented interface for manipulating the disjoint set data structure. """
+    
+    def __init__(self, size: int):
+        self.parents, self.sizes, self.ranks = list(range(size)), [1] * size, [0] * size
+
+    size = disjoint_set_size
+    find = disjoint_set_find
+    is_same_set = disjoint_set_is_same_set
+    union = disjoint_set_union
     
 class DisjointSetObject:
     """ Disjoint set that can be used without constructing the universe set. """
