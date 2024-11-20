@@ -10,29 +10,12 @@ Check the documentation on <https://123jimin.github.io/ckp/>.
 
 ## To-Do List
 
-- [x] `automata`
-- [ ] `data_structure`
-  - [x] `disjoint_set`
-  - [x] `graph`
-  - [ ] `segment_tree`
-  - [x] `sorted_containers`
-- [ ] `fourier`
-  - [x] `complex`
-  - [ ] `ntt`
-- [x] `geometry`
-  - [x] `circumcircle`
-  - [x] `circumsphere`
-  - [x] `convex_hull`
-  - [x] `delaunay`
-- [ ] `graph_theory`
-  - [ ] `bipartite_matching`
-  - [x] `ford_fulkerson`
-  - [ ] `strongly_connected_components`
-- [ ] `language`
-- [x] `linear_algebra`
-- [x] `nimber`
-- [x] `number_theory`
+- [ ] `data_structure.segment_tree`
+- [ ] `fourier.ntt`
+- [ ] `geometry.half_plane_intersection`
+- [ ] `graph_theory.bipartite_matching`
+- [ ] `graph_theory.max_flow.push_relabel`
+- [ ] `graph_theory.strongly_connected_components`
+- [ ] `language` (plaintext to languages)
 - [ ] `polynomial`
-- [ ] `string`
-  - [x] `kmp`
-  - [ ] `suffix_array`
+- [ ] `string.suffix_array`
