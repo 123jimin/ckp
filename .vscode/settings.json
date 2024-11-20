@@ -33,6 +33,7 @@
         "rubiks",
         "rvalid",
         "sortedcontainers",
+        "subpackages",
         "sympy",
         "tottime",
         "Tukey"

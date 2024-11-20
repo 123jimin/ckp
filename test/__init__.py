@@ -7,4 +7,5 @@ from .linear_algebra import *
 from .misc import *
 from .nimber import *
 from .number_theory import *
+from .numeric import *
 from .string import *
