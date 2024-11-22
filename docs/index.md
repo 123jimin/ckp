@@ -106,6 +106,10 @@ Contains various algorithms and functions for 2D and 3D geometry.
 - Convex Hull
 - Delaunay Triangulation
 
+### Numeric: `ckp.numeric`
+
+Contains various constants and algorithms for computing numeric functions.
+
 ### Nimber: `ckp.nimber`
 
 Contains nimber arithmetic, which is just an another name for the Galois field $GF(2^{2^k})$.
@@ -124,6 +128,10 @@ Following algorithms are not implemented in CKP, mostly because the Python Stand
 
 - Memoization: Use [`functools.cache`](https://docs.python.org/3/library/functools.html#functools.cache).
 - Topological Sorting: Use [`graphlib.TopologicalSorter`](https://docs.python.org/3/library/graphlib.html#graphlib.TopologicalSorter).
+- Error Function: Use [`math.erf` and `math.erfc`](https://docs.python.org/3/library/math.html#math.erf).
+- Gamma Function: Use [`math.gamma` and `math.lgamma`](https://docs.python.org/3/library/math.html#math.gamma).
+  - This also handles log-factorials.
+  - Complex-valud gamma functions could be interesting, but I don't think that it will be particularly useful for competitive programming.
 - Balanced Trees (such as Red-Black Tree): Trees are generally slow on Python. Check `ckp.data_structure.sorted_containers`.
 
 ## Caveats
