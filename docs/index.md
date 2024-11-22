@@ -106,7 +106,7 @@ Contains various algorithms and functions for 2D and 3D geometry.
 - Convex Hull
 - Delaunay Triangulation
 
-### Numeric: `ckp.numeric`
+### [Numeric: `ckp.numeric`](./numeric/index.md)
 
 Contains various constants and algorithms for computing numeric functions.
 
