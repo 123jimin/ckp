@@ -64,7 +64,7 @@ def log_comb(n: int, k: int) -> float:
     # major diff + minor_diff - log_k_fac
     return stirling_major_diff - (log_k_fac + k / (12 * np1 * nmkp1))
 
-def harmonic_series(n: int, *, _cache: list[int] = [0, 1, 1.5]) -> float:
+def harmonic_number(n: int, *, _cache: list[int] = [0, 1, 1.5]) -> float:
     """ Computes H(n) = `sum(1/i for i in range(1, n+1))`, accurately for large n. """
     if n <= 0: return 0
     if n == 1: return 1
@@ -85,8 +85,8 @@ def harmonic_series(n: int, *, _cache: list[int] = [0, 1, 1.5]) -> float:
 def coupon_collector_expected(n: int, k: int) -> float:
     """ Computes `n*(H(n) - H(n-k))`, the expected number of coupons collected for collecting `k` of `n` coupons. """
     if k == 0: return 0
-    if n == k: return n * harmonic_series(n)
+    if n == k: return n * harmonic_number(n)
     if k <= 100: return n * sum(1/(n-i) for i in range(k))
-    if n-k <= 100: return n * (harmonic_series(n) - harmonic_series(n-k))
+    if n-k <= 100: return n * (harmonic_number(n) - harmonic_number(n-k))
     # TODO
     raise NotImplementedError()
