@@ -3,6 +3,7 @@
 """
 
 from math import log, comb, lgamma, log1p
+from .const import euler_gamma
 
 def log_falling_factorial(n: int, k: int) -> float:
     """
@@ -64,7 +65,7 @@ def log_comb(n: int, k: int) -> float:
     return stirling_major_diff - (log_k_fac + k / (12 * np1 * nmkp1))
 
 def harmonic_series(n: int, *, _cache: list[int] = [0, 1, 1.5]) -> float:
-    """ Computes `sum(1/i for i in range(1, n+1))`, accurately for large n. """
+    """ Computes H(n) = `sum(1/i for i in range(1, n+1))`, accurately for large n. """
     if n <= 0: return 0
     if n == 1: return 1
     if n < len(_cache): return _cache[n]
@@ -74,8 +75,12 @@ def harmonic_series(n: int, *, _cache: list[int] = [0, 1, 1.5]) -> float:
             s += 1/i
             _cache.append(s)
         return s
-    # TODO
-    raise NotImplementedError()
+    
+    nsq = n*n
+    nqd = nsq*nsq
+
+    # Absolute error should be less than 1/n^10
+    return log(n) + euler_gamma() + 1/(2*n) - 1/(12*nsq) + 1/(120*nqd) - 1/(252*nsq*nqd) + 1/(240*nqd*nqd)
 
 def coupon_collector_expected(n: int, k: int) -> float:
     """ Computes `n*(H(n) - H(n-k))`, the expected number of coupons collected for collecting `k` of `n` coupons. """

@@ -64,8 +64,20 @@ class TestLogComb(unittest.TestCase):
             self.assertAlmostEqual(log_comb(10**9, 10**i), value, f"log_comb(10**9, 10**{i})")
 
 class TestHarmonicSeries(unittest.TestCase):
-    def test_small(self):
+    assertAlmostEqual = assertAlmostEqualFunc
+
+    def test_exact(self):
         self.assertEqual(harmonic_series(0), 0)
         self.assertEqual(harmonic_series(1), 1)
         self.assertEqual(harmonic_series(2), 1.5)
-        self.assertAlmostEqual(harmonic_series(3), 1.5 + 1/3)
+
+    def test_small(self):
+        s = 0
+        for n in range(1, 1001):
+            s += 1/n
+            self.assertAlmostEqual(harmonic_series(n), s, f"H({n})")
+
+    def test_large(self):
+        self.assertAlmostEqual(harmonic_series(10**8), 18.99789641385389832441711039)
+        self.assertAlmostEqual(harmonic_series(10**10), 23.6030665948919897007855933)
+        self.assertAlmostEqual(harmonic_series(10**50), 115.706470314603817061506084)
