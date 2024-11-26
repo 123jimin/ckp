@@ -14,7 +14,7 @@ def tree_lca_init(tree: TreeData) -> TreeLCAData:
 
     N = len(tree)
     D = max(depths)
-    if D <= 1: return
+    if D <= 1: return lca
 
     for i in range(D.bit_length()-1):
         for j in range(N):
@@ -26,11 +26,11 @@ def tree_lca_init(tree: TreeData) -> TreeLCAData:
 
 def tree_lca_pth_ancestor(lca: TreeLCAData, v: int, p: int) -> int:
     """ Returns p-th ancestor of v. """
-    parents = lca.parents
+    ancestors = lca.ancestors
     while p:
-        if p == 1: return parents[v][0]
+        if p == 1: return ancestors[v][0]
         p -= 1<<(l := p.bit_length() - 1)
-        v = parents[v][l]
+        v = ancestors[v][l]
     return v
 
 def tree_lca_query(lca: TreeLCAData, v: int, w: int) -> int:
