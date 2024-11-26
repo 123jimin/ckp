@@ -74,6 +74,29 @@ def tree_sizes(neighbors: list[list[int]], root_ind: int = 0) -> list[int]:
     _tree_size_dfs(neighbors, sizes, root_ind)
     return sizes
 
+def tree_centroids(neighbors: list[list[int]]|TreeData, sizes: list[int]|None = None) -> list[int]:
+    """
+        Returns a list of centroids of the tree.
+        A centroid of a tree is a point where all subtrees' sizes are <= len(neighbors) // 2.
+        As long as the tree is not empty, there are either one or two centroids.
+    """
+    if not neighbors: return []
+    if isinstance(neighbors, TreeData): neighbors = neighbors.neighbors
+    if not sizes: sizes = tree_sizes(neighbors)
+
+    half, r = divmod(len(neighbors), 2)
+    curr, parent = 0, -1
+    while True:
+        for ch in neighbors[curr]:
+            if ch == parent: continue
+            ch_size = sizes[ch]
+            if (not r) and ch_size == half: return [curr, ch]
+            elif ch_size > half:
+                curr, parent = ch, curr
+                break
+        else:
+            return [curr]
+
 class DistanceTreeData(TreeData):
     """ Represents a tree, where each edge has length. """
     __slots__ = ('distances', 'parent_distances', 'root_distances')
