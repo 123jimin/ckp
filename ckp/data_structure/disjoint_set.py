@@ -16,34 +16,98 @@ def disjoint_set_init(size: int) -> DisjointSetData:
 
     return ds
 
-def disjoint_set_size(ds: DisjointSetData, ind:int):
+def disjoint_set_size(ds: DisjointSetData, ind: int) -> int:
     """ Returns the size of the set `ind` is in. """
     return ds.sizes[disjoint_set_find(ds, ind)]
 
-def disjoint_set_find(ds: DisjointSetData, ind:int):
+def disjoint_set_find(ds: DisjointSetData, ind: int) -> int:
     """ Returns the representative element for `ind`. """
-    # TODO: implement path compression without much overhead.
     parents = ds.parents
+    
+    orig_ind, orig_root_ind = ind, parents[ind]
+    if orig_ind == orig_root_ind: return ind
+
+    ind = orig_root_ind
     while (root_ind := parents[ind]) != ind: ind = root_ind
-    return ind
 
-def disjoint_set_is_same_set(ds: DisjointSetData, x:int, y:int) -> bool:
+    # 1-level path compression to avoid recursion.
+    if orig_root_ind != root_ind: parents[orig_ind] = root_ind
+    return root_ind
+
+def disjoint_set_is_same_set(ds: DisjointSetData, x: int, y: int) -> bool:
     """ Returns whether `x` and `y` reside in the same set. """
-    return disjoint_set_find(ds, x) == disjoint_set_find(ds, y)
+    parents = ds.parents
 
-def disjoint_set_union(ds: DisjointSetData, x:int, y:int) -> tuple[int, int]|None:
-    """
-        Take the union of `x` and `y`.
+    # x = disjoint_set_find(ds, x)
+    ox, orx = x, parents[x]
+    if ox != orx:
+        x = orx
+        while (rx := parents[x]) != x: x = rx
+        if orx != rx: parents[ox] = rx
         
-        Returns a tuple (x, y), when a set with root `y` is merged to `x`.
-    """
-    if (x := disjoint_set_find(ds, x)) == (y := disjoint_set_find(ds, y)): return None
+    # y = disjoint_set_find(ds, y)
+    oy, ory = y, parents[y]
+    if oy != ory:
+        y = ory
+        while (ry := parents[y]) != y: y = ry
+        if ory != ry: parents[oy] = ry
+    
+    return x == y
 
+def disjoint_set_union(ds: DisjointSetData, x: int, y: int) -> bool:
+    """ Merge sets containing `x` and `y`, and returns whether two sets were merged. """
+    parents = ds.parents
+
+    # x = disjoint_set_find(ds, x)
+    ox, orx = x, parents[x]
+    if ox != orx:
+        x = orx
+        while (rx := parents[x]) != x: x = rx
+        if orx != rx: parents[ox] = rx
+
+    # y = disjoint_set_find(ds, y)
+    oy, ory = y, parents[y]
+    if oy != ory:
+        y = ory
+        while (ry := parents[y]) != y: y = ry
+        if ory != ry: parents[oy] = ry
+    
+    if x == y: return False
+
+    # Processes union.
     sizes, ranks = ds.sizes, ds.ranks
     if ranks[x] < ranks[y]: x, y = y, x
 
-    ds.parents[y] = x; sizes[x] += sizes[y]
+    parents[y] = x; sizes[x] += sizes[y]
+    if ranks[x] == ranks[y]: ranks[x] += 1
 
+    return True
+
+def disjoint_set_union_find(ds: DisjointSetData, x: int, y: int) -> tuple[int, int]|None:
+    """ Merge sets containing `x` and `y`, and returns a tuple (rx, ry), where a set with root `rx` has been merged to another set with root `ry`. """
+    parents = ds.parents
+
+    # x = disjoint_set_find(ds, x)
+    ox, orx = x, parents[x]
+    if ox != orx:
+        x = orx
+        while (rx := parents[x]) != x: x = rx
+        if orx != rx: parents[ox] = rx
+
+    # y = disjoint_set_find(ds, y)
+    oy, ory = y, parents[y]
+    if oy != ory:
+        y = ory
+        while (ry := parents[y]) != y: y = ry
+        if ory != ry: parents[oy] = ry
+    
+    if x == y: return None
+
+    # Processes union.
+    sizes, ranks = ds.sizes, ds.ranks
+    if ranks[x] < ranks[y]: x, y = y, x
+
+    parents[y] = x; sizes[x] += sizes[y]
     if ranks[x] == ranks[y]: ranks[x] += 1
 
     return (x, y)
@@ -58,6 +122,7 @@ class DisjointSet(DisjointSetData):
     find = disjoint_set_find
     is_same_set = disjoint_set_is_same_set
     union = disjoint_set_union
+    union_find = disjoint_set_union_find
     
 class DisjointSetObject:
     """ Disjoint set that can be used without constructing the universe set. """
@@ -76,7 +141,7 @@ class DisjointSetObject:
 
     @property
     def root(self):
-        # TODO: implement path compression without much overhead.
+        # Path compression omitted.
         curr = self
         while (parent := curr._parent) != curr: curr = parent
         return curr
