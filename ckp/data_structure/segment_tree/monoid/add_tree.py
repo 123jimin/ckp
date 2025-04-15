@@ -1,7 +1,23 @@
+class _BaseAddSegmentTree:
+    """ Common methods for all monoid add segment tree and their derivatives.  """
+
+    __slots__ = ('_len', '_tree')
+
+    _len: int
+    """ Amount of elements in this segment tree. """
+
+    _tree: list
+    """ A flat representation of this segment tree; `len(self._tree) == 2*self._len`. """
+
+    def __len__(self): return self._len
+    def __str__(self): return "[{}]".format(", ".join(map(str, self.__iter__())))
+    def __iter__(self):
+        for i in range(self._len): yield self.__getitem__(i)
+
 # TODO
 """
-class MonoidAddSegmentTree:
-    __slots__ = ('_len', '_tree', '_zero', '_op')
+class MonoidAddSegmentTree(_BaseAddSegmentTree):
+    __slots__ = ('_zero', '_op')
 
     def __init__(self, init_values: list, monoid_op, monoid_zero):
         self._op, self._zero = monoid_op, monoid_zero
@@ -13,26 +29,18 @@ class MonoidAddSegmentTree:
 
         for i in range(L-1, 0, -1):
             i2 = i+i; tree[i] = monoid_op(tree[i2], tree[i2+1])
-
-    def __len__(self): return self._len
-    def __str__(self): return "[{}]".format(", ".join(map(str, self.__iter__())))
 """
  
-class AddSegmentTree:
+class AddSegmentTree(_BaseAddSegmentTree):
     """ Segment tree for range-add operation on numbers. """
 
-    __slots__ = ('_len', '_tree')
+    __slots__ = ()
 
     def __init__(self, init_values: list):
         L = self._len = len(init_values)
         if not L: self._tree = []; return
 
-        tree = self._tree = [0] * L + init_values
-
-    def __len__(self): return self._len
-    def __str__(self): return "[%s]".format(", ".join(map(str, self.__iter__())))
-    def __iter__(self):
-        for i in range(self._len): yield self.__getitem__(i)
+        self._tree = [0] * L + init_values
 
     def __getitem__(self, ind: int):
         ind += self._len
