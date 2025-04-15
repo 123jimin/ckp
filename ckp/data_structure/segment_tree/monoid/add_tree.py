@@ -15,7 +15,7 @@ class MonoidAddSegmentTree:
             i2 = i+i; tree[i] = monoid_op(tree[i2], tree[i2+1])
 
     def __len__(self): return self._len
-    def __str__(self): return "[%s]".format(", ".join(map(str, self.__iter__())))
+    def __str__(self): return "[{}]".format(", ".join(map(str, self.__iter__())))
 """
  
 class AddSegmentTree:

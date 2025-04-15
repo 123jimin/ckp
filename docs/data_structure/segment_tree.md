@@ -84,6 +84,7 @@ Here is the table of specific segment trees implemented by CKP.
 | `list` | ⚠️ | ⚠️ | ✅ | ❌ |
 | `MonoidSumSegmentTree` | ⚠️ | ⚠️ | ✅ | ✅ |
 | `MonoidAddSegmentTree` | ⚠️ | ✅ | ✅ | ❌ |
+| `MonoidAssignSegmentTree` | ✅ | ⚠️ | ✅ | ✅ |
 | `MonoidSegmentTree` | ✅ | ✅ | ✅ | ✅ |
 
 There are some specialized instances for commonly occurring monoids:
