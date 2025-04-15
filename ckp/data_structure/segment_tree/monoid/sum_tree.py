@@ -3,7 +3,7 @@
 from math import gcd
 
 class _BaseSumSegmentTree:
-    """ Common methods for all monoid sum segment tree and their derivates. """
+    """ Common methods for all monoid sum segment tree and their derivatives. """
 
     __slots__ = ('_len', '_tree')
 
