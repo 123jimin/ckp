@@ -14,7 +14,7 @@ class _BaseSumSegmentTree:
     """ A flat representation of this segment tree; `len(self._tree) == 2*self._len`. """
 
     def __len__(self): return self._len
-    def __str__(self): return "[%s]".format(", ".join(map(str, self.__iter__())))
+    def __str__(self): return "[{}]".format(", ".join(map(str, self.__iter__())))
     def __iter__(self):
         tree = self._tree
         for i in range(self._len, self._len*2):
@@ -63,7 +63,8 @@ class MonoidSumSegmentTree(_BaseSumSegmentTree):
     
     def sum_all(self):
         """ Get the sum of all elements in this tree. """
-        return self._tree[1] if self._len else self._zero
+        # `self._tree[1]` can't be used when the monoid is not commutative.
+        return self.sum_range(0, self._len)
 
     def __setitem__(self, ind: int, value):
         if not 0 <= ind < self._len:
