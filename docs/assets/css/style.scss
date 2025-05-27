@@ -22,3 +22,12 @@ section {
 footer {
     width: 260px;
 }
+
+/* Usually for function signatures. */
+blockquote code {
+    font-style: normal;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: .75em;
+    border-radius: .75em;
+}
