@@ -17,6 +17,5 @@ Check the documentation on <https://123jimin.github.io/ckp/>.
 - [ ] `graph_theory.max_flow.push_relabel`
 - [ ] `graph_theory.strongly_connected_components`
 - [ ] `language` (plaintext to languages)
-- [ ] `numeric.combinatorics.coupon_collector_expected`
 - [ ] `polynomial`
 - [ ] `string.suffix_array`

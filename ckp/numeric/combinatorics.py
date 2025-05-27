@@ -88,5 +88,9 @@ def coupon_collector_expected(n: int, k: int) -> float:
     if n == k: return n * harmonic_number(n)
     if k <= 100: return n * sum(1/(n-i) for i in range(k))
     if n-k <= 100: return n * (harmonic_number(n) - harmonic_number(n-k))
-    # TODO
-    raise NotImplementedError()
+    
+    r = n-k
+    nn, nd = 60*n**3 - 10*n**2 + 1, 120*n**4
+    rn, rd = 60*r**3 - 10*r**2 + 1, 120*r**4
+    rem = ((nn*rd-nd*rn)*n)/(nd*rd)
+    return rem + n*log1p(k/r)

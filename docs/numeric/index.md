@@ -51,3 +51,20 @@ Computes the n-th harmonic number $H_n = \sum_{i=1}^n \frac{1}{i}$ in constant t
 $$H_n = \log n + \gamma + \frac{1}{2n} - \frac{1}{12n^2} + \frac{1}{120n^4} - \frac{1}{252n^6} + \frac{1}{240n^8} + \cdots$$
 
 Every harmonic numbers are rational numbers, but the exact version of this function (returning `fractions.Fraction`) is *not* planned to be implemented, as it's practically useless.
+
+> `coupon_collector_expected(n: int, k: int) -> float`
+
+Computes $n (H_n - H_{n-k})$, the expected number of coupons collected for collecting $k$ of $n$ coupons.
+
+One may tempt to use `n * (harmonic_number(n) - harmonic_number(n-k))` for this, but it's not accurate enough for large $n$ and small $k$; $H_n$ and $H_{n-k}$ are very close to each other, so the subtraction may cause a significant loss of precision.
+
+Instead, (let $r = n-k$) $H_n - H_r$ is computed like this:
+
+$$
+\begin{aligned}
+H_n - H_{n-k} &\approx \log n - \log r + \left( \frac{1}{2n} - \frac{1}{12n^2} + \frac{1}{120n^4} \right) - \left( \frac{1}{2r} - \frac{1}{12r^2} + \frac{1}{120r^4} \right) \\
+&= \log \frac{n}{r} + \frac{60n^3 - 10n^2 + 1}{120n^4} - \frac{60r^3 - 10r^2 + 1}{120r^4}
+\end{aligned}
+$$
+
+Note that `math.log1p` should be used to accurately compute $\log \frac{n}{r} = \log (1 + \frac{k}{r})$.

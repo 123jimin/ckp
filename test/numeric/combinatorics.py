@@ -4,7 +4,8 @@ from ckp.numeric.combinatorics import *
 import math
 
 def assertAlmostEqualFunc(testcase: unittest.TestCase, actual: float, expected: float, message=None):
-    delta = abs(expected * 1e-9)
+    # Up to 1e-9 is acceptable, but let's try to be more precise.
+    delta = abs(expected * 1e-12)
     if delta == 0: delta = abs(expected)
 
     testcase.assertGreaterEqual(actual, expected - delta, message)
@@ -49,6 +50,7 @@ class TestLogComb(unittest.TestCase):
                 self.assertAlmostEqual(log_comb(n, j+1), p, f"log_comb(10**{i}, {j+1})")
         
     def test_large(self):
+        # Note: Use `Log[Combination[n, k]]` in Mathematica to get the reference values.
         data_10_9 = [
             20.723265836946411156,
             192.12824575138859612,
@@ -57,7 +59,8 @@ class TestLogComb(unittest.TestCase):
             125123.68053748311561,
             1021022.3616788467501,
             7907247.2860384416653,
-            56001525.3818861413608,
+            56001525.381886141361,
+            # Sadly, Mathematica cannot compute `Log[Combination[10^9, 10^8]]`.
         ]
 
         for i, value in enumerate(data_10_9):
@@ -78,6 +81,25 @@ class TestHarmonicNumber(unittest.TestCase):
             self.assertAlmostEqual(harmonic_number(n), s, f"H({n})")
 
     def test_large(self):
-        self.assertAlmostEqual(harmonic_number(10**8), 18.99789641385389832441711039)
+        # Note: Use `HarmonicNumber[n]` in Mathematica to get the reference values.
+        self.assertAlmostEqual(harmonic_number(10**8),  18.9978964138538983244171104)
         self.assertAlmostEqual(harmonic_number(10**10), 23.6030665948919897007855933)
-        self.assertAlmostEqual(harmonic_number(10**50), 115.706470314603817061506084)
+        self.assertAlmostEqual(harmonic_number(10**50), 115.706470314603817061506085)
+
+class TestCouponCollectorExpected(unittest.TestCase):
+    assertAlmostEqual = assertAlmostEqualFunc
+
+    def test_zero_k(self):
+        self.assertEqual(coupon_collector_expected(10, 0), 0)
+        self.assertEqual(coupon_collector_expected(10**10, 0), 0)
+        self.assertEqual(coupon_collector_expected(10**50, 0), 0)
+    
+    def test_n_equal_k(self):
+        self.assertAlmostEqual(coupon_collector_expected(10, 10), 10 * harmonic_number(10))
+        self.assertAlmostEqual(coupon_collector_expected(10**10, 10**10), 10**10 * harmonic_number(10**10))
+    
+    def test_large(self):
+        self.assertAlmostEqual(coupon_collector_expected(10**18, 10**6),           1000000.000000499999500000)
+        self.assertAlmostEqual(coupon_collector_expected(10**18, 5 * 10**17),      693147180559945308.9172321)
+        self.assertAlmostEqual(coupon_collector_expected(10**18, 10**18 - 100000), 29933601208930927226.06714)
+        self.assertAlmostEqual(coupon_collector_expected(10**18, 10**18 - 1000),   34538276478244010260.77384)
