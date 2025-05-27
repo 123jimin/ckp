@@ -12,3 +12,13 @@ from ckp.number_theory import is_prime
 
 print(sum(is_prime(2*int(sys.stdin.readline())+1) for _ in range(int(sys.stdin.readline()))))
 ```
+
+## Problem 1196
+
+> Submission ID: 94811910
+
+```py
+from ckp.numeric.combinatorics import coupon_collector_expected
+
+print(coupon_collector_expected(*map(int, input().split())))
+```
