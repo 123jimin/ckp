@@ -1,6 +1,6 @@
 # Using CKP to Solve BOJ Problems
 
-Here are several example solutions for problems on [Backjoon Online Judge](https://www.acmicpc.net/), demonstrating how CKP can be used to solve competitive programming problems.
+Here are several example solutions for problems on [Baekjoon Online Judge](https://www.acmicpc.net/), demonstrating how CKP can be used to solve competitive programming problems.
 
 ## Problem 5615
 

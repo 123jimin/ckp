@@ -22,7 +22,7 @@ Returns the sum of every divisors of n; equivalent but a bit faster than `sum(di
 
 This is the Euler-phi function $\varphi(n)$, which returns \# of numbers $x$ coprime to $n$, such that $1 \le x < n$.
 
-## Basic Modular Arithmatic
+## Basic Modular Arithmetic
 
 > Class `ZMod`
 
@@ -108,7 +108,7 @@ Other prime sieve functions call this function as needed, so calling this functi
 
 > Class `PrimeSieve`
 
-A conveient class to manage prime sieves in an OOP manner.
+A convenient class to manage prime sieves in an OOP manner.
 Using this class is as efficient as using individual prime sieve functions, but impacker would emit a code with unused functions.
 
 ## Integer Factorization

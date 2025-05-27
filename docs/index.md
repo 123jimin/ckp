@@ -131,7 +131,7 @@ Following algorithms are not implemented in CKP, mostly because the Python Stand
 - Error Function: Use [`math.erf` and `math.erfc`](https://docs.python.org/3/library/math.html#math.erf).
 - Gamma Function: Use [`math.gamma` and `math.lgamma`](https://docs.python.org/3/library/math.html#math.gamma).
   - This also handles log-factorials.
-  - Complex-valud gamma functions could be interesting, but I don't think that it will be particularly useful for competitive programming.
+  - Complex-valued gamma functions could be interesting, but I don't think that it will be particularly useful for competitive programming.
 - Balanced Trees (such as Red-Black Tree): Trees are generally slow on Python. Check `ckp.data_structure.sorted_containers`.
 
 ## Caveats
