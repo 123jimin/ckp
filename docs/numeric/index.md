@@ -8,9 +8,9 @@ In this document, when a function `foo`'s signature is listed like this:
 
 > `foo() -> float | fractions.Fractions | decimal.Decimal`
 
-then it means that there are different versions of `foo` availble to use:
+then it means that there are different versions of `foo` available to use:
 
-- `foo() -> float` returns a float (IEEE 754 binary64), usually within $10^{-9}$ relative error (*not gauranteed*).
+- `foo() -> float` returns a float (IEEE 754 binary64), usually within $10^{-9}$ relative error (*not guaranteed*).
 - `foo_exact() -> fractions.Fractions (or int)` returns an exact value.
 - `foo_decimal() -> decimal.Decimal` returns a `decimal.Decimal` value, respecting current decimal context.
 
@@ -22,7 +22,7 @@ CKP does not provide any global variables, neither does this package. Call the f
 
 - `euler_gamma() -> float` returns the euler's constant $\gamma \simeq 0.57721 \, 56649$.
 - `golden_phi() -> float` returns the golden ratio $\phi \simeq 1.61803 \, 39887$.
-- `catalans_constant() -> float` returns the Catalan's constnat $G = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)^2} \simeq 0.91596 \, 55942$.
+- `catalans_constant() -> float` returns the Catalan's constant $G = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)^2} \simeq 0.91596 \, 55942$.
 
 ## Functions
 
