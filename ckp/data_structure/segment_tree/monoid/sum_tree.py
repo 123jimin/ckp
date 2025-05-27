@@ -206,6 +206,10 @@ class MaxSegmentTree(_BaseSumSegmentTree):
                 if prev_value <= other_value: break
                 if changed_value < other_value: changed_value = other_value
                 tree[curr_ind := next_ind] = changed_value
+    
+    def add_to(self, ind: int, value):
+        """ Update `self[ind]` to `max(self[ind], value)`. """
+        self.__setitem__(ind, max(self[ind], value))
 
 class GCDSegmentTree(_BaseSumSegmentTree):
     """ Segment tree for calculating the GCD of elements in ranges. """

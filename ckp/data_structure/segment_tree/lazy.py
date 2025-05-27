@@ -1,5 +1,7 @@
 import operator
 
+# TODO: Merge this with `monoid.add_tree`.
+
 class LazyOpSegmentTree:
     """
         A generic, lazy segment tree on a commutative monoid for supporting `add_to_range`, but not `reduce_range`. 

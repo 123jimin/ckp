@@ -2,13 +2,13 @@ import unittest
 from ckp.data_structure.segment_tree.lazy import *
 
 import random
-from .test_util import DataGenerator
+from .util.data_generator import TestDataGenerator
 
 class TestLazyOpSegmentTree(unittest.TestCase):    
     def test_random_ops(self):
         for __ in range(400):
             N = random.randint(1, 128)
-            g = DataGenerator(N, ['add_to_range', 'get'])
+            g = TestDataGenerator(N, ['add_to_range', 'get'], lambda: random.randint(-100, 100))
 
             arr = g.list()
             tree = LazyOpSegmentTree(arr)
@@ -27,7 +27,7 @@ class TestLazySumSegmentTree(unittest.TestCase):
     def test_sum_random(self):
         for __ in range(100):
             N = random.randint(1, 128)
-            g = DataGenerator(N, [])
+            g = TestDataGenerator(N, [], lambda: random.randint(-100, 100))
 
             arr = g.list()
             tree = LazySumSegmentTree(arr)
@@ -46,7 +46,7 @@ class TestLazySumSegmentTree(unittest.TestCase):
     def test_random_ops(self):
         for __ in range(400):
             N = random.randint(1, 128)
-            g = DataGenerator(N, ['add_to_range', 'get', 'set', 'sum_range'])
+            g = TestDataGenerator(N, ['add_to_range', 'get', 'set', 'sum_range'], lambda: random.randint(-100, 100))
 
             arr = g.list()
             tree = LazySumSegmentTree(arr)
