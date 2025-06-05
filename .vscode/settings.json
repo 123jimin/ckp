@@ -15,6 +15,7 @@
         "getitem",
         "graphlib",
         "idiv",
+        "iexp",
         "iloc",
         "impacker",
         "infty",
@@ -31,6 +32,7 @@
         "Mathematica",
         "monoid",
         "monoids",
+        "mult",
         "nimber",
         "nimbers",
         "nmkp",
@@ -45,11 +47,13 @@
         "rubiks",
         "rvalid",
         "setitem",
+        "setrecursionlimit",
         "sortedcontainers",
         "subpackages",
         "sympy",
         "Tonelli",
         "tottime",
-        "Tukey"
+        "Tukey",
+        "zmod"
     ]
 }

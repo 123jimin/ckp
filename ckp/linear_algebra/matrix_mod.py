@@ -1,5 +1,6 @@
 """
     Codes for performing matrix operations on Z/nZ for some n.
+    Surprisingly, using nested lists is faster than using a flat list.
 """
 
 from .matrix import matrix_id

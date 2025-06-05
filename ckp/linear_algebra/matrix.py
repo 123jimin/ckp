@@ -1,6 +1,7 @@
 """
     Codes for performing matrix operations on an arbitrary ring.
     For performing matrix operations on Z/nZ, using `ckp.linear_algebra.matrix_mod` is recommended.
+    Surprisingly, using nested lists is faster than using a flat list.
 """
 
 def column_vec(x: list) -> list[list]: return [[xe] for xe in x]

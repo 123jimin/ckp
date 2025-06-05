@@ -12,4 +12,5 @@ from .linear_algebra import *
 from .nimber import nimber_mul, nimber_mul_2exp, Nimber
 from .number_theory import *
 from .numeric import *
+from .polynomial import *
 from .string import *
