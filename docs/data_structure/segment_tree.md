@@ -91,6 +91,7 @@ There are some specialized instances for commonly occurring monoids:
 
 - `MonoidSumSegmentTree`
   - `SumSegmentTree`
+    - Use Fenwick tree (via `ckp.data_structure.segment_tree.FenwickTree`) as it's faster.
   - `MaxSegmentTree`
   - `GCDSegmentTree`
 - `MonoidAddSegmentTree`
