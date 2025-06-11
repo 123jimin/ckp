@@ -15,7 +15,11 @@ Check the documentation on <https://123jimin.github.io/ckp/>.
 - [ ] `geometry.half_plane_intersection`
 - [ ] `graph_theory.bipartite_matching`
 - [ ] `graph_theory.max_flow.push_relabel`
-- [ ] `graph_theory.strongly_connected_components`
 - [ ] `language` (plaintext to languages)
 - [ ] `polynomial`
 - [ ] `string.suffix_array`
+
+### Potential Improvements
+
+- `fourier`: Find a better way to organize FFT instances?
+- `graph_theory.strongly_connected_components`: Avoid stacks without sacrificing performance?
