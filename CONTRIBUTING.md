@@ -42,7 +42,7 @@ Currently, impacker doesn't try to resolve name collisions, so there could be er
 
 It is very hard to do dependency analysis on member functions.
 
-The following structure is recommended:
+The following structure is desirable:
 
 ```py
 # Minimal class to hold data.

@@ -1,4 +1,4 @@
-from .abc import AbstractGraph
+from ..data_structure.graph.abc import AbstractGraph
 
 def strongly_connected_components(g: AbstractGraph):
     """
