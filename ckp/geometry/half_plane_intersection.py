@@ -10,6 +10,14 @@ def half_plane_intersection(half_planes: list[tuple[int, int, int]]) -> None|lis
         - A list of indices of non-degenerate `half_planes` forming the intersection, ordered counter-clockwise.
     """
 
-    if not half_planes: return []
+    pruned_half_planes = []
+    for (a, b, c) in half_planes:
+        if a == b == 0:
+            if c > 0: return None
+            continue
+        pruned_half_planes.append((a, b, c))
+    
+    if not pruned_half_planes: return []
+    if len(pruned_half_planes) == 1: return [0]
     
     raise NotImplementedError()

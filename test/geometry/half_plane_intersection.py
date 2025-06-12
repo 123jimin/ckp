@@ -7,13 +7,11 @@ class TestHalfPlaneIntersection(unittest.TestCase):
     def test_empty(self):
         self.assertListEqual(half_plane_intersection([]), [])
     
-    @unittest.skip
     def test_single_degenerate(self):
         for i in range(-3, 4):
-            if i >= 0: self.assertListEqual(half_plane_intersection([(0, 0, i)]), [], f"Full space when {i=}.")
+            if i <= 0: self.assertListEqual(half_plane_intersection([(0, 0, i)]), [], f"Full space when {i=}.")
             else: self.assertIsNone(half_plane_intersection([(0, 0, i)]), f"Empty when {i=}.")
 
-    @unittest.skip
     def test_single(self):
         for _ in range(100):
             while True:
