@@ -84,7 +84,10 @@ class MonoidSumSegmentTree(_BaseSumSegmentTree):
         self.__setitem__(ind, self._op(self._tree[self._len + ind], value))
 
 class SumSegmentTree(_BaseSumSegmentTree):
-    """ Segment tree for summing numbers in ranges. """
+    """
+        Segment tree for summing numbers in ranges.
+        For this specific instance of `_BaseSumSegmentTree`, using `FenwickTree` is likely a better idea, as it's more efficient.
+    """
 
     __slots__ = ()
     
