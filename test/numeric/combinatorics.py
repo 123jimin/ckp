@@ -4,7 +4,8 @@ from ckp.numeric.combinatorics import *
 import math
 
 def assertAlmostEqualFunc(testcase: unittest.TestCase, actual: float, expected: float, message=None):
-    # Up to 1e-9 is acceptable, but let's try to be more precise.
+    # Let's try to be as precise as possible - if the test fails, try devising a better algorithm.
+    # If implementing a such algorithm is too hard, the permissible relative error may be relaxed, up to 1e-9.
     delta = abs(expected * 1e-12)
     if delta == 0: delta = abs(expected)
 
