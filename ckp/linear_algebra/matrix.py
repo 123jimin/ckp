@@ -138,7 +138,7 @@ class Matrix:
         return self
     
     def __rmul__(self, other):
-        if isinstance(other, (list, tuple)): return Matrix(matrix_sub(other, self.rows))
+        if isinstance(other, (list, tuple)): return Matrix(matrix_mul(other, self.rows))
         else: return Matrix(matrix_scalar_mul(self.rows, other))
     
     def __pow__(self, other):

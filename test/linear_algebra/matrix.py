@@ -47,3 +47,14 @@ class TestMatrix(unittest.TestCase):
             
             self.assertListEqual(with_class_mul, without_class_mul)
             self.assertListEqual(with_class_mul, with_mul)
+
+    def test_left_mul(self):
+        for _ in range(100):
+            N = random.randint(1, 8)
+            A = [[random.randint(-10, 10) for _ in range(N)] for _ in range(N)]
+            B = [[random.randint(-10, 10) for _ in range(N)] for _ in range(N)]
+
+            expected = matrix_mul(A, B)
+            result = (A * Matrix(B)).rows
+
+            self.assertListEqual(result, expected)
