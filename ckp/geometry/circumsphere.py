@@ -85,7 +85,7 @@ def circumsphere_of_tetrahedron(a: tuple[float, float,  float], b: tuple[float, 
     if Ca < 0: Ca, Cb, Cx, Cy, Cz = -Ca, -Cb, -Cx, -Cy, -Cz
     return (2*Ca, (Cx, Cy, Cz), Cx*Cx + Cy*Cy + Cz*Cz + 4*Ca*Cb)
 
-def min_enclosing_sphere(P: list[tuple[float, float, float]]) -> tuple[float, tuple[float, float], float]:
+def min_enclosing_sphere(P: list[tuple[float, float, float]]) -> tuple[float, tuple[float, float, float], float]:
     """
         Given a list of points P, returns the minimal enclosing sphere C.
         C will be given as a format (Ca, Cp, Cr2), where, given that the circle is centered at (x, y, z) with radius r:

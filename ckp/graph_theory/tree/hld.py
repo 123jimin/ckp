@@ -61,7 +61,7 @@ def tree_hld_decompose_descendant(hld: TreeHLDData, node: int, ancestor: int):
         Given that `ancestor` is an ancestor of `node`, returns a list of intervals in heavy paths (`hld.paths`).
         - Each interval is given as a tuple `(path_index, path_start, path_end)`, which represents an interval `hld.paths[path_index][path_start:path_end]`.
         - Intervals are non-overlaping.
-        - The union of all intervals is a continous path from `node` to `ancestor`, including both ends.
+        - The union of all intervals is a continuous path from `node` to `ancestor`, including both ends.
     """
     
     path_index, paths, tree = hld.path_index, hld.paths, hld.tree

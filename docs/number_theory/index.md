@@ -180,7 +180,7 @@ For a prime number $p$, returns the Legendre symbol $(a/p)$.
 
 > `jacobi_symbol(a: int, n: int) -> int`
 
-For a positive odd number $n$, returns the Jacobi symbol $(a/p)$.
+For a positive odd number $n$, returns the Jacobi symbol $(a/n)$.
 
 > `sqrt_mod(n: int, m: int, m_factors = None) -> int`
 
