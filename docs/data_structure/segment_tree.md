@@ -99,10 +99,10 @@ There are some specialized instances for commonly occurring monoids:
 
 ### Ring
 
-| Name | `a[i] = v` | `a[i] += d` | `a[i] *= d` | Get `a[i]` | Sum `a[i:j]` | 
+| Name | `a[i] = v` | `a[i] += d` | `a[i] *= d` | Get `a[i]` | Sum `a[i:j]` |
 | ---- | ---------- | ----------- | ----------- | ---------- | ------------ |
 | `list` | ⚠️ | ⚠️ | ⚠️ | ✅ | ❌ |
-| `RingSegmentTree` | ⚠️ | ✅ | ✅ | ✅ | ✅ |
+| `RingSegmentTree` | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 ### Merge Sort
 
