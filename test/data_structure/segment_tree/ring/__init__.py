@@ -6,8 +6,7 @@ from ..util.data_generator import TestDataGenerator
 
 RING_SEGMENT_TREE_OPS = ['set', 'set_range', 'add_to', 'add_to_range', 'mul_to', 'mul_to_range', 'mul_add_to', 'mul_add_to_range', 'get', 'sum_range', 'sum_all']
 
-class TestAddSegmentTree(unittest.TestCase):
-    @unittest.skip
+class TestNumberRingSegmentTree(unittest.TestCase):
     def test_random(self):
         for __ in range(100):
             N = random.randint(1, 128)
