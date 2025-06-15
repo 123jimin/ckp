@@ -36,10 +36,8 @@ def matrix_neg_mod(x: list[list[int]], m: int) -> list[list[int]]:
 
 def matrix_mul_mod(x: list[list[int]], y: list[list[int]], m: int) -> list[list[int]]:
     assert(0 < len(x[0]) == len(y))
-
-    I, J, K = len(x), len(y), len(y[0])
-
-    return [[sum(x[i][j]*y[j][k] for j in range(J))%m for k in range(K)] for i in range(I)]
+    ty = list(zip(*y))
+    return [[sum(a*b for (a, b) in zip(row, col)) % m for col in ty] for row in x]
 
 def matrix_scalar_mul_mod(x: list[list[int]], k: int, m: int) -> list[list[int]]:
     return [[(k*xe)%m for xe in xr] for xr in x]

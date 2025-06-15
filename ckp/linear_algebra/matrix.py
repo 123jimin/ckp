@@ -34,10 +34,8 @@ def matrix_neg(x: list[list]) -> list[list]:
 
 def matrix_mul(x: list[list], y: list[list]) -> list[list]:
     assert(0 < len(x[0]) == len(y))
-
-    I, J, K = len(x), len(y), len(y[0])
-
-    return [[sum(x[i][j]*y[j][k] for j in range(J)) for k in range(K)] for i in range(I)]
+    ty = list(zip(*y))
+    return [[sum(a*b for (a, b) in zip(row, col)) for col in ty] for row in x]
 
 def matrix_scalar_mul(x: list[list], k) -> list[list]:
     return [[k*xe for xe in xr] for xr in x]
