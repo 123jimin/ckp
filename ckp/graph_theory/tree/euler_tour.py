@@ -1,4 +1,4 @@
-from .tree import TreeData
+from .tree import TreeData, tree_sizes
 
 class EulerTourData:
     """ Represents an euler tour of a tree. """
@@ -36,9 +36,19 @@ def euler_tour(tree: TreeData) -> EulerTourData:
 
     return tour
 
-def _euler_tour_sorted_dfs(tour: EulerTourData, tree: TreeData, node: int, parent: int):
-    # TODO
-    raise NotImplementedError("Not yet implemented!")
+def _euler_tour_sorted_dfs(tour: EulerTourData, tree: TreeData, sizes: list[int], node: int, parent: int):
+    t = len(tour.visits)
+
+    tour.visits.append(node)
+    tour.begin[node] = t
+
+    children = [ch for ch in tree.neighbors[node] if ch != parent]
+    children.sort(key=lambda ch: sizes[ch], reverse=True)
+
+    for ch in children:
+        _euler_tour_sorted_dfs(tour, tree, sizes, ch, node)
+    
+    tour.end[node] = len(tour.visits)
 
 def euler_tour_sorted(tree: TreeData) -> EulerTourData:
     """
@@ -50,6 +60,8 @@ def euler_tour_sorted(tree: TreeData) -> EulerTourData:
     tour.visits = []
     tour.begin = [-1] * len(tree)
     tour.end = [-1] * len(tree)
-    _euler_tour_sorted_dfs(tour, tree, tree.root, -1)
+
+    sizes = tree_sizes(tree.neighbors, tree.root)
+    _euler_tour_sorted_dfs(tour, tree, sizes, tree.root, -1)
 
     return tour
