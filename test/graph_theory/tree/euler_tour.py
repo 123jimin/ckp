@@ -2,17 +2,8 @@ import unittest
 from ckp.graph_theory.tree.euler_tour import *
 
 import random
-from ckp.graph_theory.tree import tree_from_edges
+from ckp.graph_theory.tree import tree_from_edges, random_tree
 from ckp.graph_theory.tree.hld import tree_hld_init
-
-def random_tree(n: int) -> TreeData:
-    perm = list(range(n))
-    random.shuffle(perm)
-
-    edges = [(perm[i], perm[random.randrange(i)]) for i in range(1, n)]
-    root = random.randrange(n)
-
-    return tree_from_edges(edges, root)
 
 class TestEulerTour(unittest.TestCase):
     def test_simple(self):
