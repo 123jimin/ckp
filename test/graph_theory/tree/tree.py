@@ -11,6 +11,10 @@ class TestTreeParentsAndDepths(unittest.TestCase):
 
 class TestTreeSizes(unittest.TestCase):
     def test_simple(self):
+        self.assertListEqual(tree_sizes([[]]), [1])
+        self.assertListEqual(tree_sizes([[1], [0]], 0), [2, 1])
+        self.assertListEqual(tree_sizes([[1], [0]], 1), [1, 2])
+
         neighbors = [[2], [3], [0, 3], [1, 2, 4], [3]]
         sizes = tree_sizes(neighbors)
         self.assertListEqual(sizes, [5, 1, 4, 3, 1])

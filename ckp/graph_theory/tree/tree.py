@@ -60,18 +60,33 @@ def tree_parents_and_depths(neighbors: list[list[int]], root_ind: int = 0) -> tu
 
     return parents, depths
 
-def _tree_size_dfs(neighbors: list[list[int]], sizes: list[int], curr: int, parent: int = -1) -> int:
-    sizes[curr] = s = 1 + sum(_tree_size_dfs(neighbors, sizes, ch, curr) for ch in neighbors[curr] if ch != parent)
-    return s
-
 def tree_sizes(neighbors: list[list[int]], root_ind: int = 0) -> list[int]:
     """ Constructs a list S, where S[i] is the size of the subtree rooted at node i. """
     if not neighbors: return []
-    if not neighbors[0]: return [1] * len(neighbors)
+    if not neighbors[root_ind]:
+        assert(len(neighbors) == 1)
+        return [1]
 
     sizes = [0] * len(neighbors)
+    get_sizes = sizes.__getitem__
+    
+    stack = [(root_ind, -1)]
+    stack.extend((ch, root_ind) for ch in neighbors[root_ind])
 
-    _tree_size_dfs(neighbors, sizes, root_ind)
+    while stack:
+        v, p = stack.pop()
+        if p >= 0:
+            lch = neighbors[v]
+            if len(lch) == 1:
+                sizes[v] = 1
+                continue
+
+            stack.append((v, -1))
+            stack.extend((ch, v) for ch in lch if ch != p)
+        else:
+            # No need to check for parents.
+            sizes[v] = 1+sum(map(get_sizes, neighbors[v]))
+
     return sizes
 
 def tree_centroids(neighbors: list[list[int]]|TreeData, sizes: list[int]|None = None) -> list[int]:
