@@ -10,6 +10,7 @@ class EulerTourData:
     begin: list[int]
     """ Index of the first visit to each node. `[begin[node], end[node])` forms a half-open range representing the subtree rooted at the node. """
 
+    # TODO: This is unnecessary because of `tree_sizes(tree)`. Remove it.
     end: list[int]
     """ One plus index of the last visit to each node. `[begin[node], end[node])` forms a half-open range representing the subtree rooted at the node. """
 
