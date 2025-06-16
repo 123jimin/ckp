@@ -13,44 +13,38 @@ class TreeHLDData:
     def __str__(self): return f"<TreeHLD path_index={self.path_index} paths={self.paths}>"
 
 def tree_hld_init(tree: TreeData):
-    tree_neighbors = tree.neighbors
+    tree_children = tree.children
     sizes = tree_sizes(tree)
+    get_size = sizes.__getitem__
 
     path_index = [None] * len(tree)
     paths = [[]]
 
-    stack = [(0, tree.root, -1)]
+    stack = [(0, tree.root)]
     while stack:
-        curr_ind, curr, parent = stack.pop()
+        curr_ind, curr = stack.pop()
         path_index[curr] = (curr_ind, len(curr_path := paths[curr_ind]))
         curr_path.append(curr)
-        neighbors = tree_neighbors[curr]
+        children = tree_children[curr]
 
-        if parent == -1:
-            if len(neighbors) == 0: continue
-        else:
-            if len(neighbors) == 1: continue
-            if len(neighbors) == 2:
-                for ch in neighbors:
-                    if ch != parent:
-                        stack.append((curr_ind, ch, curr))
-                        break
-                else:
-                    assert(False)
-                continue
+        if len(children) == 0:
+            continue
+
+        if len(children) == 1:
+            stack.extend((curr_ind, ch) for ch in children)
+            continue
         
-        max_ch_size = max(sizes[ch] for ch in neighbors if ch != parent)
-        for ch in neighbors:
-            if ch == parent: continue
-            if sizes[ch] == max_ch_size:
+        max_ch_size = max(map(get_size, children))
+        for ch in children:
+            if get_size(ch) == max_ch_size:
                 # Heavy Path
                 max_ch_size += 1
-                stack.append((curr_ind, ch, curr))
+                stack.append((curr_ind, ch))
             else:
                 # Light Path
                 new_ind = len(paths)
                 paths.append([])
-                stack.append((new_ind, ch, curr))
+                stack.append((new_ind, ch))
     
     hld = TreeHLDData()
     hld.tree = tree

@@ -1,14 +1,13 @@
 class TreeData:
     """ Represents a tree. """
-    __slots__ = ('root', 'neighbors', 'parents', 'depths', 'sizes')
+    __slots__ = ('root', 'children', 'parents', 'depths', 'sizes')
 
     root: int
     """ The root index of this tree. """
 
-    # TODO: replace `neighbors` with `children`.
-    neighbors: list[list[int]]
-    """ Neighbor list of each node. """
-    
+    children: list[list[int]]
+    """ Children of each node. """
+
     parents: list[int]
     """ Parent node index of each node. `tree.parents[tree.root]` is -1. """
 
@@ -21,12 +20,19 @@ class TreeData:
     def __len__(self): return len(self.parents)
     def __repr__(self): return f"TreeData(parents={self.parents}, root={self.root})"
 
+def tree_with_root(tree: TreeData, new_root: int) -> TreeData:
+    """ Create a copy of the given tree with the specified root. """
+    return tree_from_neighbors([
+        (chs if p < 0 else chs + [p])
+        for chs, p in zip(tree.children, tree.parents)
+    ], new_root)
+
 def tree_from_neighbors(neighbors: list[list[int]], root: int = 0) -> TreeData:
     """ Constructs a new tree from lists of neighbors. """
     tree = TreeData()
     tree.root = root
-    tree.neighbors = neighbors = neighbors
-    tree.parents, tree.depths = tree_parents_and_depths(neighbors, root)
+    tree.parents, tree.depths = tree_parents_and_depths_from_neighbors(neighbors, root)
+    tree.children = [[ch for ch in n if ch != p] for (p, n) in zip(tree.parents, neighbors)]
     tree.sizes = None
     return tree
 
@@ -35,11 +41,11 @@ def tree_from_parents(parents: list[int], root: int = 0) -> TreeData:
     assert(parents[root] == -1)
     tree = TreeData()
     tree.root = root
-    neighbors = tree.neighbors = [[] for _ in range(len(parents))]
+    children = tree.children = [[] for _ in range(len(parents))]
     for i in range(len(parents)):
-        if (p := parents[i]) >= 0: neighbors[p].append(i); neighbors[i].append(p)
+        if (p := parents[i]) >= 0: children[p].append(i)
     tree.parents = parents
-    _, tree.depths = tree_parents_and_depths(neighbors, root)
+    tree.depths = tree_depths_from_children(children, root)
     tree.sizes = None
     return tree
 
@@ -49,15 +55,32 @@ def tree_from_edges(edges: list[tuple[int, int]], root: int = 0) -> TreeData:
     for (x, y) in edges: neighbors[x].append(y); neighbors[y].append(x)
     return tree_from_neighbors(neighbors, root)
 
-def tree_parents_and_depths(neighbors: list[list[int]], root: int = 0) -> tuple[list[int], list[int]]:
-    """ Create a list P, and D where P[i] is the parent of node i, and D[i] is the distance of node i from root. P[root] is -1. """
+def tree_depths_from_children(children: list[list[int]], root: int = 0) -> list[int]:
+    """ Create a list D where D[i] is the distance of node i from the root. """
+    depths = [0] * len(children)
+
+    for ch in (stack := children[root].copy()):
+        depths[ch] = 1
+    
+    stack_pop, stack_push = stack.pop, stack.append
+    while stack:
+        v = stack_pop()
+        nd = depths[v] + 1
+        for ch in children[v]:
+            depths[ch] = nd
+            if children[ch]: stack_push(ch)
+        
+    return depths
+
+
+def tree_parents_and_depths_from_neighbors(neighbors: list[list[int]], root: int = 0) -> tuple[list[int], list[int]]:
+    """ Create a list P, and D where P[i] is the parent of node i, and D[i] is the distance of node i from the root. P[root] is -1. """
     N = len(neighbors)
 
     parents = [-1] * N
     depths = [0] * N
 
-    stack = neighbors[root].copy()
-    for ch in stack:
+    for ch in (stack := neighbors[root].copy()):
         parents[ch] = root
         depths[ch] = 1
     
@@ -73,59 +96,55 @@ def tree_parents_and_depths(neighbors: list[list[int]], root: int = 0) -> tuple[
     
     return parents, depths
 
-def tree_sizes_from_neighbors(neighbors: list[list[int]], root: int = 0) -> list[int]:
+def tree_sizes_from_children(children: list[list[int]], root: int = 0) -> list[int]:
     """ Constructs a list S, where S[i] is the size of the subtree rooted at node i. """
-    if not neighbors: return []
-    if not neighbors[root]:
-        assert(len(neighbors) == 1)
+    if not children: return []
+    if not children[root]:
+        assert(len(children) == 1)
         return [1]
 
-    sizes = [0] * len(neighbors)
+    sizes = [0] * len(children)
     get_sizes = sizes.__getitem__
 
-    stack = [(root, -1)]
-    stack.extend((ch, root) for ch in neighbors[root])
+    stack = [(root, False)]
+    stack.extend((ch, True) for ch in children[root])
 
     stack_pop, stack_push, stack_extend = stack.pop, stack.append, stack.extend
     while stack:
         v, p = stack_pop()
-        if p >= 0:
-            lch = neighbors[v]
-            if len(lch) == 1:
+        if p:
+            if (lch := children[v]):
+                stack_push((v, False))
+                stack_extend((ch, True) for ch in lch)
+            else:
                 sizes[v] = 1
-                continue
-
-            stack_push((v, -1))
-            stack_extend((ch, v) for ch in lch if ch != p)
         else:
-            # No need to check for parents.
-            sizes[v] = 1+sum(map(get_sizes, neighbors[v]))
+            sizes[v] = 1+sum(map(get_sizes, children[v]))
 
     return sizes
 
 def tree_sizes(tree: TreeData) -> list[int]:
     if tree.sizes: return tree.sizes
-    sizes = tree.sizes = tree_sizes_from_neighbors(tree.neighbors, tree.root)
+    sizes = tree.sizes = tree_sizes_from_children(tree.children, tree.root)
     return sizes
 
-def tree_centroids_from_neighbors(neighbors: list[list[int]], root: int = 0, sizes: list[int]|None = None) -> list[int]:
+def tree_centroids_from_children(children: list[list[int]], root: int = 0, sizes: list[int]|None = None) -> list[int]:
     """
         Returns a list of centroids of the tree.
         A centroid of a tree is a point where all subtrees' sizes are <= len(neighbors) // 2.
         As long as the tree is not empty, there are either one or two centroids.
     """
-    if not neighbors: return []
-    if not sizes: sizes = tree_sizes_from_neighbors(neighbors, root)
+    if not children: return []
+    if not sizes: sizes = tree_sizes_from_children(children, root)
 
-    half, r = divmod(len(neighbors), 2)
-    curr, parent = 0, -1
+    half, r = divmod(len(children), 2)
+    curr = 0
     while True:
-        for ch in neighbors[curr]:
-            if ch == parent: continue
+        for ch in children[curr]:
             ch_size = sizes[ch]
             if (not r) and ch_size == half: return [curr, ch]
             elif ch_size > half:
-                curr, parent = ch, curr
+                curr = ch
                 break
         else:
             return [curr]
@@ -136,7 +155,7 @@ def tree_centroids(tree: TreeData) -> list[int]:
         A centroid of a tree is a point where all subtrees' sizes are <= len(neighbors) // 2.
         As long as the tree is not empty, there are either one or two centroids.
     """
-    return tree_centroids_from_neighbors(tree.neighbors, tree.root, tree_sizes(tree))
+    return tree_centroids_from_children(tree.children, tree.root, tree_sizes(tree))
 
 class DistanceTreeData(TreeData):
     """ Represents a tree, where each edge has length. """

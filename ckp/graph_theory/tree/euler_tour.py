@@ -13,15 +13,14 @@ class EulerTourData:
     end: list[int]
     """ One plus index of the last visit to each node. `[begin[node], end[node])` forms a half-open range representing the subtree rooted at the node. """
 
-def _euler_tour_dfs(tour: EulerTourData, tree: TreeData, node: int, parent: int):
+def _euler_tour_dfs(tour: EulerTourData, tree: TreeData, node: int):
     t = len(tour.visits)
 
     tour.visits.append(node)
     tour.begin[node] = t
 
-    for ch in tree.neighbors[node]:
-        if ch == parent: continue
-        _euler_tour_dfs(tour, tree, ch, node)
+    for ch in tree.children[node]:
+        _euler_tour_dfs(tour, tree, ch)
 
     tour.end[node] = len(tour.visits)
 
@@ -32,21 +31,18 @@ def euler_tour(tree: TreeData) -> EulerTourData:
     tour.visits = []
     tour.begin = [-1] * len(tree)
     tour.end = [-1] * len(tree)
-    _euler_tour_dfs(tour, tree, tree.root, -1)
+    _euler_tour_dfs(tour, tree, tree.root)
 
     return tour
 
-def _euler_tour_sorted_dfs(tour: EulerTourData, tree: TreeData, sizes: list[int], node: int, parent: int):
+def _euler_tour_sorted_dfs(tour: EulerTourData, tree: TreeData, sizes: list[int], node: int):
     t = len(tour.visits)
 
     tour.visits.append(node)
     tour.begin[node] = t
 
-    children = [ch for ch in tree.neighbors[node] if ch != parent]
-    children.sort(key=lambda ch: sizes[ch], reverse=True)
-
-    for ch in children:
-        _euler_tour_sorted_dfs(tour, tree, sizes, ch, node)
+    for ch in sorted(tree.children[node], key=sizes.__getitem__, reverse=True):
+        _euler_tour_sorted_dfs(tour, tree, sizes, ch)
     
     tour.end[node] = len(tour.visits)
 
@@ -62,6 +58,6 @@ def euler_tour_sorted(tree: TreeData) -> EulerTourData:
     tour.end = [-1] * len(tree)
 
     sizes = tree_sizes(tree)
-    _euler_tour_sorted_dfs(tour, tree, sizes, tree.root, -1)
+    _euler_tour_sorted_dfs(tour, tree, sizes, tree.root)
 
     return tour

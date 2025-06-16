@@ -13,30 +13,22 @@ def tree_lca_init(tree: TreeData) -> TreeLCAData:
     lca.depths = tree.depths
     ancestors = lca.ancestors = [[] for _ in range(N)]
 
-    get_neighbors = tree.neighbors.__getitem__
+    children = tree.children
     get_parent = tree.parents.__getitem__
-    
-    # Temporary value for the root node, to simplify visited check.
-    ancestors[tree.root].append(-1)
-    
+        
     # BFS
     d = 1
-    curr_chs = get_neighbors(tree.root).copy()
+    curr_chs = children[tree.root].copy()
     next_chs = []
     while curr_chs:
         next_chs.clear()
         li = list(range(d.bit_length() - 1))
         for v in curr_chs:
-            if (a := ancestors[v]): continue
-            a.append(p := get_parent(v))
+            (a := ancestors[v]).append(p := get_parent(v))
             a.extend((p := ancestors[p][i]) for i in li)
-            # Intentionally do not check for parent node, to simplify visited check.
-            if len(nv := get_neighbors(v)) > 1: next_chs.extend(nv)
+            if (nv := children[v]): next_chs.extend(nv)
         curr_chs, next_chs = next_chs, curr_chs
         d += 1
-
-    # Remove temporary value for the root node.
-    ancestors[tree.root].clear()
 
     return lca
 

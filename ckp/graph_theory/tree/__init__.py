@@ -2,7 +2,7 @@
     This package contains algorithms related to handling trees.
 """
 
-from .tree import TreeData, tree_from_neighbors, tree_from_parents, tree_from_edges, tree_centroids, tree_sizes
+from .tree import TreeData, tree_with_root, tree_from_neighbors, tree_from_parents, tree_from_edges, tree_centroids, tree_sizes
 from .tree import DistanceTreeData, distance_tree_init, distance_tree_from_edges
 from .random import *
 

@@ -1,12 +1,8 @@
-from .tree import TreeData, tree_from_neighbors, tree_centroids
+from .tree import TreeData, tree_with_root, tree_centroids
 
-def _tree_isomorphism_signature_dfs(tree: TreeData, curr: int, parent: int = -1) -> int:
-    ch_sigs: list[int] = []
-    neighbors = tree.neighbors[curr]
-    if not neighbors: return 0b10
-    for ch in tree.neighbors[curr]:
-        if ch == parent: continue
-        ch_sigs.append(_tree_isomorphism_signature_dfs(tree, ch, curr))
+def _tree_isomorphism_signature_dfs(tree: TreeData, curr: int) -> int:
+    if not (children := tree.children[curr]): return 0b10
+    ch_sigs: list[int] = [_tree_isomorphism_signature_dfs(tree, ch) for ch in children]
     ch_sigs.sort()
     sig = 1
     for ch_sig in ch_sigs:
@@ -31,11 +27,12 @@ def tree_isomorphism_signature(tree: TreeData) -> int:
     centroids = tree_centroids(tree)
     assert(len(centroids) in (1, 2))
 
-    tree_0 = tree if tree.root == centroids[0] else tree_from_neighbors(tree.neighbors, centroids[0])
+    tree_0 = tree if tree.root == centroids[0] else tree_with_root(tree, centroids[0])
     sig_0 = _tree_isomorphism_signature_dfs(tree_0, tree_0.root)
+
     if len(centroids) == 1: return sig_0
     
-    tree_1 = tree if tree.root == centroids[1] else tree_from_neighbors(tree.neighbors, centroids[1])
+    tree_1 = tree if tree.root == centroids[1] else tree_with_root(tree, centroids[1])
     sig_1 = _tree_isomorphism_signature_dfs(tree_1, tree_1.root)
 
     if sig_0 > sig_1: sig_0, sig_1 = sig_1, sig_0
