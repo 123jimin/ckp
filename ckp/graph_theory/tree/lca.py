@@ -13,12 +13,10 @@ def tree_lca_init(tree: TreeData) -> TreeLCAData:
     depths = lca.depths = tree.depths
     ancestors = lca.ancestors = [[] for _ in range(N)]
 
-    D = max(depths)
-    if D <= 1: return lca
-
     get_depth = depths.__getitem__
     get_parent = tree.parents.__getitem__
-    for v in sorted(range(1, N), key=get_depth):
+    for v in sorted(range(N), key=get_depth):
+        if v == tree.root: continue
         (a := ancestors[v]).append(p := get_parent(v))
         a.extend((p := ancestors[p][i]) for i in range(get_depth(v).bit_length()-1))
 
