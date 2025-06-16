@@ -35,29 +35,32 @@ def euler_tour(tree: TreeData) -> EulerTourData:
 
     return tour
 
-def _euler_tour_sorted_dfs(tour: EulerTourData, tree: TreeData, sizes: list[int], node: int):
-    t = len(tour.visits)
-
-    tour.visits.append(node)
-    tour.begin[node] = t
-
-    for ch in sorted(tree.children[node], key=sizes.__getitem__, reverse=True):
-        _euler_tour_sorted_dfs(tour, tree, sizes, ch)
-    
-    tour.end[node] = len(tour.visits)
-
 def euler_tour_sorted(tree: TreeData) -> EulerTourData:
     """
         Returns the euler tour of the given tree, visiting each node in DFS order.
         This visits are sorted so that heavy paths (for HLD) always appear together in the visits.
     """
 
-    tour = EulerTourData()
-    tour.visits = []
-    tour.begin = [-1] * len(tree)
-    tour.end = [-1] * len(tree)
-
+    N = len(tree)
+    tree_children = tree.children
     sizes = tree_sizes(tree)
-    _euler_tour_sorted_dfs(tour, tree, sizes, tree.root)
+    get_size = sizes.__getitem__
+    root = tree.root
+
+    tour = EulerTourData()
+    tour_visits = tour.visits = []
+    tour_begin = tour.begin = [-1] * N
+    tour_end = tour.end = [-1] * N
+
+    stack = [root]
+    while stack:
+        v = stack.pop()
+
+        tour_begin[v] = t = len(tour_visits)
+        tour_end[v] = t + get_size(v)
+        tour_visits.append(v)
+
+        # `reversed` is added to maintain consistency with HLD (earlier child gets chosen first).
+        stack.extend(sorted(reversed(tree_children[v]), key=get_size))
 
     return tour

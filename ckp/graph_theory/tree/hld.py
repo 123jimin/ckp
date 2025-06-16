@@ -25,11 +25,8 @@ def tree_hld_init(tree: TreeData):
         curr_ind, curr = stack.pop()
         path_index[curr] = (curr_ind, len(curr_path := paths[curr_ind]))
         curr_path.append(curr)
-        children = tree_children[curr]
 
-        if len(children) == 0:
-            continue
-
+        if not (children := tree_children[curr]): continue
         if len(children) == 1:
             stack.extend((curr_ind, ch) for ch in children)
             continue

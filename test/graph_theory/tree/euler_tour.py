@@ -69,5 +69,5 @@ class TestEulerTourSorted(unittest.TestCase):
                 # `tour_inds` must be continuous and ascending.
 
                 tour_inds = [tour.begin[v] for v in path]
-                self.assertEqual(tour_inds[-1], tour_inds[0] + len(path) - 1)
+                self.assertEqual(tour_inds[-1], tour_inds[0] + len(path) - 1, f"HLD path {tree=} {N=} {path=} {tour_inds=}")
                 self.assertListEqual(tour_inds, list(range(tour_inds[0], tour_inds[-1]+1)))
