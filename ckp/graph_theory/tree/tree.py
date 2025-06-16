@@ -1,15 +1,15 @@
 class TreeData:
     """ Represents a tree. """
-    __slots__ = ('root', 'children', 'parents', 'depths', 'sizes')
+    __slots__ = ('root', 'parents', 'children', 'depths', 'sizes')
 
     root: int
     """ The root index of this tree. """
 
-    children: list[list[int]]
-    """ Children of each node. """
-
     parents: list[int]
     """ Parent node index of each node. `tree.parents[tree.root]` is -1. """
+
+    children: list[list[int]]
+    """ Children of each node. """
 
     depths: list[int]
     """ Depth of each node. `tree.depths[tree.root]` is 0. """
@@ -19,6 +19,44 @@ class TreeData:
     
     def __len__(self): return len(self.parents)
     def __repr__(self): return f"TreeData(parents={self.parents}, root={self.root})"
+
+def assert_valid_tree(tree: TreeData) -> None:
+    """ Checks whether a given tree is consistent. This function is for debugging CKP only. """
+    N = len(tree)
+    assert N > 0, f"len(tree) must be greater than zero"
+    assert N == len(tree.parents), f"len(tree)={N} must be equal to {len(tree.parents)=}"
+    assert N == len(tree.children), f"len(tree)={N} must be equal to {len(tree.children)=}"
+    assert N == len(tree.depths), f"len(tree)={N} must be equal to {len(tree.depths)=}"
+
+    root = tree.root
+    assert 0 <= root < N, f"tree.root={root} must be in [0, len(tree)={N})"
+    assert tree.parents[root] == -1, f"{tree.parents[root]=} must be -1"
+    assert tree.depths[root] == 0, f"{tree.depths[root]=} must be 0"
+
+    visited = [False] * N
+    stack = [root]
+    visited[root] = True
+
+    while stack:
+        v = stack.pop()
+        for ch in tree.children[v]:
+            assert 0 <= ch < N, f"tree.children[{v=}] has out-of-bound child {ch=}"
+            assert ch != v, f"{v=} has itself as a child"
+            assert tree.parents[ch] == v, f"parent inconsistency between {v=} and {ch=}"
+            assert tree.depths[ch] == tree.depths[v]+1, f"depth inconsistency between {v=} and {ch=}"
+            assert not visited[ch], f"{ch=} appears multiple times"
+            visited[ch] = True
+            stack.append(ch)
+
+    assert all(visited), f"some nodes are unreachable"
+
+    if tree.sizes is not None:
+        assert N == len(tree.sizes), f"len(tree)={N} must be equal to {len(tree.sizes)=}"
+        assert N == tree.sizes[root], f"len(tree)={N} must be equal to {tree.sizes[root]=}"
+
+        for v in range(N):
+            assert 1 <= tree.sizes[v] <= N, f"{tree.sizes[v]=} out of range"
+            assert tree.sizes[v] == 1 + sum(tree.sizes[ch] for ch in tree.children[v]), f"size inconsistency for {v=}"
 
 def tree_with_root(tree: TreeData, new_root: int) -> TreeData:
     """ Create a copy of the given tree with the specified root. """
@@ -72,7 +110,6 @@ def tree_depths_from_children(children: list[list[int]], root: int = 0) -> list[
         
     return depths
 
-
 def tree_parents_and_depths_from_neighbors(neighbors: list[list[int]], root: int = 0) -> tuple[list[int], list[int]]:
     """ Create a list P, and D where P[i] is the parent of node i, and D[i] is the distance of node i from the root. P[root] is -1. """
     N = len(neighbors)
@@ -124,6 +161,7 @@ def tree_sizes_from_children(children: list[list[int]], root: int = 0) -> list[i
     return sizes
 
 def tree_sizes(tree: TreeData) -> list[int]:
+    """ Retrieves the list of subtrees of the tree, which is cached to the provided `tree`. """
     if tree.sizes: return tree.sizes
     sizes = tree.sizes = tree_sizes_from_children(tree.children, tree.root)
     return sizes
@@ -157,49 +195,3 @@ def tree_centroids(tree: TreeData) -> list[int]:
     """
     return tree_centroids_from_children(tree.children, tree.root, tree_sizes(tree))
 
-class DistanceTreeData(TreeData):
-    """ Represents a tree, where each edge has length. """
-    __slots__ = ('distances', 'parent_distances', 'root_distances')
-
-    distances: list[list[int]]
-
-    parent_distances: list[int]
-    root_distances: list[int]
-
-def _distance_tree_init_dfs(tree: DistanceTreeData, depth: int, root_distance: int, curr: int, parent: int = -1):
-    tree.parents[curr] = parent
-    tree.depths[curr] = depth
-    tree.root_distances[curr] = root_distance
-    parent_distances = tree.parent_distances
-
-    for (ch, d) in zip(tree.neighbors[curr], tree.distances[curr]):
-        if ch == parent: continue
-
-        parent_distances[ch] = d
-        _distance_tree_init_dfs(tree, depth+1, root_distance+d, ch, curr)
-
-def distance_tree_init(neighbors: list[list[int]], distances: list[list[int]], root: int = 0) -> DistanceTreeData:
-    tree = DistanceTreeData()
-    tree.root = root
-    tree.neighbors = neighbors
-    tree.distances = distances
-    tree.sizes = None
-
-    N = len(neighbors)
-    tree.parents = [-1] * N
-    tree.depths = [0] * N
-    tree.parent_distances = [0] * N
-    tree.root_distances = [0] * N
-
-    _distance_tree_init_dfs(tree, 0, 0, root)
-    return tree
-
-def distance_tree_from_edges(edges: list[tuple[int, int, int]], root: int = 0) -> DistanceTreeData:
-    neighbors = [[] for _ in range(len(edges)+1)]
-    distances = [[] for _ in range(len(edges)+1)]
-    for (x, y, d) in edges:
-        assert(x != y)
-        neighbors[x].append(y); neighbors[y].append(x)
-        distances[x].append(d); distances[y].append(d)
-
-    return distance_tree_init(neighbors, distances, root)

@@ -1,6 +1,37 @@
 import unittest
-
 from ckp.graph_theory.tree.tree import *
+
+import random
+from ckp.graph_theory.tree.random import random_tree, random_tree_edges
+
+class TestTreeWithRoot(unittest.TestCase):
+    def test_simple(self):
+        neighbors = [[1], [0, 2, 3], [1], [1]]
+        t1 = tree_from_neighbors(neighbors, 0)
+        assert_valid_tree(t1)
+
+        t2 = tree_with_root(t1, 2)
+        assert_valid_tree(t2)
+
+        self.assertEqual(t1.root, 0)
+        self.assertEqual(t2.root, 2)
+
+class TestTreeConstructors(unittest.TestCase):
+    def test_random_tree(self):
+        for _ in range(1000):
+            N = random.randint(1, 1000)
+            tree = random_tree(N)
+            assert_valid_tree(tree)
+
+    def test_random_edges(self):
+        for _ in range(1000):
+            N = random.randint(1, 1000)
+            edges = random_tree_edges(N)
+            tree = tree_from_edges(edges, random.randrange(N))
+            assert_valid_tree(tree)
+
+            for (u, v) in edges:
+                self.assertTrue(tree.parents[u] == v or tree.parents[v] == u)
 
 class TestTreeParentsAndDepthsFromNeighbors(unittest.TestCase):
     def test_simple(self):
@@ -18,6 +49,13 @@ class TestTreeSizesFromChildren(unittest.TestCase):
         children = [[2], [], [3], [1, 4], []]
         sizes = tree_sizes_from_children(children)
         self.assertListEqual(sizes, [5, 1, 4, 3, 1])
+    
+    def test_random(self):
+        for _ in range(500):
+            N = random.randint(1, 500)
+            tree = random_tree(N)
+            tree_sizes(tree)
+            assert_valid_tree(tree)
 
 class TestTreeCentroids(unittest.TestCase):
     def _test_from_neighbors(self, neighbors: list[list[int]], centroids: list[int]):
