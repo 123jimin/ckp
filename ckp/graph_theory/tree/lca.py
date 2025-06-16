@@ -8,20 +8,20 @@ class TreeLCAData:
     depths: list[int]
 
 def tree_lca_init(tree: TreeData) -> TreeLCAData:
+    N = len(tree)
     lca = TreeLCAData()
     depths = lca.depths = tree.depths
-    ancestors = lca.ancestors = [([p] if p >= 0 else []) for p in tree.parents]
+    ancestors = lca.ancestors = [[] for _ in range(N)]
 
-    N = len(tree)
     D = max(depths)
     if D <= 1: return lca
 
-    for i in range(D.bit_length()-1):
-        for j in range(N):
-            if len(a := ancestors[j]) <= i: continue
-            if len(pa := ancestors[a[i]]) <= i: continue
-            a.append(pa[i])
-        
+    get_depth = depths.__getitem__
+    get_parent = tree.parents.__getitem__
+    for v in sorted(range(1, N), key=get_depth):
+        (a := ancestors[v]).append(p := get_parent(v))
+        a.extend((p := ancestors[p][i]) for i in range(get_depth(v).bit_length()-1))
+
     return lca
 
 def tree_lca_pth_ancestor(lca: TreeLCAData, v: int, p: int) -> int:
