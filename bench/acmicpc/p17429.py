@@ -1,5 +1,5 @@
 from ckp.data_structure.segment_tree.ring import NumberRingSegmentTree
-from ckp.graph_theory.tree import tree_from_edges, random_tree_edges
+from ckp.graph_theory.tree import tree_from_edges, random_tree_edges, tree_sizes
 from ckp.graph_theory.tree.lca import tree_lca_init, tree_lca_query
 from ckp.graph_theory.tree.euler_tour import euler_tour_sorted
 from ckp.graph_theory.tree.hld import tree_hld_init, tree_hld_decompose_descendant
@@ -8,9 +8,11 @@ import sys
 if sys.getrecursionlimit() < 10_000_000: sys.setrecursionlimit(10_000_000)
 
 import random
-N, Q = 500_000, 100_000
+random.seed(42)
 
-T = tree_from_edges(random_tree_edges(N))
+N, Q = 500_000, 100_000
+E = random_tree_edges(N)
+
 lQ = []
 
 for _ in range(Q):
@@ -24,11 +26,25 @@ for _ in range(Q):
         case 6: lQ.append((q, random.randrange(N), random.randrange(N)))
 
 def bench():
-    # TODO: reduce runtime for these before benchmarking
-    V = NumberRingSegmentTree([0] * N)
+    T = tree_from_edges(E)
+    sizes = tree_sizes(T)
     tour = euler_tour_sorted(T)
     hld = tree_hld_init(T)
     lca = tree_lca_init(T)
+
+    V = NumberRingSegmentTree([0] * N)
+
+    ans = 0
+    return ans
+
+    for (q, *args) in lQ:
+        match q:
+            case 1: pass
+            case 2: pass
+            case 3: pass
+            case 4: pass
+            case 5: pass
+            case 6: pass
 
 tags = {
     'hld', 'segment_tree', 'lca', 'euler_tour_technique'
