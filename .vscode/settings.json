@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "Abelian",
+        "acmicpc",
         "Baekjoon",
         "Baillie",
         "binom",
@@ -52,6 +53,7 @@
         "setitem",
         "setrecursionlimit",
         "sortedcontainers",
+        "squarefree",
         "subpackages",
         "sympy",
         "Tonelli",

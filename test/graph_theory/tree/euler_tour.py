@@ -23,7 +23,7 @@ class TestEulerTour(unittest.TestCase):
             N = random.randrange(1, 200)
             tree = random_tree(N)
             tour = euler_tour(tree)
-            sizes = tree_sizes(tree.neighbors, tree.root)
+            sizes = tree_sizes(tree)
 
             self.assertEqual(tour.begin[tree.root], 0)
             self.assertEqual(tour.end[tree.root], N)
@@ -49,7 +49,7 @@ class TestEulerTourSorted(unittest.TestCase):
             N = random.randrange(1, 200)
             tree = random_tree(N)
             tour = euler_tour_sorted(tree)
-            sizes = tree_sizes(tree.neighbors, tree.root)
+            sizes = tree_sizes(tree)
 
             self.assertEqual(tour.begin[tree.root], 0)
             self.assertEqual(tour.end[tree.root], N)

@@ -61,7 +61,7 @@ def euler_tour_sorted(tree: TreeData) -> EulerTourData:
     tour.begin = [-1] * len(tree)
     tour.end = [-1] * len(tree)
 
-    sizes = tree_sizes(tree.neighbors, tree.root)
+    sizes = tree_sizes(tree)
     _euler_tour_sorted_dfs(tour, tree, sizes, tree.root, -1)
 
     return tour

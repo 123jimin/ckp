@@ -12,9 +12,9 @@ class TreeHLDData:
     
     def __str__(self): return f"<TreeHLD path_index={self.path_index} paths={self.paths}>"
 
-def tree_hld_init(tree: TreeData, sizes: list[int]|None = None):
+def tree_hld_init(tree: TreeData):
     tree_neighbors = tree.neighbors
-    if sizes is None: sizes = tree_sizes(tree_neighbors, tree.root)
+    sizes = tree_sizes(tree)
 
     path_index = [None] * len(tree)
     paths = [[]]

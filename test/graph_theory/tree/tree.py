@@ -9,29 +9,24 @@ class TestTreeParentsAndDepths(unittest.TestCase):
         self.assertListEqual(parents, [-1, 3, 0, 2, 3])
         self.assertListEqual(depths, [0, 3, 1, 2, 3])
 
-class TestTreeSizes(unittest.TestCase):
+class TestTreeSizesFromNeighbors(unittest.TestCase):
     def test_simple(self):
-        self.assertListEqual(tree_sizes([[]]), [1])
-        self.assertListEqual(tree_sizes([[1], [0]], 0), [2, 1])
-        self.assertListEqual(tree_sizes([[1], [0]], 1), [1, 2])
+        self.assertListEqual(tree_sizes_from_neighbors([[]]), [1])
+        self.assertListEqual(tree_sizes_from_neighbors([[1], [0]], 0), [2, 1])
+        self.assertListEqual(tree_sizes_from_neighbors([[1], [0]], 1), [1, 2])
 
         neighbors = [[2], [3], [0, 3], [1, 2, 4], [3]]
-        sizes = tree_sizes(neighbors)
+        sizes = tree_sizes_from_neighbors(neighbors)
         self.assertListEqual(sizes, [5, 1, 4, 3, 1])
 
 class TestTreeCentroids(unittest.TestCase):
+    def _test_from_neighbors(self, neighbors: list[list[int]], centroids: list[int]):
+        self.assertListEqual(sorted(tree_centroids_from_neighbors(neighbors)), centroids)
+        self.assertListEqual(sorted(tree_centroids(tree_from_neighbors(neighbors))), centroids)
+
     def test_simple(self):
-        neighbors = [[]]
-        self.assertListEqual(tree_centroids(neighbors), [0])
-        
-        neighbors = [[1], [0]]
-        self.assertListEqual(sorted(tree_centroids(neighbors)), [0, 1])
-
-        neighbors = [[1, 2], [0], [0]]
-        self.assertListEqual(tree_centroids(neighbors), [0])
-
-        neighbors = [[2], [3], [0, 3], [1, 2, 4], [3]]
-        self.assertListEqual(tree_centroids(neighbors), [3])
-
-        neighbors = [[1], [0, 2], [1, 3], [2]]
-        self.assertListEqual(sorted(tree_centroids(neighbors)), [1, 2])
+        self._test_from_neighbors([[]], [0])
+        self._test_from_neighbors([[1], [0]], [0, 1])
+        self._test_from_neighbors([[1, 2], [0], [0]], [0])
+        self._test_from_neighbors([[2], [3], [0, 3], [1, 2, 4], [3]], [3])
+        self._test_from_neighbors([[1], [0, 2], [1, 3], [2]], [1, 2])
