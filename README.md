@@ -22,6 +22,7 @@ Check the documentation on <https://123jimin.github.io/ckp/>.
 ### Potential Improvements
 
 - `fourier`: Find a better way to organize FFT instances?
+- `data_structure.segment_tree.monoid.monoid_tree`: Too slow!
 - `data_structure.segment_tree.ring`: Too slow!
 - `graph_theory.strongly_connected_components`: Avoid stacks without sacrificing performance?
 - `graph_theory.tree.distance_tree`: Implement non-recursive version, and add tests.
