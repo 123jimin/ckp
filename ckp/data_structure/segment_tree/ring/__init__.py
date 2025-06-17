@@ -1,9 +1,10 @@
-class NumberRingSegmentTree:
+from ..abc import AbstractSegmentTree
+
+class NumberRingSegmentTree(AbstractSegmentTree):
     """ Temporary implementation for RingSegmentTree. """
 
-    __slots__ = ('_len', '_cap', '_tree', '_lazy_mul', '_lazy_add')
+    __slots__ = ('_cap', '_tree', '_lazy_mul', '_lazy_add')
 
-    _len: int
     _cap: int
     _tree: list[int|float]
     _lazy_mul: list[int|float]
@@ -29,11 +30,6 @@ class NumberRingSegmentTree:
         
         self._lazy_mul = [1] * cap
         self._lazy_add = [0] * cap
-    
-    def __len__(self): return self._len
-    def __str__(self): return "[{}]".format(", ".join(map(str, self.__iter__())))
-    def __iter__(self):
-        for i in range(self._len): yield self.__getitem__(i)
     
     def __getitem__(self, ind: int):
         return self.sum_range(ind, ind + 1)
@@ -116,12 +112,11 @@ class NumberRingSegmentTree:
     def mul_add_to_range(self, start: int, end: int, m, d):
         self._mul_add_to_range(start, end, m, d, 1, 0, self._cap)
 
-class ZModRingSegmentTree:
+class ZModRingSegmentTree(AbstractSegmentTree):
     """ Temporary implementation for RingSegmentTree on Z/nZ. """
 
-    __slots__ = ('_len', '_cap', '_tree', '_lazy_mul', '_lazy_add', '_mod')
+    __slots__ = ('_cap', '_tree', '_lazy_mul', '_lazy_add', '_mod')
 
-    _len: int
     _cap: int
     _tree: list[int]
     _lazy_mul: list[int]
@@ -150,11 +145,6 @@ class ZModRingSegmentTree:
         
         self._lazy_mul = [1] * cap
         self._lazy_add = [0] * cap
-    
-    def __len__(self): return self._len
-    def __str__(self): return "[{}]".format(", ".join(map(str, self.__iter__())))
-    def __iter__(self):
-        for i in range(self._len): yield self.__getitem__(i)
     
     def __getitem__(self, ind: int):
         return self.sum_range(ind, ind + 1)

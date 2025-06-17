@@ -90,12 +90,15 @@ Here is the table of specific segment trees implemented by CKP.
 There are some specialized instances for commonly occurring monoids:
 
 - `MonoidSumSegmentTree`
-  - `SumSegmentTree`
-    - Use Fenwick tree (via `ckp.data_structure.segment_tree.FenwickTree`) as it's faster.
+  - `SumSegmentTree` (Note: `FenwickTree` is also available, providing the same functionality.)
   - `MaxSegmentTree`
   - `GCDSegmentTree`
-- `MonoidAddSegmentTree`
+- ~~`MonoidAddSegmentTree`~~ (Not yet implemented.)
+  - ~~`CommutativeMonoidAddSegmentTree`~~ (Not yet implemented.)
   - `AddSegmentTree`
+- ~~`MonoidSegmentTree`~~ (Not yet implemented.)
+  - ~~`CommutativeMonoidSegmentTree`~~ (Not yet implemented.)
+  - ~~`NumberSegmentTree`~~ (Not yet implemented.)
 
 ### Ring
 
