@@ -4,9 +4,6 @@ from ckp.graph_theory.tree.lca import tree_lca_init, tree_lca_query
 from ckp.graph_theory.tree.euler_tour import euler_tour_sorted
 from ckp.graph_theory.tree.hld import tree_hld_init, tree_hld_decompose_descendant
 
-import sys
-if sys.getrecursionlimit() < 10_000_000: sys.setrecursionlimit(10_000_000)
-
 import random
 
 N, Q = 500_000, 100_000

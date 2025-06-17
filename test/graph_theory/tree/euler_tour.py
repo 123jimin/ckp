@@ -16,20 +16,14 @@ class TestEulerTour(unittest.TestCase):
 
         self.assertListEqual(tour.visits, [0, 1, 6, 7, 8, 2, 3, 4, 5, 9])
         self.assertListEqual(tour.begin,  [0, 1, 5, 6, 7, 8, 2, 3, 4, 9])
-        self.assertListEqual(tour.end,    [10, 5, 10, 7, 10, 10, 3, 5, 5, 10])
 
-    def test_subtree(self):
+    def test_random(self):
         for _ in range(200):
             N = random.randrange(1, 200)
             tree = random_tree(N)
             tour = euler_tour(tree)
-            sizes = tree_sizes(tree)
-
             self.assertEqual(tour.begin[tree.root], 0)
-            self.assertEqual(tour.end[tree.root], N)
-
-            for i in range(N):
-                self.assertEqual(tour.end[i] - tour.begin[i], sizes[i])
+            self.assertListEqual([tour.visits[tour.begin[v]] for v in range(N)], list(range(N)))
 
 class TestEulerTourSorted(unittest.TestCase):
     def test_simple(self):
@@ -42,20 +36,14 @@ class TestEulerTourSorted(unittest.TestCase):
 
         self.assertListEqual(tour.visits, [0, 2, 4, 5, 9, 3, 1, 7, 8, 6])
         self.assertListEqual(tour.begin,  [0, 6, 1, 5, 2, 3, 9, 7, 8, 4])
-        self.assertListEqual(tour.end,    [10, 10, 6, 6, 5, 5, 10, 9, 9, 5])
     
-    def test_subtree(self):
+    def test_random(self):
         for _ in range(200):
             N = random.randrange(1, 200)
             tree = random_tree(N)
             tour = euler_tour_sorted(tree)
-            sizes = tree_sizes(tree)
-
             self.assertEqual(tour.begin[tree.root], 0)
-            self.assertEqual(tour.end[tree.root], N)
-
-            for i in range(N):
-                self.assertEqual(tour.end[i] - tour.begin[i], sizes[i])
+            self.assertListEqual([tour.visits[tour.begin[v]] for v in range(N)], list(range(N)))
 
     def test_hld(self):
         for _ in range(200):
