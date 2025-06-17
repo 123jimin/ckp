@@ -1,5 +1,5 @@
 import argparse, cProfile
-from bench.util import bench, log_bench_result
+from bench.util import bench, stdev_range
 
 parser = argparse.ArgumentParser(prog="bench.acmicpc", description="Benchmark CKP with one or more problems from acmicpc.net")
 parser.add_argument('problem_name', help="specify this to benchmark a specific problem", nargs='?')
@@ -26,5 +26,5 @@ for problem_name in problem_names:
         print(f"## Profile stats for Problem #{problem_name[1:]}:")
         cProfile.run("[curr_problem.bench() for _ in range(5)]", sort='tottime')
     else:
-        times = bench("bench()", num_trials=8, log=False, global_vars={'bench': curr_problem.bench})
-        log_bench_result(f"Problem #{problem_name[1:]}", times)
+        times = bench(curr_problem.bench, num_trials=10, log=False)
+        print(f"Problem #{problem_name[1:]}", stdev_range(times))

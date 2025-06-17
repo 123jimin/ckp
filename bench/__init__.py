@@ -1,1 +1,1 @@
-from .util import bench, log_bench_result
+from .util import bench, stdev_range
