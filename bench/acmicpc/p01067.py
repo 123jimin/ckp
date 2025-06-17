@@ -3,9 +3,15 @@ from ckp.fourier import ComplexCooleyTukeyFFT
 import random
 N = 30000
 
-random.seed(42)
-X = [random.randint(0, 100) for _ in range(N)] * 2
-Y = [random.randint(0, 100) for _ in range(N)][::-1]
+X = []
+Y = []
+
+def setup():
+    global X, Y
+
+    random.seed(42)
+    X = [random.randint(0, 100) for _ in range(N)] * 2
+    Y = [random.randint(0, 100) for _ in range(N)][::-1]
 
 def bench():
     fft = ComplexCooleyTukeyFFT.get_common_fft(X, Y)

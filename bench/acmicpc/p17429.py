@@ -8,22 +8,27 @@ import sys
 if sys.getrecursionlimit() < 10_000_000: sys.setrecursionlimit(10_000_000)
 
 import random
-random.seed(42)
 
 N, Q = 500_000, 100_000
-E = random_tree_edges(N)
-
+E = []
 lQ = []
 
-for _ in range(Q):
-    q = random.randint(1, 6)
-    match q:
-        case 1: lQ.append((q, random.randrange(N), random.randrange(1, 1_000_000_000)))
-        case 2: lQ.append((q, random.randrange(N), random.randrange(N), random.randrange(1, 1_000_000_000)))
-        case 3: lQ.append((q, random.randrange(N), random.randrange(1, 1_000_000_000)))
-        case 4: lQ.append((q, random.randrange(N), random.randrange(N), random.randrange(1, 1_000_000_000)))
-        case 5: lQ.append((q, random.randrange(N)))
-        case 6: lQ.append((q, random.randrange(N), random.randrange(N)))
+def setup():
+    global E, lQ
+
+    random.seed(42)
+    E = random_tree_edges(N)
+    
+    lQ = []
+    for _ in range(Q):
+        q = random.randint(1, 6)
+        match q:
+            case 1: lQ.append((q, random.randrange(N), random.randrange(1, 1_000_000_000)))
+            case 2: lQ.append((q, random.randrange(N), random.randrange(N), random.randrange(1, 1_000_000_000)))
+            case 3: lQ.append((q, random.randrange(N), random.randrange(1, 1_000_000_000)))
+            case 4: lQ.append((q, random.randrange(N), random.randrange(N), random.randrange(1, 1_000_000_000)))
+            case 5: lQ.append((q, random.randrange(N)))
+            case 6: lQ.append((q, random.randrange(N), random.randrange(N)))
 
 def bench():
     T = tree_from_edges(E)
