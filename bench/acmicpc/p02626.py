@@ -1,6 +1,6 @@
 from ckp.geometry import min_enclosing_circle
-import random, sys, math
-sys.setrecursionlimit(10_000_000)
+import random, math
+
 N = 100000
 points = []
 

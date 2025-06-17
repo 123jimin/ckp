@@ -52,5 +52,5 @@ def bench():
             case 6: pass
 
 tags = {
-    'hld', 'segment_tree', 'lca', 'euler_tour_technique'
+    'hld', 'segment_tree', 'lazyprop', 'lca', 'euler_tour_technique'
 }
