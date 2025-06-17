@@ -21,6 +21,7 @@ class TestDataGenerator:
         self.generate_value = generate_value
     
     def op(self):
+        """ Returns a random segment tree operation. """
         match random.choice(self.ops):
             case 'get': return ('get', self.index())
             case 'sum_range': return ('sum_range', *self.range())
@@ -47,8 +48,30 @@ class TestDataGenerator:
         return self.generate_value()
     
     def list(self) -> list:
+        """ Returns a list of values, that can be used for initializing a segment tree. """
         return [self.value() for _ in range(self.N)]
-    
+
+    @staticmethod    
+    def bench(tree, ops):
+        """ Benchmarks the given segment tree with the given operations. """
+        for op in ops:
+            match op:
+                case ('get', i): tree[i]
+                case ('sum_range', i, j): tree.sum_range(i, j)
+                case ('sum_all',): tree.sum_all()
+
+                case ('set', i, v): tree[i] = v
+                case ('set_range', i, j, v): tree.set_range(i, j, v)
+
+                case ('add_to', i, v): tree.add_to(i, v)
+                case ('add_to_range', i, j, v): tree.add_to_range(i, j, v)
+
+                case ('mul_to', i, v): tree.mul_to(i, v)
+                case ('mul_to_range', i, j, v): tree.mul_to_range(i, j, v)
+
+                case ('mul_add_to', i, v1, v2): tree.mul_add_to(i, v1, v2)
+                case ('mul_add_to_range', i, j, v1, v2): tree.mul_add_to_range(i, j, v1, v2)
+
     @staticmethod
     def test(
         asserter: unittest.TestCase, N: int, amount: int, test_ops: List[str],
