@@ -7,7 +7,6 @@ from ..util.data_generator import TestDataGenerator
 MONOID_SEGMENT_TREE_OPS = ['set', 'add_to', 'add_to_range', 'get', 'sum_range', 'sum_all']
 
 class TestNumberSegmentTree(unittest.TestCase):
-    @unittest.skip
     def test_random(self):
         for __ in range(100):
             N = random.randint(1, 128)

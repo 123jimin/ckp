@@ -49,7 +49,7 @@ class AddSegmentTree(AbstractSegmentTree):
 
     def add_to_range(self, start: int, end: int, value):
         tree, L = self._tree, self._len
-        if (not self._len) or start >= end: return 0
+        if (not L) or start >= end: return 0
 
         start, end = max(0, start)+L, min(end, L)+L
 
