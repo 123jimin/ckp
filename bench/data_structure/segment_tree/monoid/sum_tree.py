@@ -1,6 +1,7 @@
 from bench.util import bench
 from ckp.data_structure.segment_tree import SumSegmentTree, AbstractSumSegmentTree
 from test.data_structure.segment_tree.util.data_generator import TestDataGenerator
+import cProfile
 
 class SumSegmentTreeAlt(AbstractSumSegmentTree):
     """ Segment tree for summing numbers in ranges. """
@@ -33,9 +34,9 @@ class SumSegmentTreeAlt(AbstractSumSegmentTree):
         res = 0
 
         while start < end:
-            if (start & 1) > 0: res += tree[start]; start += 1
-            if (end & 1) > 0: res += tree[end := end - 1]
-            start >>= 1; end >>= 1
+            if start & 1: res += tree[start]; start += 1
+            if end & 1: res += tree[end := end - 1]
+            start //= 2; end //= 2
         
         return res
     
@@ -52,7 +53,7 @@ class SumSegmentTreeAlt(AbstractSumSegmentTree):
 
         while curr_ind > 1:
             changed_value += tree[curr_ind+(1,-1)[curr_ind & 1]]
-            tree[curr_ind := curr_ind >> 1] = changed_value
+            tree[curr_ind := curr_ind // 2] = changed_value
 
     def add_to(self, ind: int, value):
         """ Add a given value to (the right side of) `self[ind]`. """
@@ -62,7 +63,7 @@ class SumSegmentTreeAlt(AbstractSumSegmentTree):
         curr_ind, tree = self._len + ind, self._tree
         tree[curr_ind] += value
 
-        while curr_ind > 1: curr_ind >>= 1; tree[curr_ind] += value
+        while curr_ind > 1: curr_ind //= 2; tree[curr_ind] += value
 
 import random
 random.seed(42)
@@ -74,13 +75,17 @@ init_values = data_gen.list()
 ops = [data_gen.op() for _ in range(Q)]
 
 def bench_sum():
-    TestDataGenerator.bench(SumSegmentTree(init_values), ops)
+    res = TestDataGenerator.bench(SumSegmentTree(init_values), ops)
+    assert(sum(res) == 327828661)
 
 def bench_alt():
-    TestDataGenerator.bench(SumSegmentTreeAlt(init_values), ops)
+    res = TestDataGenerator.bench(SumSegmentTreeAlt(init_values), ops)
+    assert(sum(res) == 327828661)
 
 if __name__ == "__main__":
     bench([
         bench_sum,
         bench_alt,
     ], num_trials=10)
+
+    cProfile.runctx("for _ in range(10): f()", {'f': bench_alt}, {}, sort='tottime')

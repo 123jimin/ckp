@@ -107,9 +107,9 @@ class SumSegmentTree(AbstractSumSegmentTree):
         res = 0
 
         while start < end:
-            if (start & 1) > 0: res += tree[start]; start += 1
-            if (end & 1) > 0: res += tree[end := end - 1]
-            start >>= 1; end >>= 1
+            if start & 1: res += tree[start]; start += 1
+            if end & 1: res += tree[end := end - 1]
+            start //= 2; end //= 2
         
         return res
     
@@ -126,7 +126,7 @@ class SumSegmentTree(AbstractSumSegmentTree):
 
         while curr_ind > 1:
             changed_value += tree[curr_ind+(1,-1)[curr_ind & 1]]
-            tree[curr_ind := curr_ind >> 1] = changed_value
+            tree[curr_ind := curr_ind // 2] = changed_value
 
     def add_to(self, ind: int, value):
         """ Add a given value to (the right side of) `self[ind]`. """
@@ -136,7 +136,7 @@ class SumSegmentTree(AbstractSumSegmentTree):
         curr_ind, tree = self._len + ind, self._tree
         tree[curr_ind] += value
 
-        while curr_ind > 1: curr_ind >>= 1; tree[curr_ind] += value
+        while curr_ind > 1: curr_ind //= 2; tree[curr_ind] += value
 
 # TODO: remove `divmod`
 class MaxSegmentTree(AbstractSumSegmentTree):
