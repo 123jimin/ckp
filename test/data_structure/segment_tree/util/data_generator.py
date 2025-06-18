@@ -54,11 +54,13 @@ class TestDataGenerator:
     @staticmethod    
     def bench(tree, ops):
         """ Benchmarks the given segment tree with the given operations. """
+        values = []
+        push = values.append
         for op in ops:
             match op:
-                case ('get', i): tree[i]
-                case ('sum_range', i, j): tree.sum_range(i, j)
-                case ('sum_all',): tree.sum_all()
+                case ('get', i): push(tree[i])
+                case ('sum_range', i, j): push(tree.sum_range(i, j))
+                case ('sum_all',): push(tree.sum_all())
 
                 case ('set', i, v): tree[i] = v
                 case ('set_range', i, j, v): tree.set_range(i, j, v)
@@ -71,6 +73,7 @@ class TestDataGenerator:
 
                 case ('mul_add_to', i, v1, v2): tree.mul_add_to(i, v1, v2)
                 case ('mul_add_to_range', i, j, v1, v2): tree.mul_add_to_range(i, j, v1, v2)
+        return values
 
     @staticmethod
     def test(
