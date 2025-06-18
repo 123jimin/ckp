@@ -23,7 +23,6 @@ class SumSegmentTreeAlt(AbstractSumSegmentTree):
     def sum_range(self, start: int, end: int):
         """ Get the sum of elements at indices in the half-open range [start, end). """
         tree, L = self._tree, self._len
-        if (not L) or start >= end: return 0
         
         if start >= 0: start += L
         else: start = L
@@ -35,7 +34,7 @@ class SumSegmentTreeAlt(AbstractSumSegmentTree):
 
         while start < end:
             if start & 1: res += tree[start]; start += 1
-            if end & 1: res += tree[end := end - 1]
+            if end & 1: res += tree[end - 1]
             start //= 2; end //= 2
         
         return res
@@ -49,11 +48,10 @@ class SumSegmentTreeAlt(AbstractSumSegmentTree):
             raise IndexError(f"Index {ind} out of range (len={self._len})")
         
         curr_ind, tree = self._len + ind, self._tree
-        changed_value = tree[curr_ind] = value
+        if not (delta := value - tree[curr_ind]): return
 
-        while curr_ind > 1:
-            changed_value += tree[curr_ind+(1,-1)[curr_ind & 1]]
-            tree[curr_ind := curr_ind // 2] = changed_value
+        tree[curr_ind] = value
+        while curr_ind > 1: tree[curr_ind := curr_ind//2] += delta
 
     def add_to(self, ind: int, value):
         """ Add a given value to (the right side of) `self[ind]`. """
@@ -63,7 +61,7 @@ class SumSegmentTreeAlt(AbstractSumSegmentTree):
         curr_ind, tree = self._len + ind, self._tree
         tree[curr_ind] += value
 
-        while curr_ind > 1: curr_ind //= 2; tree[curr_ind] += value
+        while curr_ind > 1: tree[curr_ind := curr_ind // 2] += value
 
 import random
 random.seed(42)
