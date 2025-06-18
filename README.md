@@ -21,6 +21,8 @@ Check the documentation on <https://123jimin.github.io/ckp/>.
 
 ### Potential Improvements
 
+- Remove usages of `divmod` for small ints.
+
 - `fourier`: Find a better way to organize FFT instances?
 - `data_structure.segment_tree.monoid.monoid_tree`: Too slow!
 - `data_structure.segment_tree.ring`: Too slow!
