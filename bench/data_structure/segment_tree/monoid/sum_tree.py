@@ -1,21 +1,86 @@
 from bench.util import bench
-from ckp.data_structure.segment_tree import MonoidSumSegmentTree, SumSegmentTree
+from ckp.data_structure.segment_tree import SumSegmentTree, AbstractSumSegmentTree
+from test.data_structure.segment_tree.util.data_generator import TestDataGenerator
 
-from random import seed, randrange
-seed(42)
+class SumSegmentTreeAlt(AbstractSumSegmentTree):
+    """ Segment tree for summing numbers in ranges. """
 
-N = 100_000
-data = [randrange(500) for _ in range(N)]
-sum_indices = [(i, j) for (i, j) in ((randrange(N), randrange(N)) for _ in range(N)) if i < j]
+    __slots__ = ()
+    
+    def __init__(self, init_values: list|int):
+        """ Creates a segment tree on `init_values`. """
+        is_init_list = not isinstance(init_values, int)
 
-sum_tree = SumSegmentTree(data)
+        L = self._len = len(init_values) if is_init_list else init_values
+        if not L: self._tree = []; return
+    
+        tree = self._tree = [0] * L + init_values if is_init_list else [0] * (L+L)
 
-def bench_sum(tree):
-    ans = sum(tree.sum_range(i, j) for (i, j) in sum_indices)
-    assert(ans == 416647779345)
-    return ans
+        for i in range(L-1, 0, -1):
+            i2 = i+i; tree[i] = tree[i2] + tree[i2+1]
+    
+    def sum_range(self, start: int, end: int):
+        """ Get the sum of elements at indices in the half-open range [start, end). """
+        tree, L = self._tree, self._len
+        if (not L) or start >= end: return 0
+        
+        if start >= 0: start += L
+        else: start = L
+
+        if end < L: end += L
+        else: end = L+L
+
+        res = 0
+
+        while start < end:
+            if (start & 1) > 0: res += tree[start]; start += 1
+            if (end & 1) > 0: res += tree[end := end - 1]
+            start >>= 1; end >>= 1
+        
+        return res
+    
+    def sum_all(self):
+        """ Get the sum of all elements in this tree. """
+        return self._tree[1] if self._len else 0
+    
+    def __setitem__(self, ind: int, value):
+        if not 0 <= ind < self._len:
+            raise IndexError(f"Index {ind} out of range (len={self._len})")
+        
+        curr_ind, tree = self._len + ind, self._tree
+        changed_value = tree[curr_ind] = value
+
+        while curr_ind > 1:
+            changed_value += tree[curr_ind+(1,-1)[curr_ind & 1]]
+            tree[curr_ind := curr_ind >> 1] = changed_value
+
+    def add_to(self, ind: int, value):
+        """ Add a given value to (the right side of) `self[ind]`. """
+        if not 0 <= ind < self._len:
+            raise IndexError(f"Index {ind} out of range (len={self._len})")
+        
+        curr_ind, tree = self._len + ind, self._tree
+        tree[curr_ind] += value
+
+        while curr_ind > 1: curr_ind >>= 1; tree[curr_ind] += value
+
+import random
+random.seed(42)
+
+N, Q = 100_000, 100_000
+
+data_gen = TestDataGenerator(N,  ['set', 'sum_range', 'get'], lambda: random.randint(-100, 100))
+init_values = data_gen.list()
+ops = [data_gen.op() for _ in range(Q)]
+
+def bench_sum():
+    TestDataGenerator.bench(SumSegmentTree(init_values), ops)
+
+def bench_alt():
+    TestDataGenerator.bench(SumSegmentTreeAlt(init_values), ops)
 
 if __name__ == "__main__":
     bench([
-        "bench_sum(sum_tree)",
-    ], num_trials=8, global_vars=globals())
+        bench_sum,
+        bench_alt,
+    ], num_trials=10)

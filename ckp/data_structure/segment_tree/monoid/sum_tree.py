@@ -14,6 +14,7 @@ class AbstractSumSegmentTree(AbstractSegmentTree):
     def __iter__(self): yield from map(self._tree.__getitem__, range(self._len, self._len*2))
     def __getitem__(self, ind: int): return self._tree[self._len + ind]
 
+# TODO: remove `divmod`
 class MonoidSumSegmentTree(AbstractSumSegmentTree):
     """ Monoid segment tree that only supports range sum query. """
 
@@ -97,16 +98,18 @@ class SumSegmentTree(AbstractSumSegmentTree):
         tree, L = self._tree, self._len
         if (not L) or start >= end: return 0
         
-        start, end = max(0, start)+L, min(end, L)+L
+        if start >= 0: start += L
+        else: start = L
+
+        if end < L: end += L
+        else: end = L+L
 
         res = 0
-        while start < end:
-            sn, sr = divmod(start, 2)
-            en, er = divmod(end, 2)
-            if sr: res += tree[start]; sn += 1
-            if er: res += tree[end-1]
 
-            start, end = sn, en
+        while start < end:
+            if (start & 1) > 0: res += tree[start]; start += 1
+            if (end & 1) > 0: res += tree[end := end - 1]
+            start >>= 1; end >>= 1
         
         return res
     
@@ -122,9 +125,8 @@ class SumSegmentTree(AbstractSumSegmentTree):
         changed_value = tree[curr_ind] = value
 
         while curr_ind > 1:
-            next_ind, r = divmod(curr_ind, 2)
-            changed_value = tree[next_ind] = changed_value + tree[curr_ind+(1,-1)[r]]
-            curr_ind = next_ind
+            changed_value += tree[curr_ind+(1,-1)[curr_ind & 1]]
+            tree[curr_ind := curr_ind >> 1] = changed_value
 
     def add_to(self, ind: int, value):
         """ Add a given value to (the right side of) `self[ind]`. """
@@ -134,8 +136,9 @@ class SumSegmentTree(AbstractSumSegmentTree):
         curr_ind, tree = self._len + ind, self._tree
         tree[curr_ind] += value
 
-        while curr_ind > 1: curr_ind //= 2; tree[curr_ind] += value
+        while curr_ind > 1: curr_ind >>= 1; tree[curr_ind] += value
 
+# TODO: remove `divmod`
 class MaxSegmentTree(AbstractSumSegmentTree):
     """ Segment tree for calculating max of a range of numbers. """
 
@@ -205,6 +208,7 @@ class MaxSegmentTree(AbstractSumSegmentTree):
         """ Update `self[ind]` to `max(self[ind], value)`. """
         self.__setitem__(ind, max(self[ind], value))
 
+# TODO: remove `divmod`
 class GCDSegmentTree(AbstractSumSegmentTree):
     """ Segment tree for calculating the GCD of elements in ranges. """
 

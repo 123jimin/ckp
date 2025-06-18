@@ -10,21 +10,11 @@ data_gen = TestDataGenerator(N, ['get', 'sum_range', 'sum_range', 'set', 'add_to
 init_values = data_gen.list()
 ops = [data_gen.op() for _ in range(Q)]
 
-def bench_tree(tree):
-    ans = 0
-    for op in ops:
-        match op:
-            case ('get', i): ans += tree[i]
-            case ('sum_range', i, j): ans += tree.sum_range(i, j)
-            case ('set', i, v): tree[i] = v
-            case ('add_to_range', i, j, v): tree.add_to_range(i, j, v)
-    # assert(ans == 3240201523773)
-
 def bench_lazy():
-    bench_tree(LazySumSegmentTree(init_values))
+    TestDataGenerator.bench(LazySumSegmentTree(init_values), ops)
 
 def bench_number():
-    bench_tree(NumberSegmentTree(init_values))
+    TestDataGenerator.bench(NumberSegmentTree(init_values), ops)
 
 if __name__ == "__main__":
     bench([
