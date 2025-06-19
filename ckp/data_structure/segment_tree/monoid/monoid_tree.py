@@ -48,10 +48,12 @@ class NumberSegmentTree(AbstractSegmentTree):
         start, end = start + L, end + L-1
         for s in range(self._h, 0, -1):
             for i in range(start>>s, (end>>s)+1):
-                self._apply(i+i, self._lazy[i], k)
-                self._apply(i+i+1, self._lazy[i], k)
+                value = self._lazy[i]
+                i2 = i+i
+                self._apply(i2, value, k)
+                self._apply(i2+1, value, k)
                 self._lazy[i] = 0
-            k >>= 1
+            k //= 2
 
     def __getitem__(self, ind: int): return self.sum_range(ind, ind+1)
     def sum_range(self, start: int, end: int):
@@ -64,9 +66,8 @@ class NumberSegmentTree(AbstractSegmentTree):
         start, end = start+L, end+L
         while start < end:
             if start&1: res += self._tree[start]; start += 1
-            if end&1: res += self._tree[(end := end-1)]
-            start >>= 1
-            end >>= 1
+            if end&1: res += self._tree[end-1]
+            start //= 2; end //= 2
         return res
     def sum_all(self): return self.sum_range(0, len(self))
 
@@ -86,9 +87,9 @@ class NumberSegmentTree(AbstractSegmentTree):
         start, end = start+L, end+L
         while start < end:
             if start&1: self._apply(start, value, k); start += 1
-            if end&1: self._apply((end := end-1), value, k)
-            start >>= 1
-            end >>= 1
-            k <<= 1
+            if end&1: self._apply(end-1, value, k)
+            start //= 2
+            end //= 2
+            k += k
         self._build(l0, l0+1)
         self._build(r0-1, r0)
