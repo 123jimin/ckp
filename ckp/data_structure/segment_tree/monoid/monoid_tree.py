@@ -31,14 +31,17 @@ class NumberSegmentTree(AbstractSegmentTree):
         if ind < self._len: self._lazy[ind] += value
     
     def _build(self, start: int, end: int):
-        L = self._len
+        L, tree, lazy = self._len, self._tree, self._lazy
         k = 2
         start, end = start + L, end + L-1
         while start > 1:
             start //= 2; end //= 2
-            for i in range(end, start-1, -1): self._calc(i, k)
+            for i in range(end, start-1, -1):
+                i2 = i+i
+                tree[i] = tree[i2] + tree[i2+1] + lazy[i] * k
             k += k
-        
+    
+    # TODO: remove this (after improving `add_to_range`).
     def _calc(self, ind: int, size: int):
         self._tree[ind] = self._tree[ind+ind] + self._tree[ind+ind+1] + self._lazy[ind] * size
 
