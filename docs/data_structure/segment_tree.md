@@ -98,8 +98,9 @@ There are some specialized instances for commonly occurring monoids:
   - `AddSegmentTree`
 - ~~`MonoidSegmentTree`~~ (Not yet implemented.)
   - ~~`CommutativeMonoidSegmentTree`~~ (Not yet implemented.)
-  - ~~`NumberSegmentTree`~~ (Not yet implemented.)
-
+  - `NumberSegmentTree`
+    - `SimpleNumberSegmentTree`: While this is a bit slower than `NumberSegmentTree`, it is simpler and easier to customize.
+  
 ### Ring
 
 | Name | `a[i] = v` | `a[i] += d` | `a[i] *= d` | Get `a[i]` | Sum `a[i:j]` |

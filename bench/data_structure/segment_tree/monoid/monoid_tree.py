@@ -1,5 +1,5 @@
 from bench.util import bench
-from ckp.data_structure.segment_tree import LazySumSegmentTree, NumberSegmentTree
+from ckp.data_structure.segment_tree import NumberSegmentTree, SimpleNumberSegmentTree
 from test.data_structure.segment_tree.util.data_generator import TestDataGenerator
 
 import random, cProfile
@@ -10,8 +10,8 @@ data_gen = TestDataGenerator(N, ['get', 'sum_range', 'sum_range', 'set', 'add_to
 init_values = data_gen.list()
 ops = [data_gen.op() for _ in range(Q)]
 
-def bench_lazy():
-    res = TestDataGenerator.bench(LazySumSegmentTree(init_values), ops)
+def bench_simple():
+    res = TestDataGenerator.bench(SimpleNumberSegmentTree(init_values), ops)
     assert(sum(res) == 10793641679)
 
 def bench_number():
@@ -20,7 +20,7 @@ def bench_number():
 
 if __name__ == "__main__":
     bench([
-        bench_lazy,
+        bench_simple,
         bench_number,
     ], num_trials=10)
     
