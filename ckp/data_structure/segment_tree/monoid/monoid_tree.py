@@ -40,16 +40,14 @@ class NumberSegmentTree(AbstractSegmentTree):
         
         for s in range(H, 1, -1):
             if (value := lazy[i := x >> s]):
-                lazy[i] = 0
-                tree[i2 := i+i] += (vk := value * k)
-                lazy[i2] += value
+                lazy[i] = 0; lazy[i2 := i+i] += value
+                tree[i2] += (vk := value * k)
                 tree[i2 := i2+1] += vk
                 if i2 < L: lazy[i2] += value
 
             if (value := lazy[i := y >> s]):
-                lazy[i] = 0
-                tree[i2 := i+i] += (vk := value * k)
-                lazy[i2] += value
+                lazy[i] = 0; lazy[i2 := i+i] += value
+                tree[i2] += (vk := value * k)
                 tree[i2 := i2+1] += vk
                 if i2 < L: lazy[i2] += value
 
@@ -75,8 +73,10 @@ class NumberSegmentTree(AbstractSegmentTree):
 
         if start >= end: return 0
         self._push_two(start, end-1)
+
         res = 0
-        start, end = start+L, end+L
+        start += L; end += L
+        
         while start < end:
             if start&1: res += tree[start]; start += 1
             if end&1: res += tree[end-1]
@@ -98,21 +98,38 @@ class NumberSegmentTree(AbstractSegmentTree):
         L, tree, lazy = self._len, self._tree, self._lazy
         self._push_two(start, end-1)
 
-        cl, cr, k = False, False, 1
+        cl, cr, k, vk = False, False, 1, value
         start += L; end += L
 
         while start < end:
             if cl: s2=start+start; tree[start-1] = tree[s2-2] + tree[s2-1] + lazy[start-1] * k
-            if cr: e2=end+end; tree[end] = tree[e2] + tree[e2+1] + lazy[end] * k
-            if start&1: self._apply(start, value, k); cl = True; start += 1
-            if end&1: self._apply(end-1, value, k); cr = True
-            start //= 2; end //= 2; k += k
+            if cr: e2=end+end;     tree[end]     = tree[e2]   + tree[e2+1] + lazy[end]     * k
+
+            # 
+            # self._tree[ind] += value * size
+            # if ind < self._len: self._lazy[ind] += value
+            if start&1:
+                tree[start] += vk
+                if start < L: lazy[start] += value
+                cl = True; start += 1
+            if end&1:
+                tree[end := end-1] += vk
+                if end < L: lazy[end] += value
+                cr = True
+            start //= 2; end //= 2; k += k; vk += vk
 
         start -= 1
-        while end:
-            if cl: s2=start+start; tree[start] = tree[s2] + tree[s2+1] + lazy[start] * k
-            if cr and (not cl or start != end): e2=end+end; tree[end] = tree[e2] + tree[e2+1] + lazy[end] * k
-            start //= 2; end //= 2; k += k
+
+        if cl:
+            while end:
+                s2=start+start; tree[start] = tree[s2] + tree[s2+1] + lazy[start] * k
+                if cr and start != end:
+                    e2=end+end; tree[end] = tree[e2] + tree[e2+1] + lazy[end] * k
+                start //= 2; end //= 2; k += k
+        elif cr: # Actually, `cr` must always be `True` here, so this may be changed into `else:`.
+            while end:
+                e2=end+end; tree[end] = tree[e2] + tree[e2+1] + lazy[end] * k
+                end //= 2; k += k
 
 class SimpleNumberSegmentTree(AbstractSegmentTree):
     """
