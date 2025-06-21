@@ -66,7 +66,7 @@ def prime_sieve_primes(sieve: PrimeSieveData):
     """ Yields prime numbers inferable from the sieve. """
     yield 2
     odd_primes, sieve_arr = sieve._odd_primes, sieve._sieve
-    odd_primes.extend(k*2+1 for k in range(sieve._odd_primes_next//2, sieve._max_testable_odd//2+1) if sieve_arr[k] == 1)
+    odd_primes.extend((k+k)+1 for k in range(sieve._odd_primes_next//2, sieve._max_testable_odd//2+1) if sieve_arr[k] == 1)
     yield from odd_primes
     sieve._odd_primes_next = sieve._max_testable_odd + 2
 
@@ -76,10 +76,9 @@ def prime_sieve_query(sieve: PrimeSieveData, n: int) -> bool:
         When `n` is an odd number, the sieve might get extended.
     """
     if n < 100: return n in {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}
-    m, d = divmod(n, 2)
-    if d == 0: return False
+    if not (n&1): return False
     if n > sieve._max_testable_odd: sieve.extend(n)
-    return sieve._sieve[m] == 1
+    return sieve._sieve[n // 2] == 1
 
 def prime_sieve_factor(sieve: PrimeSieveData, n: int):
     """ Yields every prime factors of `n`, in no particular order. """
