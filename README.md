@@ -10,6 +10,7 @@ Check the documentation on <https://123jimin.github.io/ckp/>.
 
 ## To-Do List
 
+- [ ] `data_structure.wavelet_tree`
 - [ ] `fourier.ntt`
 - [ ] `geometry.half_plane_intersection`
 - [ ] `graph_theory.bipartite_matching`
