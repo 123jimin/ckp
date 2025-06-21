@@ -9,7 +9,7 @@ def bench():
     for v in V:
         v2 = v // 2
         for p in prime_sieve_primes(sieve):
-            if p >= v2: break
+            if p > v2: break
             ans += prime_sieve_query(sieve, v-p)
     assert(ans == 578969)
 
