@@ -1,5 +1,7 @@
 from ..abc import AbstractSegmentTree
 
+import itertools
+
 class NumberSegmentTree(AbstractSegmentTree):
     """
         A segment tree on integers/floats supporting range add/sum operations.
