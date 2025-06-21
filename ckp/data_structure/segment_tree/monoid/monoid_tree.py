@@ -29,10 +29,6 @@ class NumberSegmentTree(AbstractSegmentTree):
         
         self._lazy = [0] * L
     
-    def _apply(self, ind: int, value, size: int):
-        self._tree[ind] += value * size
-        if ind < self._len: self._lazy[ind] += value
-    
     def _push_two(self, x: int, y: int):
         L, H, tree, lazy = self._len, self._h, self._tree, self._lazy
         k = 1 << (H - 1)
@@ -105,17 +101,13 @@ class NumberSegmentTree(AbstractSegmentTree):
             if cl: s2=start+start; tree[start-1] = tree[s2-2] + tree[s2-1] + lazy[start-1] * k
             if cr: e2=end+end;     tree[end]     = tree[e2]   + tree[e2+1] + lazy[end]     * k
 
-            # 
-            # self._tree[ind] += value * size
-            # if ind < self._len: self._lazy[ind] += value
             if start&1:
-                tree[start] += vk
+                cl = True; tree[start] += vk
                 if start < L: lazy[start] += value
-                cl = True; start += 1
+                start += 1
             if end&1:
-                tree[end := end-1] += vk
+                cr = True; tree[end := end-1] += vk
                 if end < L: lazy[end] += value
-                cr = True
             start //= 2; end //= 2; k += k; vk += vk
 
         start -= 1
