@@ -16,7 +16,6 @@ class TestPushRelabel(unittest.TestCase):
         self.assertTrue(all(pr.excess[i] == 0 for i in range(len(graph)) if i != 4), f"{pr.excess=} should be 0 for all non-sink vertices")
     
     def test_bipartite(self):
-        return # TODO
         graph = DictGraph(13)
         graph.add_edge(0, 1, 1000)
         for u in [2, 3, 4, 5, 6]: graph.add_edge(0, u, 1)

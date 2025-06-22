@@ -3,8 +3,14 @@ from ...data_structure.graph import AbstractWeightedGraph, DictFlowGraph
 class PushRelabel:
     """ Implements the push-relabel max-flow algorithm. """
 
+    __slots__ = ('source', 'sink', 'height', 'flow', 'max_flow', 'excess', 'excess_queue')
+
+    source: int
+    sink: int
+
     def __init__(self, graph: AbstractWeightedGraph, source: int, sink: int):
         assert(source != sink)
+        self.source, self.sink = source, sink
 
         self.height = [0] * len(graph)
         self.height[source] = len(graph)
@@ -32,6 +38,7 @@ class PushRelabel:
             for v in range(len(graph)): # TODO: get a better way to get neighbors
                 if self.height[v] == self.height[u]-1 and (graph.get_weight(u, v) or 0) > (flow.get_weight(u, v) or 0):
                     self._push(graph, u, v, sink)
+                    if self.excess[u] > 0: excess_queue.append(u)
                     break
             else:
                 self._relabel(graph, u)
@@ -43,7 +50,9 @@ class PushRelabel:
         send = min(excess[u], (graph.get_weight(u, v) or 0) - (flow.get_weight(u, v) or 0))
         flow.add_flow(u, v, send)
         excess[u] -= send
-        
+
+        if v == self.source: return
+            
         prev_v_excess = excess[v]
         excess[v] = prev_v_excess + send
         if v != sink and not prev_v_excess: self.excess_queue.append(v)
