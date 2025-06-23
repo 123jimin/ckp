@@ -23,34 +23,24 @@ def disjoint_set_size(ds: DisjointSetData, ind: int) -> int:
 def disjoint_set_find(ds: DisjointSetData, ind: int) -> int:
     """ Returns the representative element for `ind`. """
     parents = ds.parents
+
+    # Compress the path by half.
+    while (parent := parents[ind]) != ind:
+        parents[ind] = gparent = parents[parent]; ind = gparent
     
-    orig_ind, orig_root_ind = ind, parents[ind]
-    if orig_ind == orig_root_ind: return ind
-
-    ind = orig_root_ind
-    while (root_ind := parents[ind]) != ind: ind = root_ind
-
-    # 1-level path compression to avoid recursion.
-    if orig_root_ind != root_ind: parents[orig_ind] = root_ind
-    return root_ind
+    return ind
 
 def disjoint_set_is_same_set(ds: DisjointSetData, x: int, y: int) -> bool:
     """ Returns whether `x` and `y` reside in the same set. """
     parents = ds.parents
 
     # x = disjoint_set_find(ds, x)
-    ox, orx = x, parents[x]
-    if ox != orx:
-        x = orx
-        while (rx := parents[x]) != x: x = rx
-        if orx != rx: parents[ox] = rx
-        
+    while (px := parents[x]) != x:
+        parents[x] = gx = parents[px]; x = gx
+    
     # y = disjoint_set_find(ds, y)
-    oy, ory = y, parents[y]
-    if oy != ory:
-        y = ory
-        while (ry := parents[y]) != y: y = ry
-        if ory != ry: parents[oy] = ry
+    while (py := parents[y]) != y:
+        parents[y] = gy = parents[py]; y = gy
     
     return x == y
 
@@ -59,18 +49,12 @@ def disjoint_set_union(ds: DisjointSetData, x: int, y: int) -> bool:
     parents = ds.parents
 
     # x = disjoint_set_find(ds, x)
-    ox, orx = x, parents[x]
-    if ox != orx:
-        x = orx
-        while (rx := parents[x]) != x: x = rx
-        if orx != rx: parents[ox] = rx
-
+    while (px := parents[x]) != x:
+        parents[x] = gx = parents[px]; x = gx
+    
     # y = disjoint_set_find(ds, y)
-    oy, ory = y, parents[y]
-    if oy != ory:
-        y = ory
-        while (ry := parents[y]) != y: y = ry
-        if ory != ry: parents[oy] = ry
+    while (py := parents[y]) != y:
+        parents[y] = gy = parents[py]; y = gy
     
     if x == y: return False
 
@@ -88,18 +72,12 @@ def disjoint_set_union_find(ds: DisjointSetData, x: int, y: int) -> tuple[int, i
     parents = ds.parents
 
     # x = disjoint_set_find(ds, x)
-    ox, orx = x, parents[x]
-    if ox != orx:
-        x = orx
-        while (rx := parents[x]) != x: x = rx
-        if orx != rx: parents[ox] = rx
-
+    while (px := parents[x]) != x:
+        parents[x] = gx = parents[px]; x = gx
+    
     # y = disjoint_set_find(ds, y)
-    oy, ory = y, parents[y]
-    if oy != ory:
-        y = ory
-        while (ry := parents[y]) != y: y = ry
-        if ory != ry: parents[oy] = ry
+    while (py := parents[y]) != y:
+        parents[y] = gy = parents[py]; y = gy
     
     if x == y: return None
 
