@@ -79,7 +79,7 @@ def tree_from_parents(parents: list[int], root: int = 0) -> TreeData:
     assert(parents[root] == -1)
     tree = TreeData()
     tree.root = root
-    children = tree.children = [[] for _ in range(len(parents))]
+    children = tree.children = [[] for _ in parents]
     for i in range(len(parents)):
         if (p := parents[i]) >= 0: children[p].append(i)
     tree.parents = parents

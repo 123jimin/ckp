@@ -1,3 +1,4 @@
+from .distance_tree import *
 from .hld import *
 from .isomorphism import *
 from .lca import *
