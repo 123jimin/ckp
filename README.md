@@ -16,6 +16,7 @@ Check the documentation on <https://123jimin.github.io/ckp/>.
 - [ ] `graph_theory.bipartite_matching`
 - [ ] `graph_theory.max_flow.push_relabel`
 - [ ] `language` (plaintext to languages)
+- [ ] `misc.hungarian`
 - [ ] `polynomial`
 - [ ] `string.suffix_array`
 
