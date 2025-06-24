@@ -13,7 +13,8 @@ CKP is a Python library providing various algorithms for solving competitive pro
   - CKP does not have any dependency.
 - **Performant**
   - CKP is micro-optimized for CPython.
-  - There are [micro-benchmarks](./benchmark/index.md) for testing CKP's performance.
+    - See [Optimizing CPython Code](./optimization/index.md) for optimization tips.
+  - (TODO) There are [micro-benchmarks](./benchmark/index.md) for testing CKP's performance.
 - **Modular and Versatile**
   - CKP is designed to be modular, while remaining performant.
   - Each API function and class can be used in multiple scenarios.
