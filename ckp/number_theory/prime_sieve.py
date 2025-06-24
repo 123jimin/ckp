@@ -44,20 +44,18 @@ def prime_sieve_extend(sieve: PrimeSieveData, max_n: int):
         sieve_p = p*p
         if sieve_p <= max_testable_odd:
             sieve_p = max_testable_odd + 2
-            if sieve_p % p: sieve_p += p - (sieve_p % p)
+            if (r := sieve_p % p): sieve_p += p - r
             if sieve_p % 2 == 0: sieve_p += p
         elif sieve_p > new_max_testable_odd:
             break
-        for k in range(sieve_p//2, new_len, p):
-            sieve_arr[k] = p
+        for k in range(sieve_p//2, new_len, p): sieve_arr[k] = p
 
     p_max = math.isqrt(new_max_testable_odd)
 
     for k in range(sieve._odd_primes_next//2, p_max//2+1):
-        if sieve_arr[k] == 1:
-            p = k+k+1
-            odd_primes.append(p)
-            for q in range((k+k)*(1+k), new_len, p): sieve_arr[q] = p
+        if sieve_arr[k] != 1: continue
+        odd_primes.append(p := (k2 := k+k)+1)
+        for q in range(k2*(1+k), new_len, p): sieve_arr[q] = p
         
     sieve._odd_primes_next = max(sieve._odd_primes_next, p_max + 2)
     sieve._max_testable_odd = new_max_testable_odd
