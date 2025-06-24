@@ -33,7 +33,7 @@ class Vec2:
         if isinstance(other, Vec2): return self.x * other.x + self.y * other.y
         else: return Vec2(self.x * other, self.y * other)
     def __rmul__(self, other): return Vec2(other * self.x, other * self.y)
-    def __div__(self, other): return Vec2(self.x / other, self.y / other)
+    def __truediv__(self, other): return Vec2(self.x / other, self.y / other)
     def norm(self) -> float: return hypot(self.x, self.y)
     def norm_sq(self) -> float: return self.x*self.x + self.y*self.y
     def dist(self, other) -> float: return hypot(self.x-other.x, self.y-other.y)
@@ -79,7 +79,7 @@ class Vec3:
         if isinstance(other, Vec3): return self.x * other.x + self.y * other.y + self.z * other.z
         else: return Vec3(self.x * other, self.y * other, self.z * other)
     def __rmul__(self, other): return Vec3(other * self.x, other * self.y, other * self.z)
-    def __div__(self, other): return Vec3(self.x / other, self.y / other, self.z / other)
+    def __truediv__(self, other): return Vec3(self.x / other, self.y / other, self.z / other)
     def __matmul__(self, other): return Vec3(self.y * other.z - self.z * other.y, self.z * other.x - other.z * self.x, self.x * other.y - self.y * other.x)
 
     def norm(self) -> float: return hypot(self.x, self.y, self.z)
