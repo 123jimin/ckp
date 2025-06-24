@@ -175,7 +175,8 @@ def tree_centroids_from_children(children: list[list[int]], root: int = 0, sizes
     if not children: return []
     if not sizes: sizes = tree_sizes_from_children(children, root)
 
-    half, r = divmod(len(children), 2)
+    L = len(children)
+    half, r = L // 2, L & 1
     curr = 0
     while True:
         for ch in children[curr]:
