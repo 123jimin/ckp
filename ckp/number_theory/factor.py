@@ -7,15 +7,15 @@ def factor_naive(n: int):
     """
     if n < 2: return
 
-    while n%2 == 0:
+    while not(n&1):
         yield 2
         n //= 2
     if n == 1: return
-    while n%3 == 0:
+    while not(n%3):
         yield 3
         n //= 3
     if n == 1: return
-    while n%5 == 0:
+    while not(n%5):
         yield 5
         n //= 5
     if n == 1: return
@@ -23,17 +23,17 @@ def factor_naive(n: int):
     p, psq = 7, 49
 
     while psq <= n:
-        if n%p == 0:
+        if not(n%p):
             yield p
             n //= p
-            while n%p == 0:
+            while not(n%p):
                 yield p
                 n //= p
             if n < psq:
                 if 1 < n: yield n
                 return
         p += 4
-        while n%p == 0:
+        while not(n%p):
             yield p
             n //= p
         p += 2
@@ -87,15 +87,15 @@ def factor_pollard_rho(n: int):
     """
     if n < 2: return
 
-    while n%2 == 0:
+    while not(n&1):
         yield 2
         n //= 2
     if n == 1: return
-    while n%3 == 0:
+    while not(n%3):
         yield 3
         n //= 3
     if n == 1: return
-    while n%5 == 0:
+    while not(n%5):
         yield 5
         n //= 5
     if n == 1: return
@@ -112,7 +112,7 @@ def factor_pollard_rho(n: int):
         return
     
     start = 2
-    while (d := pollard_rho_find_divisor(n, start)) == 0:
+    while not(d := pollard_rho_find_divisor(n, start)):
         start += 1
     
     yield from factor(d)
@@ -122,7 +122,7 @@ def factor(n:int):
     """
         Yields every prime factors of `n` (with duplicates), in no particular order.
 
-        The emperically best algorithm is selected based on `n`.
+        The empirically best algorithm is selected based on `n`.
     """
 
     if n < 2: return
@@ -139,8 +139,8 @@ def divisors(n:int, n_factors:Counter|list[int]|None = None):
         When `n_factors` is given, it would be regarded as the factorization of `n`.
         In this case, the provided n can either be the original value or 0.
     """
-    if n == 0:
-        if n_factors is None: raise ValueError("`n_factors` must be provided when n == 0.")
+    if not n:
+        if n_factors is None: raise ValueError("`n_factors` must be provided when n is zero.")
     elif n == 1:
         yield 1; return
     elif n < 4:

@@ -14,7 +14,7 @@ class TestSqrtModPrime(unittest.TestCase):
                 elif a_sqrt == 0:
                     self.assertEqual(legendre_symbol(a, p), -1, f"({a}/{p}) is not -1, but prime_mod_sqrt returned 0")
                 else:
-                    self.assertEqual(pow(a_sqrt, 2, p), a)
+                    self.assertEqual(pow(a_sqrt, 2, p), a, f"sqrt_mod_prime({a}, {p}) returned {a_sqrt}, which is wrong.")
 
 class TestSqrtModPrimePower(unittest.TestCase):
     def test(self):

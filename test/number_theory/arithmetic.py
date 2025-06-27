@@ -25,7 +25,7 @@ class TestNumDivisors(unittest.TestCase):
 class TestEulerPhi(unittest.TestCase):
     def test(self):
         A = [
-            0, 1, 1, 2, 2, 4, 2, 6, 4, 6,
+            1, 1, 2, 2, 4, 2, 6, 4, 6,
             4, 10, 4, 12, 6, 8, 8, 16, 6, 18,
             8, 12, 10, 22, 8, 20, 12, 18, 12, 28,
             8, 30, 16, 20, 16, 24, 12, 36, 18, 24,
@@ -33,8 +33,7 @@ class TestEulerPhi(unittest.TestCase):
             20, 32, 24, 52, 18, 40, 24, 36, 28, 58,
             16, 60, 30, 36, 32, 48, 20, 66, 32, 44,
         ]
-        for i, v in enumerate(A):
-            if i == 0: continue
+        for i, v in enumerate(A, 1):
             self.assertEqual(euler_phi(i), v, f"Incorrect euler_phi({i})")
             if i >= 2:
                 self.assertEqual(euler_phi(i, factor(i)), v,  f"Incorrect euler_phi({i}) with factors provided")

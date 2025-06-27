@@ -12,8 +12,8 @@ def num_divisors(n:int, n_factors:Counter|list[int]|None = None):
         When `n_factors` is given, it would be regarded as the factorization of n.
         In this case, the provided n can either be the original value or 0.
     """
-    if n == 0:
-        if n_factors is None: raise ValueError("`n_factors` must be provided when n == 0.")
+    if not n:
+        if n_factors is None: raise ValueError("`n_factors` must be provided when n is zero.")
     elif n <= 12:
         return (0, 1, 2, 2, 3, 2, 4, 2, 4, 3, 4, 2, 6)[n]
 
@@ -32,8 +32,8 @@ def sum_divisors(n:int, n_factors:Counter|list[int]|None = None):
         When `n_factors` is given, it would be regarded as the factorization of `n`.
         In this case, the provided n can either be the original value or 0.
     """
-    if n == 0:
-        if n_factors is None: raise ValueError("`n_factors` must be provided when n == 0.")
+    if not n:
+        if n_factors is None: raise ValueError("`n_factors` must be provided when n is zero.")
     elif n <= 12:
         return (0, 1, 3, 4, 7, 6, 12, 8, 15, 13, 18, 12, 28)[n]
 
@@ -53,8 +53,8 @@ def euler_phi(n:int, n_factors:Counter|list[int]|None = None):
         When `n_factors` is given, it would be regarded as the factorization of `n`.
         In this case, the provided n can either be the original value or 0.
     """
-    if n == 0:
-        if n_factors is None: raise ValueError("`n_factors` must be provided when n == 0.")
+    if not n:
+        if n_factors is None: raise ValueError("`n_factors` must be provided when n is zero.")
     elif n <= 12:
         return (0, 1, 1, 2, 2, 4, 2, 6, 4, 6, 4, 10, 4)[n]
 

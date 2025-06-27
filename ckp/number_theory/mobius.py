@@ -18,13 +18,13 @@ def mobius_naive(n: int) -> int:
         m = -m
     p, psq = 7, 49
     while psq <= n:
-        if n%p == 0:
+        if not(n%p):
             n //= p
-            if n%p == 0: return 0
+            if not(n%p): return 0
             m = -m
-        if n%(q := p+4) == 0:
+        if not(n%(q := p+4)):
             n //= q
-            if n%q == 0: return 0
+            if not(n%q): return 0
             m = -m
         psq += 12*p + 36
         p += 6
