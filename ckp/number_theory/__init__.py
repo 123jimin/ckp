@@ -4,6 +4,7 @@
 
 from .arithmetic import num_divisors, sum_divisors, euler_phi
 from .factor import factor, divisors
+from .mobius import mobius_sieve_init
 from .misc import iterate_idiv, extended_gcd, factorial_prime_power, comb_prime_power
 from .modular import solve_linear_mod, count_zero_mod, sum_floor_linear
 from .modular import comb_mod_prime, chinese_mod, legendre_symbol, jacobi_symbol, ZMod

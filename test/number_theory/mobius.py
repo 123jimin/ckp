@@ -1,6 +1,8 @@
 import unittest
 from ckp.number_theory.mobius import *
 
+from ckp.number_theory import is_prime
+
 class TestMobiusNaive(unittest.TestCase):
     def test_small(self):
         for (x, v) in enumerate([1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0, -1, 1, 1, 0, -1, 0, -1, 0], 1):
@@ -13,3 +15,19 @@ class TestMobiusNaive(unittest.TestCase):
             self.assertEqual(mobius_naive(x), -1, f"testing mu({x})")
         for x in [2310, 2730, 3570, 3990, 4290, 4830, 5610, 6006]:
             self.assertEqual(mobius_naive(x), -1, f"testing mu({x})")
+
+class TestMobiusSieve(unittest.TestCase):
+    def test(self):
+        N = 1000
+        sieve = mobius_sieve_init(N)
+        self.assertEqual(len(sieve.mu), (N+1)//2)
+        
+        for (k, v) in enumerate(sieve.mu):
+            self.assertEqual(v, mobius_naive(2*k+1), f"testing mu({2*k+1})")
+        
+        is_prime_manual = []
+        for (k, v) in enumerate(sieve.is_prime):
+            self.assertEqual(v, is_prime(2*k+1), f"testing is_prime({2*k+1})")
+            if v: is_prime_manual.append(2*k+1)
+        
+        self.assertListEqual(sieve.odd_primes, is_prime_manual)

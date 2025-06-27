@@ -63,7 +63,6 @@ def pollard_rho_find_divisor(n:int, start:int = 2):
     # Memory usage incurred by storing past trajectory isn't a big deal in practice.
     # Also, pre-allocating `l` doesn't seem to affect overall performance.
     i, i4, l = 0, 4, [x5, x6, x7, x8]
-    t = l.extend
     while True:
         p0, p1, p2, p3 = l[i:i4]
         x1 = (x8*x8 + 1) % n
@@ -78,7 +77,7 @@ def pollard_rho_find_divisor(n:int, start:int = 2):
         x7 = (x6*x6 + 1) % n
         if (d := g((x8 := (x7*x7 + 1) % n) - p3, n)) != 1: return 0 if d == n else d
 
-        t((x1, x2, x3, x4, x5, x6, x7, x8))
+        l += (x1, x2, x3, x4, x5, x6, x7, x8)
         i, i4 = i4, i4 + 4
 
 def factor_pollard_rho(n: int):
