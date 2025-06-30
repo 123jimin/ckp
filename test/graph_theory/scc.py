@@ -1,7 +1,8 @@
 
 import unittest
-from ckp.data_structure.graph.simple import ListGraph
 from ckp.graph_theory.scc import *
+
+from ckp.data_structure.graph.simple import ListGraph
 
 class TestStronglyConnectedComponents(unittest.TestCase):
     def test_02150(self):
