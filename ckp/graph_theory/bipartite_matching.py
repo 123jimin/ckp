@@ -38,8 +38,8 @@ def bipartite_matching(graph: BipartiteGraphData) -> BipartiteMatchingData:
         Create a bipartite matching of the given graph, using the Hopkroft-Karp algorithm.
     """
     size = 0
-    u_pair = [-1] * len(graph.u_neighbors)
-    v_pair = [-1] * len(graph.v_neighbors)
+    u_pair = [-1] * graph.U
+    v_pair = [-1] * graph.V
 
     u_neighbors = graph.u_neighbors
     dist = [-1] * len(u_pair)

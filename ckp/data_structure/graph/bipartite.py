@@ -21,8 +21,9 @@ def bipartite_graph_from_neighbors(U: int, V: int, u_neighbors: list[list[int]],
 
 def bipartite_graph_from_edges(U: int, V: int, edges: list[tuple[int, int]]|None = None):
     u_neighbors: list[list[int]] = [[] for _ in repeat(None, U)]
-    v_neighbors: list[list[int]] = [[] for _ in repeat(None, V)]
+    if not edges: return BipartiteGraphData(U, V, u_neighbors)
 
+    v_neighbors: list[list[int]] = [[] for _ in repeat(None, V)]
     for u, v in edges:
         u_neighbors[u].append(v)
         v_neighbors[v].append(u)

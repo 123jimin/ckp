@@ -19,4 +19,4 @@ def bench():
     
     return a, acr
 
-tags = ['geometry', 'min_enclosing_circle']
+tags = {'geometry', 'min_enclosing_circle'}
