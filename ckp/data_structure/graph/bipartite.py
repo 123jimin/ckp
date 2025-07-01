@@ -7,29 +7,24 @@ class BipartiteGraphData:
         It's possible that `v_neighbors` is not given.
     """
 
-    __slots__ = ('u_neighbors', 'v_neighbors')
+    __slots__ = ('U', 'V', 'u_neighbors', 'v_neighbors')
+    U: int
+    V: int
     u_neighbors: list[list[int]]
     v_neighbors: list[list[int]]|None
 
-    def __init__(self, u_neighbors: list[list[int]], v_neighbors: list[list[int]]|None = None):
-        self.u_neighbors, self.v_neighbors = u_neighbors, v_neighbors
+    def __init__(self, U: int, V: int, u_neighbors: list[list[int]], v_neighbors: list[list[int]]|None = None):
+        self.U, self.V, self.u_neighbors, self.v_neighbors = U, V, u_neighbors, v_neighbors
 
-def bipartite_graph_from_neighbors(u_neighbors: list[list[int]], v_neighbors: list[list[int]]|None = None) -> BipartiteGraphData:
-    return BipartiteGraphData(u_neighbors, v_neighbors)
+def bipartite_graph_from_neighbors(U: int, V: int, u_neighbors: list[list[int]], v_neighbors: list[list[int]]|None = None) -> BipartiteGraphData:
+    return BipartiteGraphData(U, V, u_neighbors, v_neighbors)
 
-def bipartite_graph_from_edges(edges: list[tuple[int, int]]) -> BipartiteGraphData:
-    u_neighbors: list[list[int]] = []
-    for u, v in edges:
-        if len(u_neighbors) <= u: u_neighbors += [[] for _ in range(u+1 - len(u_neighbors))]
-        u_neighbors[u].append(v)
-    return BipartiteGraphData(u_neighbors)
-
-def bipartite_graph_from_size(u: int, v: int, edges: list[tuple[int, int]]|None = None):
-    u_neighbors: list[list[int]] = [[] for _ in repeat(None, u)]
-    v_neighbors: list[list[int]] = [[] for _ in repeat(None, v)]
+def bipartite_graph_from_edges(U: int, V: int, edges: list[tuple[int, int]]|None = None):
+    u_neighbors: list[list[int]] = [[] for _ in repeat(None, U)]
+    v_neighbors: list[list[int]] = [[] for _ in repeat(None, V)]
 
     for u, v in edges:
         u_neighbors[u].append(v)
         v_neighbors[v].append(u)
 
-    return BipartiteGraphData(u_neighbors, v_neighbors)
+    return BipartiteGraphData(U, V, u_neighbors, v_neighbors)

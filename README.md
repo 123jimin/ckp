@@ -13,7 +13,6 @@ Check the documentation on <https://123jimin.github.io/ckp/>.
 - [ ] `data_structure.wavelet_tree`
 - [ ] `fourier.ntt`
 - [ ] `geometry.half_plane_intersection`
-- [ ] `graph_theory.bipartite_matching`
 - [ ] `graph_theory.max_flow.push_relabel`
 - [ ] `language` (plaintext to languages)
 - [ ] `misc.hungarian`
@@ -24,5 +23,6 @@ Check the documentation on <https://123jimin.github.io/ckp/>.
 
 - `fourier`: Find a better way to organize FFT instances?
 - `data_structure.segment_tree.ring`: Too slow!
-- `graph_theory.strongly_connected_components`: Avoid stacks without sacrificing performance?
+- `graph_theory.bipartite_matching`: Replace recursion with manual stacks.
+- `graph_theory.strongly_connected_components`: Replace recursion with manual stacks.
 - `graph_theory.tree.tree`: Add more tests for constructors.
