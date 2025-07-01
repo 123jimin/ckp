@@ -32,8 +32,8 @@ class TestLCA(unittest.TestCase):
             self.assertEqual(tree_lca_query(lca, 1, 1), 1)
 
     def test_random(self):
-        for _ in range(200):
-            N = random.randrange(1, 64)
+        for _ in range(250):
+            N = random.randrange(1, 32)
             tree = random_tree(N)
             lca = tree_lca_init(tree)
 

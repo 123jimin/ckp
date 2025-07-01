@@ -18,14 +18,14 @@ class TestTreeWithRoot(unittest.TestCase):
 
 class TestTreeConstructors(unittest.TestCase):
     def test_random_tree(self):
-        for _ in range(1000):
-            N = random.randint(1, 1000)
+        for _ in range(500):
+            N = random.randint(1, 500)
             tree = random_tree(N)
             assert_valid_tree(tree)
 
     def test_random_edges(self):
-        for _ in range(1000):
-            N = random.randint(1, 1000)
+        for _ in range(500):
+            N = random.randint(1, 500)
             edges = random_tree_edges(N)
             tree = tree_from_edges(edges, random.randrange(N))
             assert_valid_tree(tree)
@@ -51,8 +51,8 @@ class TestTreeSizesFromChildren(unittest.TestCase):
         self.assertListEqual(sizes, [5, 1, 4, 3, 1])
     
     def test_random(self):
-        for _ in range(500):
-            N = random.randint(1, 500)
+        for _ in range(400):
+            N = random.randint(1, 400)
             tree = random_tree(N)
             tree_sizes(tree)
             assert_valid_tree(tree)

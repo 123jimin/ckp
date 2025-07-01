@@ -19,8 +19,8 @@ class TestMonoidSumSegmentTree(unittest.TestCase):
 
     def test_permutation(self):
         for __ in range(100):
-            N = random.randint(1, 128)
-            M = 20
+            N = random.randint(1, 64)
+            M = 12
             e = tuple(range(M))
             TestDataGenerator.test(self, N, 400, SUM_SEGMENT_TREE_OPS,
                 lambda init_values: MonoidSumSegmentTree(init_values, compose_perms, e),

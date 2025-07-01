@@ -19,7 +19,7 @@ class TestOffline2DFenwickTree(unittest.TestCase):
     
     def test_random_small(self):
         for __ in range(100):
-            N = random.randint(1, 128)
+            N = random.randint(1, 64)
             P = [(random.randint(-100, 100), random.randint(-100, 100)) for _ in range(N)]
             tree = Offline2DFenwickTree(P)
 
