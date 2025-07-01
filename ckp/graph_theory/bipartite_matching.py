@@ -34,53 +34,90 @@ def assert_valid_bipartite_matching(graph: BipartiteGraphData, matching: Biparti
     assert len(set(u for u in matching.v_pair if u >= 0)) == matching.size
 
 def bipartite_matching(graph: BipartiteGraphData) -> BipartiteMatchingData:
-    """
-        Create a bipartite matching of the given graph, using the Hopkroft-Karp algorithm.
-    """
+    """ Create a bipartite matching of the given graph, using the Hopkroft-Karp algorithm. """
+    U, V = graph.U, graph.V
+    W = min(U, V)
+    
     size = 0
-    u_pair = [-1] * graph.U
-    v_pair = [-1] * graph.V
-
+    u_pair = [-1] * U
+    v_pair = [-1] * V
     u_neighbors = graph.u_neighbors
-    dist = [-1] * len(u_pair)
-    while (dist_nil := _bipartite_matching_bfs(u_neighbors, u_pair, v_pair, dist)) >= 0:
-        for u in range(len(u_pair)):
-            if u_pair[u] < 0 and _bipartite_matching_dfs(u_neighbors, u_pair, v_pair, dist, dist_nil, u):
-                size += 1
-    
-    return BipartiteMatchingData(size, u_pair, v_pair)
 
-def _bipartite_matching_bfs(u_neighbors: list[list[int]], u_pair: list[int], v_pair: list[int], dist: list[int]) -> int:
-    q = []
-    for u in range(len(u_pair)):
-        if u_pair[u] < 0:
-            dist[u] = 0
-            q.append(u)
-        else:
-            dist[u] = -1
-    dist_nil = -1
+    dist = [-1] * U
+    q_append = (q := []).append
 
-    for u in q:
-        if (du := dist[u]) < 0: continue
-        if dist_nil >= 0 and du >= dist_nil: continue
-
+    ## Step 0: First BFS+DFS step. ##
+    for u in range(U):
         for v in u_neighbors[u]:
-            if (vp := v_pair[v]) < 0:
-                if dist_nil < 0: dist_nil = du+1
-            elif dist[vp] < 0:
-                dist[vp] = du+1
-                q.append(vp)
+            if v_pair[v] < 0:
+                u_pair[u], v_pair[v] = v, u
+                size += 1
+                break
+        else:
+            dist[u] = 0
+            q_append(u)
 
-    return dist_nil
+    while size < W:
+        ## Step 1: BFS to find shortest augmenting paths. ##        
+        aug_not_found = True
+        dist_nil = 1
 
-def _bipartite_matching_dfs(u_neighbors: list[list[int]], u_pair: list[int], v_pair: list[int], dist: list[int], dist_nil: int, u: int) -> bool:
-    if u < 0: return True
-    
-    for v in u_neighbors[u]:
-        vp = v_pair[v]
-        if dist[u]+1 == (dist_nil if vp < 0 else dist[vp]) and _bipartite_matching_dfs(u_neighbors, u_pair, v_pair, dist, dist_nil, vp):
-            u_pair[u], v_pair[v] = v, u
-            return True
-    
-    dist[u] = -1
-    return False
+        while aug_not_found:
+            q_append = (nq := []).append
+
+            for u in q:
+                for v in u_neighbors[u]:
+                    if (vp := v_pair[v]) < 0:
+                        aug_not_found = False
+                    elif dist[vp] == -1:
+                        dist[vp] = dist_nil
+                        q_append(vp)
+
+            if aug_not_found and nq:
+                q = nq; dist_nil += 1
+            else:
+                break
+
+        if aug_not_found: break
+
+        ## Step 2: DFS to flip augmenting paths, and prepare for next BFS. ##
+        u_parent = [-2] * U
+        v_parent = [-1] * V
+        next_dist = [-1] * U
+        q_append = (q := []).append
+
+        for root in range(U):
+            if u_pair[root] >= 0: continue
+
+            u_parent[root] = -1
+            stack = [root]; stack_pop, stack_push = stack.pop, stack.append
+
+            while stack:
+                ndu = dist[u := stack_pop()] + 1
+                for v in u_neighbors[u]:
+                    if v_parent[v] >= 0: continue
+
+                    if (vp := v_pair[v]) < 0:
+                        if ndu != dist_nil: continue
+                        v_parent[v] = u
+                        while v >= 0:
+                            nv = u_pair[u := v_parent[v]]
+                            u_pair[u], v_pair[v] = v, u
+                            v = nv
+                        size += 1
+                        stack = []
+                        break
+                    else:
+                        if ndu != dist[vp]: continue
+                        v_parent[v] = u
+                        if u_parent[vp] == -2:
+                            u_parent[vp] = v
+                            stack_push(vp)
+            
+            if u_pair[root] < 0:
+                next_dist[root] = 0
+                q_append(root)
+        
+        dist = next_dist
+
+    return BipartiteMatchingData(size, u_pair, v_pair)

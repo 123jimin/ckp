@@ -23,9 +23,17 @@ class TestBipartiteMatching(unittest.TestCase):
 
         self.assertEqual(len(matching), 0)
         assert_valid_bipartite_matching(graph, matching)
+    
+    def test_simple(self):
+        graph = bipartite_graph_from_edges(5, 4, [(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (2, 0), (2, 1), (3, 0), (4, 0), (4, 2)])
+        matching = bipartite_matching(graph)
+
+        self.assertEqual(len(matching), 4)
+        assert_valid_bipartite_matching(graph, matching)
 
     def test_wikipedia(self):
         graph = bipartite_graph_from_edges(5, 5, [(0, 0), (0, 1), (1, 0), (1, 4), (2, 2), (2, 3), (3, 0), (3, 4), (4, 0), (4, 3)])
         matching = bipartite_matching(graph)
 
+        self.assertEqual(len(matching), 5)
         assert_valid_bipartite_matching(graph, matching)
