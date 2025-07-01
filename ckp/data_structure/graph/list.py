@@ -4,7 +4,7 @@ from itertools import repeat
 class ListGraphData:
     """ Weightless directed graph, with no supports for duplicated edge checks, nor edge removals. """
 
-    __slots__ = ('neighbors')
+    __slots__ = ('neighbors',)
     neighbors: list[list[int]]
 
     def __init__(self, neighbors: list[list[int]]):
