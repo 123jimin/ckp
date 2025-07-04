@@ -52,8 +52,8 @@ class FenwickTree(AbstractSegmentTree):
         if end > L: end = L
 
         if start >= end: return 0
-
-        return self._prefix_sum(end) - self._prefix_sum(start)
+        if start: return self._prefix_sum(end) - self._prefix_sum(start)
+        else: return self._prefix_sum(end)
 
     def sum_all(self):
         """ Get the sum of all elements in this tree. """
