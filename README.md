@@ -23,6 +23,5 @@ Check the documentation on <https://123jimin.github.io/ckp/>.
 
 - `fourier`: Find a better way to organize FFT instances?
 - `data_structure.segment_tree.ring`: Too slow!
-- `graph_theory.bipartite_matching`: Replace recursion with manual stacks.
 - `graph_theory.strongly_connected_components`: Replace recursion with manual stacks.
 - `graph_theory.tree.tree`: Add more tests for constructors.
