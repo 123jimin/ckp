@@ -26,6 +26,11 @@ class TestMonoidSumSegmentTree(unittest.TestCase):
                 lambda init_values: MonoidSumSegmentTree(init_values, compose_perms, e),
                 lambda init_values: NaiveMonoidSegmentTree(init_values, compose_perms, e),
                 value_generator = lambda: tuple(random.sample(range(M), M)))
+    
+    def test_permutation_simple(self):
+        init_values = [(1, 0, 2)] + [(0, 1, 2)]*3 + [(0, 2, 1)]
+        tree = MonoidSumSegmentTree(init_values, compose_perms, (0, 1, 2))
+        self.assertEqual(tree.sum_all(), (2, 0, 1))
 
     def test_example(self):
         sieve = prime_sieve_init(10_000_000)
