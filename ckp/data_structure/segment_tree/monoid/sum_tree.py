@@ -17,7 +17,7 @@ class AbstractSumSegmentTree(AbstractSegmentTree):
 class MonoidSumSegmentTree(AbstractSumSegmentTree):
     """ Monoid segment tree that only supports range sum query. """
 
-    __slots__ = ('_zero', '_op',)
+    __slots__ = ('_zero', '_op')
 
     def __init__(self, init_values: list|int, monoid_op, monoid_zero):
         self._op, self._zero = monoid_op, monoid_zero
