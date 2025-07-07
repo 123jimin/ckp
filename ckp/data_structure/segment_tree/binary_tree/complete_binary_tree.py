@@ -75,9 +75,15 @@ def complete_binary_tree_add_to(tree: list, ind: int, value):
     while curr_ind > 1: tree[curr_ind := curr_ind//2] += value
 
 def complete_binary_tree_build_monoid(tree: list, monoid_op):
-    """ Build the tree with the given `monoid_op`, which may not be commutative. """
+    """ Build the tree with the given `monoid_op`. """
     for i in range(len(tree)//2-1, 0, -1):
         i2 = i+i; tree[i] = monoid_op(tree[i2], tree[i2+1])
+
+def complete_binary_tree_build_max(tree: list):
+    """ Build the tree with `max` as the monoid operation. """
+    for i in range(len(tree)//2-1, 0, -1):
+        i2 = i+i; x, y = tree[i2], tree[i2+1]
+        tree[i] = x if x > y else y
 
 def complete_binary_tree_sum_range_monoid(tree: list, start: int, end: int, monoid_op, monoid_zero):
     L = len(tree)//2

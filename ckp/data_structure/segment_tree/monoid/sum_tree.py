@@ -135,7 +135,7 @@ class FastSumSegmentTree(AbstractSumSegmentTree):
         curr_ind, tree = self._len + ind, self._tree
         tree[curr_ind] += value
 
-        while curr_ind > 1: tree[curr_ind := curr_ind // 2] += value
+        while curr_ind > 1: tree[curr_ind := curr_ind//2] += value
 
 class MaxSegmentTree(AbstractSumSegmentTree):
     """ Segment tree for calculating max of a range of numbers. """
@@ -151,8 +151,8 @@ class MaxSegmentTree(AbstractSumSegmentTree):
             return
 
         L = self._len = len(init_values)
-        self._tree = complete_binary_tree_from_list(init_values, min_value)
-        complete_binary_tree_build_monoid(self._tree, max)
+        tree = self._tree = complete_binary_tree_from_list(init_values, min_value)
+        complete_binary_tree_build_max(tree)
     
     def sum_range(self, start: int, end: int):
         """ Get the max value of elements at indices in the half-open range [start, end). """     
@@ -189,14 +189,14 @@ class MaxSegmentTree(AbstractSumSegmentTree):
 
         if prev_value < changed_value:
             while curr_ind > 1:
-                if changed_value <= tree[curr_ind := curr_ind // 2]: break
+                if changed_value <= tree[curr_ind := curr_ind//2]: break
                 tree[curr_ind] = changed_value
         else:
             while curr_ind > 1:
                 other_value = tree[curr_ind^1]
                 if prev_value <= other_value: break
                 if changed_value < other_value: changed_value = other_value
-                tree[curr_ind := curr_ind // 2] = changed_value
+                tree[curr_ind := curr_ind//2] = changed_value
     
     def add_to(self, ind: int, value):
         """ Update `self[ind]` to `max(self[ind], value)`. """
@@ -251,7 +251,7 @@ class GCDSegmentTree(AbstractSumSegmentTree):
         changed_value = tree[curr_ind] = value
 
         while curr_ind > 1:
-            next_ind = curr_ind // 2
+            next_ind = curr_ind//2
             changed_value = tree[next_ind] = gcd(changed_value, tree[curr_ind^1])
             curr_ind = next_ind
 
@@ -264,7 +264,7 @@ class GCDSegmentTree(AbstractSumSegmentTree):
         tree[curr_ind] = gcd(tree[curr_ind], value)
 
         while curr_ind > 1:
-            orig_value = tree[curr_ind := curr_ind // 2]
+            orig_value = tree[curr_ind := curr_ind//2]
             changed_value = gcd(orig_value, value)
             if orig_value == changed_value: return
             tree[curr_ind] = changed_value
