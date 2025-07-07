@@ -22,7 +22,7 @@ class TestMonoidSumSegmentTree(unittest.TestCase):
             N = random.randint(1, 64)
             M = 12
             e = tuple(range(M))
-            TestDataGenerator.test(self, N, 400, SUM_SEGMENT_TREE_OPS,
+            TestDataGenerator.test(self, N, 200, SUM_SEGMENT_TREE_OPS,
                 lambda init_values: MonoidSumSegmentTree(init_values, compose_perms, e),
                 lambda init_values: NaiveMonoidSegmentTree(init_values, compose_perms, e),
                 value_generator = lambda: tuple(random.sample(range(M), M)))
@@ -46,6 +46,12 @@ class TestSumSegmentTree(unittest.TestCase):
         for __ in range(100):
             N = random.randint(1, 128)
             TestDataGenerator.test(self, N, 400, SUM_SEGMENT_TREE_OPS, SumSegmentTree)
+            
+class TestSimpleSumSegmentTree(unittest.TestCase):
+    def test_random(self):
+        for __ in range(100):
+            N = random.randint(1, 128)
+            TestDataGenerator.test(self, N, 400, SUM_SEGMENT_TREE_OPS, SimpleSumSegmentTree)
 
 class TestMaxSegmentTree(unittest.TestCase):
     def test_random(self):

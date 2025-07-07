@@ -2,6 +2,7 @@
 
 from math import gcd
 from ..abc import AbstractSegmentTree
+from ..binary_tree.complete_binary_tree import *
 
 class AbstractSumSegmentTree(AbstractSegmentTree):
     """ Common methods for all monoid sum segment tree and their derivatives. """
@@ -131,6 +132,34 @@ class SumSegmentTree(AbstractSumSegmentTree):
         tree[curr_ind] += value
 
         while curr_ind > 1: tree[curr_ind := curr_ind // 2] += value
+
+class SimpleSumSegmentTree(AbstractSumSegmentTree):
+    __slots__ = ()
+    
+    def __init__(self, init_values: list|int):
+        """ Creates a segment tree on `init_values`. """
+        if isinstance(init_values, int):
+            L = self._len = init_values
+            self._tree = complete_binary_tree_from_size(L)
+            return
+
+        L = self._len = len(init_values)
+        self._tree = complete_binary_tree_from_list(init_values)
+        complete_binary_tree_build(self._tree)
+    
+    def sum_range(self, start: int, end: int):
+        """ Get the sum of elements at indices in the half-open range [start, end). """
+        return complete_binary_tree_sum_range(self._tree, start, end)
+    
+    def sum_all(self):
+        """ Get the sum of all elements in this tree. """
+        return self._tree[1] if self._len else 0
+    
+    def __setitem__(self, ind: int, value):
+        complete_binary_tree_set(self._tree, ind, value)
+
+    def add_to(self, ind: int, value):
+        complete_binary_tree_add_to(self._tree, ind, value)
 
 class MaxSegmentTree(AbstractSumSegmentTree):
     """ Segment tree for calculating max of a range of numbers. """
