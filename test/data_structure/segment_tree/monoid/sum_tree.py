@@ -47,11 +47,11 @@ class TestSumSegmentTree(unittest.TestCase):
             N = random.randint(1, 128)
             TestDataGenerator.test(self, N, 400, SUM_SEGMENT_TREE_OPS, SumSegmentTree)
             
-class TestSimpleSumSegmentTree(unittest.TestCase):
+class TestFastSumSegmentTree(unittest.TestCase):
     def test_random(self):
         for __ in range(100):
             N = random.randint(1, 128)
-            TestDataGenerator.test(self, N, 400, SUM_SEGMENT_TREE_OPS, SimpleSumSegmentTree)
+            TestDataGenerator.test(self, N, 400, SUM_SEGMENT_TREE_OPS, FastSumSegmentTree)
 
 class TestMaxSegmentTree(unittest.TestCase):
     def test_random(self):
