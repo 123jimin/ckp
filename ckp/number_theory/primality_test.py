@@ -11,7 +11,7 @@ def is_prime_trial_division(n: int) -> bool:
 
 def is_prime_trial_division_fast(n: int) -> bool:
     """
-        Primality test using trial division.
+        Primality test using trial division. Consider using `is_prime_trial_division` or `is_prime` instead of this one.
         - Time: `O(sqrt(n))`
     """
 
