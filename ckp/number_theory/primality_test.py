@@ -96,7 +96,7 @@ def is_prime(n: int) -> bool:
         if 1 < pow(158, nh, n) < n1: return False
         return True
     
-    # For brevity. At this point, overhead caused by this is ignorable.
+    # For brevity. At this point, overhead caused by this is negligible.
     p23 = (2, 3, 5, 7, 11, 13, 17, 19, 23)
     return is_prime_miller_rabin_with_base(n,
         (31, 73) if n < 9080191 else 
