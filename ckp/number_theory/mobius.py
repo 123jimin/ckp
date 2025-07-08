@@ -79,3 +79,6 @@ def mobius_sieve_init(max_n: int) -> MobiusSieveData:
             else: mu[x] = 0; break
 
     return data
+
+def mobius_sieve_query(sieve: MobiusSieveData, n: int) -> int:
+    return (-sieve.mu[n//4] if m == 2 else sieve.mu[n//2]) if (m := n&3) else 0
