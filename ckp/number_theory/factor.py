@@ -33,7 +33,7 @@ def factor_trial_division(n: int):
     
     if 1 < n: yield n
 
-def pollard_rho_find_divisor(n:int, start:int = 2):
+def pollard_rho_find_divisor(n: int, start: int = 2):
     """ Using a proper divisor of `n` , using Pollard's rho algorithm. """
     g = math.gcd
     if 1 < (d := g(n, start)) < n: return d
