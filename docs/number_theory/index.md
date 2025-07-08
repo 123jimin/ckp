@@ -172,7 +172,7 @@ Yields every divisors of `n`, in *no particular order*.
 
 ### Specific Algorithms under `ckp.number_theory.factor`
 
-> `factor_naive(n: int) -> Generator[int]`
+> `factor_trial_division(n: int) -> Generator[int]`
 
 Factor `n` using trial division.
 
