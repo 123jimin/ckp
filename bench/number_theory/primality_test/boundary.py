@@ -3,7 +3,7 @@
 """
 
 from bench.util import bench
-from ckp.number_theory.primality_test import is_prime, is_prime_naive, is_prime_miller_rabin_with_base
+from ckp.number_theory.primality_test import is_prime, is_prime_miller_rabin_with_base
 from math import isqrt
 
 def is_prime_with_naive(n: int) -> bool:

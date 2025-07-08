@@ -62,11 +62,21 @@ This is a probable primality test, but there's no known counter-example.
 
 ### Specific Algorithms under `ckp.number_theory.primality_test`
 
-> `is_prime_naive(n: int) -> bool`
+You need to directly import these functions via `from ckp.number_theory.primality_test import ...`.
+
+> `is_prime_trial_division(n: int) -> bool`
 
 Performs primality testing using trial division.
 
-Do use this function instead of `is_prime` when `n` is small (million-ish) and you wish the full code to be small.
+While this function is slower than both `is_prime_trial_division_fast` and `is_prime`, it has much smaller code footprint, suitable for writing simple codes.
+
+- Time Complexity: $\Theta(\sqrt n)$
+
+> `is_prime_trial_division_fast(n: int) -> bool`
+
+Performs primality testing using trial division.
+
+While this function is a bit faster than `is_prime_trial_division`, it has more code footprint and much slower than `is_prime`. Consider using either of those two instead.
 
 - Time Complexity: $\Theta(\sqrt n)$
 

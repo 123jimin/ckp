@@ -1,7 +1,3 @@
-"""
-    Compare CKP's primality test with primality tests from different libraries.
-"""
-
 from bench.util import bench
 from ckp.number_theory.primality_test import is_prime_miller_rabin_with_base
 
