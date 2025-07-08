@@ -2,14 +2,18 @@ import unittest
 from ckp.number_theory.primality_test import *
 
 class TestIsPrimeNaive(unittest.TestCase):
-    def test(self):
-        self.assertFalse(is_prime_naive(-1), "-1 is not a prime number")
-        self.assertFalse(is_prime_naive(0), "0 is not a prime number")
-        self.assertTrue(is_prime_naive(1_000_000_009))
-        
+    def test_out_of_range(self):
+        for n in (-1, 0, 1):
+            self.assertFalse(is_prime_naive(n), f"{n} is not a prime number")
+                
+    def test_small(self):
         first_200_primes = set([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199])
         for n in range(1, 200):
-            self.assertEqual(n in first_200_primes, is_prime_naive(n), f"primality test for {n=}")
+            self.assertEqual(is_prime_naive(n), n in first_200_primes, f"primality test for {n=}")
+            self.assertFalse(is_prime_naive(n*n), f"primality test for {n*n=}")
+            
+    def test_large(self):
+        self.assertTrue(is_prime_naive(1_000_000_009))
 
 class TestIsPrime(unittest.TestCase):
     def test_next_googol(self):
@@ -17,10 +21,11 @@ class TestIsPrime(unittest.TestCase):
         while not is_prime(x): x += 1
         self.assertEqual(x - 10**100, 267)
     
-    def test_small(self):
-        self.assertFalse(is_prime(-1), "-1 is not a prime number")
-        self.assertFalse(is_prime(0), "0 is not a prime number")
+    def test_out_of_range(self):
+        for n in (-1, 0, 1):
+            self.assertFalse(is_prime(n), f"{n} is not a prime number")
         
+    def test_small(self):        
         for n in range(1, 20000):
             self.assertEqual(is_prime(n), is_prime_naive(n), f"primality test for {n=}")
 

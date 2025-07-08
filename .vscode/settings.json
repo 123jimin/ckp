@@ -49,6 +49,8 @@
         "oprev",
         "powerset",
         "primality",
+        "pseudoprime",
+        "pseudoprimes",
         "pypy",
         "quadedge",
         "rcand",
