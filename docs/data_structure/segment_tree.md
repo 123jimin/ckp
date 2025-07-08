@@ -57,7 +57,7 @@ CKP also provides segment tree implementations specialized for specific monoids/
 
 | Prefix | Description |
 | ------ | ----------- |
-| (None) | Numeric Python type. (The ring `(+, *, 0, 1)`) |
+| (None) | Python's numeric type. (The ring `(+, *, 0, 1)`) |
 | `Monoid` / `Ring` | An arbitrary monoid or ring. |
 | `CommutativeMonoid` | A commutative monoid. |
 | `Max` / `Min` | Monoids `(max, min_value)` and `(min, max_value)`. |
@@ -151,3 +151,5 @@ Here are the tables of segment trees implemented by CKP.
 ### Merge Sort
 
 ### Persistent
+
+### Complete Binary Tree

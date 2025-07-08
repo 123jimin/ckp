@@ -70,7 +70,7 @@ Contains various functions related to number theory, mostly for working on a fin
 ### [Data Structures: `ckp.data_structure`](./data_structure/index.md)
 
 - [Disjoint Set](./data_structure/disjoint_set.md)
-- [Segmented Tree](./data_structure/segment_tree.md)
+- [Segment Tree](./data_structure/segment_tree.md)
 - [Sorted Containers](./data_structure/segment_tree.md)
 
 ### [Graph Theory: `ckp.graph_theory`](./graph_theory/index.md)

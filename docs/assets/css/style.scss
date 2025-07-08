@@ -23,10 +23,14 @@ footer {
     width: 260px;
 }
 
-/* Usually for function signatures. */
+/* For function signatures. */
 blockquote code {
     font-style: normal;
     background-color: rgba(0, 0, 0, 0.05);
     padding: .75em;
     border-radius: .75em;
+}
+
+a > code {
+    color: inherit !important;
 }

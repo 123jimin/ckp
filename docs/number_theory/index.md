@@ -200,7 +200,9 @@ Same as `sqrt_mod(n, p**k)`, but for a prime power `p**k`.
 
 > `iterate_idiv(x: int) -> Generator[tuple[int, int, int]]`
 
-Yields tuples $(v, i_b, i_e)$, such that $v = \lfloor \frac{x}{i} \rfloor$ if and only if $i_b \le i < i_e$, in a decreasing order of v.
+Yields tuples $(q, i_b, i_e)$, such that $q = \lfloor \frac{x}{i} \rfloor$ if and only if $i_b \le i < i_e$, in a decreasing order of q.
+
+Note that using this function is about 25% slower than using `q == x//a; b = x//q+1; a = b`.
 
 - Time Complexity: $\Theta(\sqrt x)$
 
