@@ -88,13 +88,12 @@ def is_prime(n: int) -> bool:
     # Fermat test using base=45 and 158.
     if n < 4209661:
         if not(n%17 and n%19 and n%23 and n%29 and n%31 and n%37): return False
-        allowed = (1, n-1)
-        nh = n // 2
+        n1, nh = n - 1, n // 2
 
-        if pow(45, nh, n) not in allowed: return False
+        if 1 < pow(45, nh, n) < n1: return False
         if n < 310381: return True
         
-        if pow(158, nh, n) not in allowed: return False
+        if 1 < pow(158, nh, n) < n1: return False
         return True
     
     # For brevity. At this point, overhead caused by this is ignorable.
