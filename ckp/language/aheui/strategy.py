@@ -29,6 +29,7 @@ def aheui_make_naive_from(top: int|None, value: int) -> str:
     if not value: return "빠타"
     if value == 1: return "빠나"
     if 2 <= value <= 9: return "마" + AHEUI_NUMERALS[value]
+    if top*top == value: return "빠따"
 
     candidates = []
     if value > top:
@@ -55,6 +56,8 @@ def aheui_make_from(top: int|None, value: int, effort: int = 0) -> str:
     if 2 <= value <= 9: return "마" + AHEUI_NUMERALS[value]
     if 2 <= value-top <= 9: return AHEUI_NUMERALS[value-top] + "다"
     if 2 <= top-value <= 9: return AHEUI_NUMERALS[top-value] + "타"
+    if value%top == 0 and 2 <= value//top <= 9: return AHEUI_NUMERALS[value//top] + "따"
+    if top*top == value: return "빠따"
     
     if not effort: return aheui_make_naive_from(top, value)
 
@@ -64,9 +67,13 @@ def aheui_make_from(top: int|None, value: int, effort: int = 0) -> str:
 
         if value % top == 0:
             candidates.append(aheui_make_from(None, value//top, effort-1) + "따")
+            candidates.append("빠" + aheui_make_from(top, value//top, effort-1) + "따")
         else:
             candidates.append(aheui_make_from(None, value//top, effort-1) + "따" + aheui_make_from(top*(value//top), value, effort-1))
             candidates.append(aheui_make_from(None, 1 + value//top, effort-1) + "따" + aheui_make_from(top*(value//top+1), value, effort-1))
+            
+            candidates.append("빠" + aheui_make_from(top, value//top, effort-1) + "따" + aheui_make_from(top*(value//top), value, effort-1))
+            candidates.append("빠" + aheui_make_from(top, 1 + value//top, effort-1) + "따" + aheui_make_from(top*(value//top+1), value, effort-1))
     else:
         candidates.append(aheui_make_from(None, top-value, effort-1) + "타")
 
