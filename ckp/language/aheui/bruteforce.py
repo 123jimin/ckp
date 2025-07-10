@@ -38,7 +38,7 @@ def aheui_bruteforce():
             if (prev_len := stack_seen.get(next_stack)) is not None and prev_len <= next_code_len: continue
 
             min_to_single = next_code_len + len(next_stack) - 1
-            if min_to_single > 11: continue
+            if min_to_single > 12: continue
 
             next_code = code + op
             if len(next_stack) == 1: yield (next_stack[0], next_code)
@@ -57,20 +57,25 @@ if __name__ == '__main__':
                 print(curr_len, len(min_code), "range", min(min_code.keys()), max(min_code.keys()))
                 random_v = choice(list(min_code.keys()))
                 print("Example:", random_v, "=>", min_code[random_v])
-                if curr_len == 10:
+                if curr_len == 11:
                     pos_arr = []
                     i = 0
                     while i in min_code:
                         pos_arr.append(min_code[i])
                         i += 1
-                    print(pos_arr)
+                    code_arr = []
+                    code_arr.append("OPTIMAL_POS_INT_CODE = " + str(pos_arr) + "\n")
+                    code_arr.append("OPTIMAL_POS_INT_LEN = list(map(len, OPTIMAL_POS_INT_CODE))\n\n")
                     neg_arr = []
                     i = 0
                     while i in min_code:
                         neg_arr.append(min_code[i])
                         i -= 1
                     i = 0
-                    print(neg_arr)
+                    code_arr.append("OPTIMAL_NEG_INT_CODE = " + str(neg_arr) + "\n")
+                    code_arr.append("OPTIMAL_NEG_INT_LEN = list(map(len, OPTIMAL_NEG_INT_CODE))")
+                    with open("aheui-optimal.py", "w") as f:
+                        f.writelines(code_arr)
                     exit(0)
             curr_len = len(code)
         min_code[v] = code

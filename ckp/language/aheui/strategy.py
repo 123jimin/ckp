@@ -5,9 +5,9 @@ from functools import cache
 AHEUI_NUMERALS = ('반반타', '발밤타', '반', '받', '밤', '발', '밦', '밝', '밣', '밞')
 
 @cache
-def aheui_get_naive_nonneg(n: int) -> str:
-    """ Returns code that pushes `n` on the stack. """
-    assert(0 <= n)
+def aheui_push_int_naive(n: int) -> str:
+    """ Returns any "good enough" Aheui code that pushes `n` onto an empty stack. """
+    if n < 0: return "반" + aheui_push_int_naive(2-n) + "타"
 
     if n < len(AHEUI_NUMERALS): return AHEUI_NUMERALS[n]
     if n <= 2*(len(AHEUI_NUMERALS)-1):
@@ -15,12 +15,12 @@ def aheui_get_naive_nonneg(n: int) -> str:
         return AHEUI_NUMERALS[m] + AHEUI_NUMERALS[n-m] + "다"
     
     for d in range(9, 1, -1):
-        if n%d == 0: return AHEUI_NUMERALS[d] + aheui_get_naive_nonneg(n // d) + "따"
+        if n%d == 0: return AHEUI_NUMERALS[d] + aheui_push_int_naive(n // d) + "따"
     
     if n%9 < 2 and n%8 >= 2:
-        return AHEUI_NUMERALS[n%8] + AHEUI_NUMERALS[8] + aheui_get_naive_nonneg(n//8) + "따다"
+        return AHEUI_NUMERALS[n%8] + AHEUI_NUMERALS[8] + aheui_push_int_naive(n//8) + "따다"
     
-    return AHEUI_NUMERALS[n%9] + AHEUI_NUMERALS[9] + aheui_get_naive_nonneg(n//9) + "따다"
+    return AHEUI_NUMERALS[n%9] + AHEUI_NUMERALS[9] + aheui_push_int_naive(n//9) + "따다"
 
 @cache
 def aheui_make_naive_from(top: int|None, value: int) -> str:
@@ -33,15 +33,15 @@ def aheui_make_naive_from(top: int|None, value: int) -> str:
 
     candidates = []
     if value > top:
-        candidates.append(aheui_get_naive_nonneg(value - top) + "다")
+        candidates.append(aheui_push_int_naive(value - top) + "다")
 
         if value % top == 0:
-            candidates.append(aheui_get_naive_nonneg(value // top) + "따")
+            candidates.append(aheui_push_int_naive(value // top) + "따")
         else:
-            candidates.append(aheui_get_naive_nonneg(value // top) + "따" + aheui_get_naive_nonneg(value % top) + "다")
-            candidates.append(aheui_get_naive_nonneg(1 + value // top) + "따" + aheui_get_naive_nonneg(top - value % top) + "타")
+            candidates.append(aheui_push_int_naive(value // top) + "따" + aheui_push_int_naive(value % top) + "다")
+            candidates.append(aheui_push_int_naive(1 + value // top) + "따" + aheui_push_int_naive(top - value % top) + "타")
     else:
-        candidates.append(aheui_get_naive_nonneg(top - value) + "타")
+        candidates.append(aheui_push_int_naive(top - value) + "타")
 
     return min(candidates, key=len)
 
