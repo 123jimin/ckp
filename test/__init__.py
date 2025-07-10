@@ -3,6 +3,7 @@ from .data_structure import *
 from .fourier import *
 from .geometry import *
 from .graph_theory import *
+from .language import *
 from .linear_algebra import *
 from .misc import *
 from .nimber import *
