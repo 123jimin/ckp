@@ -1,5 +1,5 @@
 from bench.util import bench
-from ckp.data_structure.segment_tree import SumSegmentTree, AbstractSumSegmentTree
+from ckp.data_structure.segment_tree import FastSumSegmentTree, SumSegmentTree, AbstractSumSegmentTree
 from test.data_structure.segment_tree.util.data_generator import TestDataGenerator
 import cProfile
 
@@ -72,7 +72,11 @@ data_gen = TestDataGenerator(N,  ['set', 'sum_range', 'get'], lambda: random.ran
 init_values = data_gen.list()
 ops = [data_gen.op() for _ in range(Q)]
 
-def bench_sum():
+def bench_fast():
+    res = TestDataGenerator.bench(FastSumSegmentTree(init_values), ops)
+    assert(sum(res) == 327828661)
+
+def bench_default():
     res = TestDataGenerator.bench(SumSegmentTree(init_values), ops)
     assert(sum(res) == 327828661)
 
@@ -82,8 +86,9 @@ def bench_alt():
 
 if __name__ == "__main__":
     bench([
-        bench_sum,
+        bench_fast,
+        bench_default,
         bench_alt,
-    ], num_trials=10)
+    ], num_trials=30)
 
-    cProfile.runctx("for _ in range(10): f()", {'f': bench_alt}, {}, sort='tottime')
+    # cProfile.runctx("for _ in range(10): f()", {'f': bench_alt}, {}, sort='tottime')

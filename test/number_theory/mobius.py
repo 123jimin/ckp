@@ -25,6 +25,9 @@ class TestMobiusSieve(unittest.TestCase):
         for (k, v) in enumerate(sieve.mu):
             self.assertEqual(v, mobius_naive(2*k+1), f"testing mu({2*k+1})")
         
+        for k in range(1, N+1):
+            self.assertEqual(mobius_sieve_query(sieve, k), mobius_naive(k), f"testing mu({k})")
+        
         is_prime_manual = []
         for (k, v) in enumerate(sieve.is_prime):
             self.assertEqual(v, is_prime(2*k+1), f"testing is_prime({2*k+1})")

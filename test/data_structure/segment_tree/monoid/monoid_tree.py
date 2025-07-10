@@ -12,8 +12,8 @@ class TestNumberSegmentTree(unittest.TestCase):
             N = random.randint(1, 128)
             TestDataGenerator.test(self, N, 400, MONOID_SEGMENT_TREE_OPS, NumberSegmentTree)
 
-class TestSimpleNumberSegmentTree(unittest.TestCase):
+class TestFastNumberSegmentTree(unittest.TestCase):
     def test_random(self):
         for __ in range(100):
             N = random.randint(1, 128)
-            TestDataGenerator.test(self, N, 400, MONOID_SEGMENT_TREE_OPS, SimpleNumberSegmentTree)
+            TestDataGenerator.test(self, N, 400, MONOID_SEGMENT_TREE_OPS, FastNumberSegmentTree)

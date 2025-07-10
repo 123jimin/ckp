@@ -62,11 +62,21 @@ This is a probable primality test, but there's no known counter-example.
 
 ### Specific Algorithms under `ckp.number_theory.primality_test`
 
-> `is_prime_naive(n: int) -> bool`
+You need to directly import these functions via `from ckp.number_theory.primality_test import ...`.
+
+> `is_prime_trial_division(n: int) -> bool`
 
 Performs primality testing using trial division.
 
-Do use this function instead of `is_prime` when `n` is small (million-ish) and you wish the full code to be small.
+While this function is slower than both `is_prime_trial_division_fast` and `is_prime`, it has much smaller code footprint, suitable for writing simple codes.
+
+- Time Complexity: $\Theta(\sqrt n)$
+
+> `is_prime_trial_division_fast(n: int) -> bool`
+
+Performs primality testing using trial division.
+
+While this function is a bit faster than `is_prime_trial_division`, it has more code footprint and much slower than `is_prime`. Consider using either of those two instead.
 
 - Time Complexity: $\Theta(\sqrt n)$
 
@@ -162,7 +172,7 @@ Yields every divisors of `n`, in *no particular order*.
 
 ### Specific Algorithms under `ckp.number_theory.factor`
 
-> `factor_naive(n: int) -> Generator[int]`
+> `factor_trial_division(n: int) -> Generator[int]`
 
 Factor `n` using trial division.
 
@@ -200,7 +210,9 @@ Same as `sqrt_mod(n, p**k)`, but for a prime power `p**k`.
 
 > `iterate_idiv(x: int) -> Generator[tuple[int, int, int]]`
 
-Yields tuples $(v, i_b, i_e)$, such that $v = \lfloor \frac{x}{i} \rfloor$ if and only if $i_b \le i < i_e$, in a decreasing order of v.
+Yields tuples $(q, i_b, i_e)$, such that $q = \lfloor \frac{x}{i} \rfloor$ if and only if $i_b \le i < i_e$, in a decreasing order of q.
+
+Note that using this function is about 25% slower than using `q == x//a; b = x//q+1; a = b`.
 
 - Time Complexity: $\Theta(\sqrt x)$
 

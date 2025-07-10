@@ -4,3 +4,10 @@ plugins:
 
 title: CKP
 description: Pure Python implementations of competitive programming algorithms.
+
+sidebar:
+  - example
+  - data_structure
+  - graph_theory
+  - number_theory
+  - numeric

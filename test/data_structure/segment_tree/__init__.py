@@ -1,3 +1,5 @@
+from .binary_tree import *
+
 from .fenwick import *
 from .monoid import *
 from .ring import *

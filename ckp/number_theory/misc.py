@@ -2,27 +2,34 @@ def iterate_idiv(x: int):
     """
         Yields tuples of ([x/i], i_begin, i_end), in a decreasing order for [x/i].
 
-        In other words, when this function yields `(a, b, c)`, then `x//i == a` holds for all `i` precisely in `range(b, c)`. 
+        In other words, values `(q, a, b)` represent that `x//i == q` holds for all `i` precisely in `range(a, b)`. 
+
+        Note that using this function is about 25% slower than using `q = x//a; b = x//q+1; a = b`.
 
         Time complexity: O(sqrt(x))
     """
-    prev_val = x
-    prev_i = 1
-    if x == 2:
-        yield (2, 1, 2)
-        yield (1, 2, 3)
+    yield(x, 1, 2)
+
+    if x <= 3:
+        if x == 2: yield (1, 2, 3)
+        elif x == 3: yield (1, 2, 4)
         return
-    for i in range(2, x+1):
-        curr_val = x // i
-        if curr_val == prev_val:
-            prev_i = i-1
-            break
-        yield (prev_val, i-1, i)
-        prev_val = curr_val
-    for k in range(prev_val, 0, -1):
-        ub = x//k
-        yield (k, prev_i, ub+1)
-        prev_i = ub+1
+    
+    prev_q = x//2
+    
+    for i in range(3, x+1):
+        if (q := x//i) == prev_q: break
+        yield (prev_q, i-1, i)
+        prev_q = q
+    
+    i -= 1
+    
+    for q in range(prev_q, 1, -1):
+        next_i = x//q + 1
+        yield (q, i, next_i)
+        i = next_i
+    
+    yield(1, i, x+1)
 
 def extended_gcd(x:int, y:int) -> tuple[int, int, int]:
     """ Returns `(g, a, b)` such that `g == math.gcd(x, y)`, and `x*a + y*b = g`."""

@@ -3,14 +3,14 @@ from ckp.number_theory.factor import *
 
 from ckp.number_theory.primality_test import is_prime
 
-class TestFactorNaive(unittest.TestCase):
+class TestFactorTrialDivision(unittest.TestCase):
     def test(self):
-        self.assertEqual(len(list(factor_naive(-1))), 0)
-        self.assertEqual(len(list(factor_naive(0))), 0)
-        self.assertEqual(len(list(factor_naive(1))), 0)
+        self.assertEqual(len(list(factor_trial_division(-1))), 0)
+        self.assertEqual(len(list(factor_trial_division(0))), 0)
+        self.assertEqual(len(list(factor_trial_division(1))), 0)
         for n in range(2, 5001):
             for k in range(1, 6):
-                factors = list(factor_naive(n**k))
+                factors = list(factor_trial_division(n**k))
                 if len(factors) == 1:
                     self.assertTrue(is_prime(n), f"{n} is not a prime number")
                     self.assertEqual(factors[0], n)

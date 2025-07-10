@@ -22,10 +22,15 @@ class TestMonoidSumSegmentTree(unittest.TestCase):
             N = random.randint(1, 64)
             M = 12
             e = tuple(range(M))
-            TestDataGenerator.test(self, N, 400, SUM_SEGMENT_TREE_OPS,
+            TestDataGenerator.test(self, N, 200, SUM_SEGMENT_TREE_OPS,
                 lambda init_values: MonoidSumSegmentTree(init_values, compose_perms, e),
                 lambda init_values: NaiveMonoidSegmentTree(init_values, compose_perms, e),
                 value_generator = lambda: tuple(random.sample(range(M), M)))
+    
+    def test_permutation_simple(self):
+        init_values = [(1, 0, 2)] + [(0, 1, 2)]*3 + [(0, 2, 1)]
+        tree = MonoidSumSegmentTree(init_values, compose_perms, (0, 1, 2))
+        self.assertEqual(tree.sum_all(), (2, 0, 1))
 
     def test_example(self):
         sieve = prime_sieve_init(10_000_000)
@@ -41,6 +46,12 @@ class TestSumSegmentTree(unittest.TestCase):
         for __ in range(100):
             N = random.randint(1, 128)
             TestDataGenerator.test(self, N, 400, SUM_SEGMENT_TREE_OPS, SumSegmentTree)
+            
+class TestFastSumSegmentTree(unittest.TestCase):
+    def test_random(self):
+        for __ in range(100):
+            N = random.randint(1, 128)
+            TestDataGenerator.test(self, N, 400, SUM_SEGMENT_TREE_OPS, FastSumSegmentTree)
 
 class TestMaxSegmentTree(unittest.TestCase):
     def test_random(self):

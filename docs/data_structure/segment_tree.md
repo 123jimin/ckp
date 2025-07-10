@@ -8,11 +8,11 @@ For ease of use, `ckp.data_structure.segment_tree` uses object-oriented APIs.
 
 ## General Structure
 
-Many, but not all, segment trees' APIs look like a subset of this:
+Most segment trees' APIs look like a subset of this:
 
 ```py
 class SegmentTree:
-    def __init__(self, init_values: list ...): pass
+    def __init__(self, init_values: list|int, ...): pass
     def __len__(self) -> int: pass
     def __str__(self) -> str: pass
     def __iter__(self): pass
@@ -34,19 +34,38 @@ class SegmentTree:
     def mul_add_to_range(self, start: int, end: int, m, d): pass
 ```
 
-- `init_values` contains initial values.
+- `init_values` can either be `list` (the list of initial values), or `int` (the size of segment tree).
 - All ranges are half-open; `(start, end)` represents elements such that its index $i$ satisfies $start \le i < end$.
 
-The API does *not* make use of slice objects, because of it would likely induce an overhead.
+The API does *not* make use of [slice objects](https://docs.python.org/3/glossary.html#term-slice), as using them induce significant overhead.
 
-### Base
+### Variations
+
+A lot of competitive programming problems revolve around using segment trees in various ways.
+Hence CKP provides many variations of segment trees.
+
+This section describes different ways to classify segment trees.
+
+#### Base Value Type
 
 A segment tree can be based on a *monoid* or a *ring*, potentially non-commutative.
 
 - A monoid is represented via a tuple `(op, zero)`.
 - A ring is represented via a tuple `(op_add, op_mul, zero, one)`.
 
-### Operation Types
+CKP also provides segment tree implementations specialized for specific monoids/rings:
+
+| Prefix | Description |
+| ------ | ----------- |
+| (None) | Python's numeric type. (The ring `(+, *, 0, 1)`) |
+| `Monoid` / `Ring` | An arbitrary monoid or ring. |
+| `CommutativeMonoid` | A commutative monoid. |
+| `Max` / `Min` | Monoids `(max, min_value)` and `(min, max_value)`. |
+| `GCD` | The monoid `(math.gcd, 0)`. |
+
+The numeric type is the most widely supported one.
+
+#### Operation Types
 
 An operation may be applied either on a range or an element.
 
@@ -62,45 +81,66 @@ For a segment tree on a ring, these operations are possible:
 - **Multiply**: `a[i] *= m`; mul-assign `m` to `a[i]`.
 - **Mul-Add**: `a[i] = a[i]*m + d`; multiply `m` and add `d` to `a[i]` .
 
-### Query Types
+For querying items and sum, these operations are possible:
 
 - **Get Item**: get value of a single element `a[i]`.
 - **Range Sum**: get range sum `sum(a[i:j])`.
 
-There can be other types of operations, such as getting range max elements for a segment tree with the group of natural numbers with addition as the base monoid.
+Segment trees supporting larger sets of operations are slower, so there's a trade-off.
+
+Check the 'Implementations' section for names of segment trees supporting specific subsets of these operations.
+
+### Optimization
+
+Segment trees with **Fast** prefixed are more optimized (inlined functions, etc...), but harder to customize, versions.
+
+For most cases, the fast variants are not necessary.
 
 ## Implementations
 
-### Monoid
+Here are the tables of segment trees implemented by CKP.
 
-Here is the table of specific segment trees implemented by CKP.
+### Monoid
 
 - ❌: no support (linear runtime)
 - ⚠️: single element support
-- ✅: range support (for operations) / support (for query)
+- ✅: (range) support
 
 | Name | `a[i] = v` | `a[i] += d` | Get `a[i]` | Sum `a[i:j]` |
 | ---- | ---------- | ----------- | ---------- | ------------ |
-| `list` | ⚠️ | ⚠️ | ✅ | ❌ |
+| `list` (for comparison) | ⚠️ | ⚠️ | ✅ | ❌ |
 | `MonoidSumSegmentTree` | ⚠️ | ⚠️ | ✅ | ✅ |
 | `MonoidAddSegmentTree` | ⚠️ | ✅ | ✅ | ❌ |
 | `MonoidSegmentTree` | ⚠️ | ✅ | ✅ | ✅ |
 | `MonoidAssignSegmentTree` | ✅ | ⚠️ | ✅ | ✅ |
 
-There are some specialized instances for commonly occurring monoids:
+#### MonoidSumSegmentTree
 
-- `MonoidSumSegmentTree`
-  - `SumSegmentTree` (Note: `FenwickTree` is also available, providing the same functionality.)
-  - `MaxSegmentTree`
-  - `GCDSegmentTree`
-- ~~`MonoidAddSegmentTree`~~ (Not yet implemented.)
-  - ~~`CommutativeMonoidAddSegmentTree`~~ (Not yet implemented.)
-  - `AddSegmentTree`
-- ~~`MonoidSegmentTree`~~ (Not yet implemented.)
-  - ~~`CommutativeMonoidSegmentTree`~~ (Not yet implemented.)
-  - `NumberSegmentTree`
-    - `SimpleNumberSegmentTree`: While this is a bit slower than `NumberSegmentTree`, it is simpler and easier to customize.
-  
+| Name | Description |
+| ---- | ----------- |
+| `MonoidSumSegmentTree` | |
+| `SumSegmentTree` | |
+| `FastSumSegmentTree` | `SumSegmentTree` with inlined function calls. |
+| `MaxSegmentTree` | |
+| `GCDSegmentTree` | |
+
+#### MonoidAddSegmentTree
+
+| Name | Description |
+| ---- | ----------- |
+| ~~`MonoidAddSegmentTree`~~ | Not yet implemented. |
+| `AddSegmentTree` | |
+
+#### MonoidSegmentTree
+
+| Name | Description |
+| ---- | ----------- |
+| ~~`MonoidSegmentTree`~~ | Not yet implemented. |
+| `NumberSegmentTree` | |
+| `FastNumberSegmentTree` | Faster but quite difficult to customize. |
+
+#### MonoidAssignSegmentTree
+
 ### Ring
 
 | Name | `a[i] = v` | `a[i] += d` | `a[i] *= d` | Get `a[i]` | Sum `a[i:j]` |
@@ -111,3 +151,5 @@ There are some specialized instances for commonly occurring monoids:
 ### Merge Sort
 
 ### Persistent
+
+### Complete Binary Tree
