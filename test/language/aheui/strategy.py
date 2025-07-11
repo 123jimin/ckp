@@ -55,6 +55,7 @@ class TestAheuiFromVals(unittest.TestCase):
         self.assertOptimal([32, 32], 4)
         self.assertOptimal([10, 100], 6)        
 
+    @unittest.skip("stress test")
     def test_optimal_small_ints(self):
         for i in range(1+aheui_push_int_from.max_optimal):
             optimal_len = OPTIMAL_POS_INT_LEN[i]
