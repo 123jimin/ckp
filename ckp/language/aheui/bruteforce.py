@@ -16,7 +16,7 @@ def aheui_stack_step(stack: tuple[int, ...], op: str) -> tuple[int, ...]|None:
                 res = x % y
         return stack[:-2] + (res,)
     if op == '^':
-        if len(stack) < 2: return None
+        if len(stack) < 1: return None
         return stack + (stack[-1],)
     if op == '~':
         if len(stack) < 2: return None
@@ -51,6 +51,13 @@ if __name__ == '__main__':
     from random import choice
     curr_len = 0
     min_code = dict[int, str]()
+
+    def format_arr(arr: list[str]):
+        lines = []
+        for i in range(0, len(arr), 100):
+            lines.append("    " + repr(arr[i:i+100])[1:-1] + ",")
+        return "[\n" + "\n".join(lines) + f"\n] # {len(arr)} elements"
+
     for (v, code) in aheui_bruteforce():
         if curr_len < len(code):
             if curr_len:
@@ -64,7 +71,7 @@ if __name__ == '__main__':
                         pos_arr.append(min_code[i])
                         i += 1
                     code_arr = []
-                    code_arr.append("OPTIMAL_POS_INT_CODE = " + str(pos_arr) + "\n")
+                    code_arr.append("OPTIMAL_POS_INT_CODE = " + format_arr(pos_arr) + "\n")
                     code_arr.append("OPTIMAL_POS_INT_LEN = list(map(len, OPTIMAL_POS_INT_CODE))\n\n")
                     neg_arr = []
                     i = 0
@@ -72,7 +79,7 @@ if __name__ == '__main__':
                         neg_arr.append(min_code[i])
                         i -= 1
                     i = 0
-                    code_arr.append("OPTIMAL_NEG_INT_CODE = " + str(neg_arr) + "\n")
+                    code_arr.append("OPTIMAL_NEG_INT_CODE = " + format_arr(neg_arr) + "\n")
                     code_arr.append("OPTIMAL_NEG_INT_LEN = list(map(len, OPTIMAL_NEG_INT_CODE))")
                     with open("aheui-optimal.py", "w") as f:
                         f.writelines(code_arr)
