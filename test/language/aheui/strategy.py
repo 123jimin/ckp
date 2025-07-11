@@ -41,8 +41,26 @@ class TestAheuiPushIntFromTrivial(unittest.TestCase):
                 output = aheui_run_strip(push_top+code+"망")
                 self.assertEqual(output, str(n))
 
+class TestAheuiPushIntFrom(unittest.TestCase):
+    def assertIdempotent(self, top: int, value: int, effort: int):
+        code = aheui_push_int_from(top, value, effort)
+        output = aheui_run_strip(aheui_push_int_naive(top) + code + "망")
+
+        self.assertEqual(output, str(value))
+
+    def assertOptimal(self, top: int, value: int, effort: int, optimal_len: int):
+        self.assertIdempotent(top, value, effort)
+
+        code = aheui_push_int_from(top, value, effort)
+        self.assertEqual(len(code), optimal_len, f"Suboptimal {code=} for {top=} {value=}")
+    
+    def test_optimal(self):
+        self.assertOptimal(44, 111, 2, 4)
+
 class TestAheuiFromVals(unittest.TestCase):
-    def assertOptimal(self, input: list[int], optimal_len: int):
+    def assertOptimal(self, input: str|list[int], optimal_len: int):
+        if isinstance(input, str): input = list(input.encode('utf-8'))
+
         codes = aheui_from_vals(input)
         actual_len = sum(map(len, codes))
 
@@ -50,6 +68,11 @@ class TestAheuiFromVals(unittest.TestCase):
         output = aheui_run_strip("".join(f"{c}망발발다맣" for c in codes))
         
         self.assertEqual(output, "".join(f"{x}\n" for x in input), f"Different output for {input=}")
+
+    def test_best_str(self):
+        self.assertOptimal("Hello, world!", 43)
+        self.assertOptimal("The quick brown fox jumps over the lazy dog.", 162)
+        self.assertOptimal("다람쥐 헌 쳇바퀴에 타고파", 180)
 
     def test_optimal_dup(self):
         self.assertOptimal([32, 32], 4)

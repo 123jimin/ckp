@@ -150,6 +150,11 @@ def _aheui_push_int_get_strategies(func: Callable[[int|None, int, int], str], to
     for d in range(2, 10):
         yield func(top, value-d, 2) + AHEUI_NUMERALS[d] + "다"
         yield func(top, value+d, 2) + AHEUI_NUMERALS[d] + "타"
+        
+        yield AHEUI_NUMERALS[d] + "다" + func(top+d, value, 2)
+        yield AHEUI_NUMERALS[d] + "타" + func(top-d, value, 2)
+        yield AHEUI_NUMERALS[d] + "따" + func(top*d, value, 2)
+        yield AHEUI_NUMERALS[d] + "나" + func(top//d, value, 2)
 
     yield func(None, value-top) + "다"
     yield "빠" + func(top, value-top, 2) + "다"
@@ -213,20 +218,46 @@ def aheui_push_int_from(top: int|None, value: int, effort: int = 0) -> str:
 aheui_push_int_from.min_optimal = -587
 aheui_push_int_from.max_optimal = 1000
 
-def aheui_from_vals(arr: list[int]) -> list[str]:
-    effort = 2
-    prev_val = None
-    result: list[str] = []
+def aheui_stack_from_vals(arr: list[int], effort: int = 2) -> list[str]:
+    prev = None
+    codes = []
+
     for x in arr:
-        if prev_val is None:
-            result.append(aheui_push_int_from(None, x, effort))
+        from_none = aheui_push_int_from(None, x, effort)
+        from_prev = "빠" + aheui_push_int_from(prev, x, effort)
+        codes.append(min(from_none, from_prev, key=len))
+
+        prev = x
+    
+    return codes
+
+def aheui_from_vals(arr: list[int], effort: int = 2) -> list[str]:
+    reuse_count = [0] * len(arr)
+    codes = []
+    stack = []
+    
+    for i in range(len(arr)):
+        x = arr[i]
+        from_none = aheui_push_int_from(None, x, effort)
+        min_stack_ind = min(
+            range(len(stack)),
+            key=lambda si: len(aheui_push_int_from(arr[stack[si]], x, effort)),
+            default=-1
+        )
+        
+        min_ind = stack[min_stack_ind] if min_stack_ind >= 0 else -1
+        from_stack_len = 1 + len(aheui_push_int_from(arr[min_ind], x, effort) if min_ind >= 0 else from_none)
+        if from_stack_len < len(from_none):
+            assert(min_stack_ind >= 0 and min_ind >= 0)
+            reuse_count[min_ind] += 1
+            stack = stack[:min_stack_ind]
+            codes.append(aheui_push_int_from(arr[min_ind], x, effort))
         else:
-            from_none = aheui_push_int_from(None, x, effort)
-            from_prev = aheui_push_int_from(prev_val, x, effort)
-            if len(from_none) < len(from_prev)+1:
-                result.append(from_none)
-            else:
-                result[-1] += "빠"
-                result.append(from_prev)
-        prev_val = x
-    return result
+            codes.append(from_none)
+        
+        stack.append(i)
+    
+    for i in range(len(codes)):
+        codes[i] += "빠" * reuse_count[i]
+    
+    return codes

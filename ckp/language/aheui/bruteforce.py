@@ -52,11 +52,12 @@ if __name__ == '__main__':
     curr_len = 0
     min_code = dict[int, str]()
 
-    def format_arr(arr: list[str]):
+    def format_dict(d: dict[int, str]):
+        elems = list(d.items())
         lines = []
-        for i in range(0, len(arr), 100):
-            lines.append("    " + repr(arr[i:i+100])[1:-1] + ",")
-        return "[\n" + "\n".join(lines) + f"\n] # {len(arr)} elements"
+        for i in range(0, len(elems), 50):
+            lines.append("    " + "".join(f"{k}: {repr(v)}, " for (k, v) in elems[i:i+50]).rstrip())
+        return "{\n" + "\n".join(lines) + f"{'}'} # {len(d)} elements"
 
     for (v, code) in aheui_bruteforce():
         if curr_len < len(code):
@@ -65,22 +66,16 @@ if __name__ == '__main__':
                 random_v = choice(list(min_code.keys()))
                 print("Example:", random_v, "=>", min_code[random_v])
                 if curr_len == 11:
-                    pos_arr = []
-                    i = 0
-                    while i in min_code:
-                        pos_arr.append(min_code[i])
-                        i += 1
-                    code_arr = []
-                    code_arr.append("OPTIMAL_POS_INT_CODE = " + format_arr(pos_arr) + "\n")
+                    code_arr = ["OPTIMAL_CODE = " + format_dict(min_code) + "\n\n"]
+
+                    code_arr.append("i = 0; OPTIMAL_POS_INT_CODE = []\n")
+                    code_arr.append("while i in OPTIMAL_CODE: OPTIMAL_POS_INT_CODE.append(OPTIMAL_CODE[i]); i += 1\n")
                     code_arr.append("OPTIMAL_POS_INT_LEN = list(map(len, OPTIMAL_POS_INT_CODE))\n\n")
-                    neg_arr = []
-                    i = 0
-                    while i in min_code:
-                        neg_arr.append(min_code[i])
-                        i -= 1
-                    i = 0
-                    code_arr.append("OPTIMAL_NEG_INT_CODE = " + format_arr(neg_arr) + "\n")
+
+                    code_arr.append("i = 0; OPTIMAL_NEG_INT_CODE = []\n")
+                    code_arr.append("while i in OPTIMAL_CODE: OPTIMAL_NEG_INT_CODE.append(OPTIMAL_CODE[i]); i -= 1\n")
                     code_arr.append("OPTIMAL_NEG_INT_LEN = list(map(len, OPTIMAL_NEG_INT_CODE))")
+
                     with open("aheui-optimal.py", "w") as f:
                         f.writelines(code_arr)
                     exit(0)

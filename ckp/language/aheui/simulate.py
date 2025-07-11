@@ -21,5 +21,7 @@ def aheui_run_strip(code: str) -> str:
             case '마': assert(len(stack) >= 1); stack.pop()
             case '망': assert(len(stack) >= 1); output.append(stack.pop())
             case '맣': assert(len(stack) >= 1); output.append(chr(stack.pop()))
+            case '아': pass
+            case '멓': output.append("".join(map(chr, reversed(stack)))); stack = []
             case _: raise ValueError(f"Unknown {ch=}")
     return "".join(map(str, output))
