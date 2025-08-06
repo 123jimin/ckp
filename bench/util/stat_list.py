@@ -10,15 +10,19 @@ def normal_cdf(z: float) -> float:
 class StatList:
     """ Sequence of floats with incremental stats. """
 
-    __slots__ = ("_data", "_sum", "_sum_sq", "_name")
+    __slots__ = ('_data', '_sum', '_sum_sq', '_min', '_max', '_name')
 
     _data: List[float]
     _sum: float
     _sum_sq: float
+    _min: float|None
+    _max: float|None
     _name: str
 
     def __init__(self, data: Iterable[float] | None = None, name: str = "") -> None:
         self._data, self._sum, self._sum_sq, self._name = [], 0.0, 0.0, name
+        self._min, self._max = None, None
+
         if data is not None: self.extend(data)
 
     @property
@@ -29,12 +33,22 @@ class StatList:
 
     def append(self, value: float) -> None:
         self._data.append(v := float(value)); self._sum += v; self._sum_sq += v * v
+        if self._min is None or value < self._min: self._min = value
+        if self._max is None or value > self._max: self._max = value
 
     def extend(self, values: Iterable[float]) -> None:
         self._data.extend(vals := list(map(float, values)))
         self._sum += sum(vals); self._sum_sq += sum(v * v for v in vals)
 
+        if not vals: return
+        min_val, max_val = min(vals), max(vals)
+        if self._min is None or min_val < self._min: self._min = min_val
+        if self._max is None or max_val > self._max: self._max = max_val
+
     def mean(self) -> float: return self._sum / len(self._data) if self._data else float("nan")
+
+    def min(self) -> float|None: return self._min
+    def max(self) -> float|None: return self._max
 
     def variance(self) -> float:
         """ Sample variance. """
@@ -140,11 +154,18 @@ class StatList:
 
     def __iter__(self): return iter(self._data)
 
-    def __str__(self, *, name_w: int = 0, val_prec: int = 3, measure_unit: str|None = None) -> str:
+    def __str__(self, *, report_range: bool = True, name_w: int = 0, val_prec: int = 3, measure_unit: str|None = None) -> str:
         name_part = (f"{self._name:<{name_w}}: " if self._name else "")
         if not self._data: return f"{name_part}(empty)"
-        val, sd = map(f"{{:.{val_prec}f}}".format, (self.mean(), self.stdev()))
-        postfix = f" {measure_unit}" if measure_unit else ""
-        return f"{name_part}{val} \xB1 {sd}{postfix}"
+        format_val = f"{{:.{val_prec}f}}".format
+
+        postfix = ""
+        if report_range and len(self._data) > 1:
+            postfix += f" ({format_val(self._min)} to {format_val(self._max)})"
+        
+        if measure_unit:
+            postfix += f" {measure_unit}"
+
+        return f"{name_part}{format_val(self.mean())} \xB1 {format_val(self.stdev())}{postfix}"
 
     def __repr__(self) -> str: return f"StatList({self._data!r}, name={self._name!r})"
