@@ -1,6 +1,6 @@
 import argparse, cProfile
 from typing import Any
-from bench.util import bench, stdev_range
+from bench.util import bench, StatList
 
 parser = argparse.ArgumentParser(prog="bench.acmicpc", description="Benchmark CKP with one or more problems from acmicpc.net")
 parser.add_argument('problem_name', help="specify this to benchmark a specific problem", nargs='?')
@@ -24,10 +24,7 @@ def do_profile(label: str, problem):
 
 def do_bench(problem_pairs: list[tuple[str, Any]]):
     for (_name, problem) in problem_pairs: do_setup(problem)
-    
-    times_list = bench([getattr(problem, 'bench') for (_name, problem) in problem_pairs], log=False)
-    for ((name, _problem), times) in zip(problem_pairs, times_list):
-        print(f"{name}:", stdev_range(times))
+    bench([getattr(problem, 'bench') for (_name, problem) in problem_pairs])
 
 args = parser.parse_args()
 filter_tag = args.tag.lower() if args.tag else None
@@ -46,6 +43,8 @@ else:
 
 problem_list = [(f"Problem #{name[1:]}", getattr(problems, name)) for name in problem_names]
 problem_list = [(name, problem) for (name, problem) in problem_list if filter_problem_tag(filter_tag, problem)]
+for (name, problem) in problem_list: setattr(getattr(problem, 'bench'), '__name__', name)
+
 problem_count_str = f"{len(problem_list)} {'problem' if len(problem_list) == 1 else 'problems'}"
 
 if args.profile:

@@ -51,6 +51,7 @@
         "nonneg",
         "oprev",
         "powerset",
+        "prec",
         "primality",
         "pseudoprime",
         "pseudoprimes",
